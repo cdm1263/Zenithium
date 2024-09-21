@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Inner from "./Inner";
 import { Switch } from "./ui/switch";
+import Seperator from "./Seperator";
 
 const Nav = () => {
   return (
@@ -24,6 +25,7 @@ const Nav = () => {
             >
               Resume
             </Link>
+            <Seperator className="h-2/5" />
             <Switch />
           </div>
         </div>
