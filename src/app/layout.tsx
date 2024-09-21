@@ -7,9 +7,10 @@ import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
+// TODO: 정적 메타데이터 내용 추가
 export const metadata: Metadata = {
-  title: "Dongmin",
-  description: "개발자로 살아남기",
+  title: "개발 블로그 Zenithium",
+  description: "To Zenith, 최고의 개발자를 향해",
 };
 
 export default function RootLayout({
