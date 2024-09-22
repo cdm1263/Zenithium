@@ -2,6 +2,21 @@ import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
 
+export type FrontMatter = {
+  title: string;
+  description: string;
+  date: string;
+  series: string;
+  tags: string[];
+  image?: string;
+};
+
+export type Mdx = {
+  frontMatter: FrontMatter;
+  content: string;
+  slug: string;
+};
+
 const directoryPath = path.join(process.cwd(), "blog-contents");
 
 // Note: 개별 mdx 파일 데이터 파싱
@@ -13,7 +28,7 @@ const readMDXFile = (filePath: string) => {
 };
 
 // Note: 디렉토리의 mdx 파일들을 파싱해 배열에 담아 반환
-const getMDXDatas = (dir: string) => {
+const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
   const fileNames = fs.readdirSync(dir);
 
   const allPosts = fileNames.map((fileName) => {
@@ -21,7 +36,7 @@ const getMDXDatas = (dir: string) => {
     const { data: frontMatter, content } = readMDXFile(filePath);
     const slug = fileName.replace(/\.mdx$/, "");
 
-    return { frontMatter, content, slug };
+    return { frontMatter: frontMatter as FrontMatter, content, slug };
   });
 
   return allPosts;
