@@ -37,10 +37,12 @@ const Blog = async ({ params }: Props) => {
         {/* <script></script> */}
 
         <div className="hidden w-60 xl:block bg-yellow-200 shrink-0"></div>
-        <article className="flex-1 prose">
-          <h1>{post.frontMatter.title}</h1>
-          <CustomMDX source={post.content} />
-        </article>
+        <div className="flex-1 flex flex-col">
+          <p>{post.frontMatter.title}</p>
+          <article className="prose dark:prose-invert px-2">
+            <CustomMDX source={post.content} />
+          </article>
+        </div>
         <div className="hidden w-60 lg:block bg-yellow-200 shrink-0"></div>
       </Inner>
     </section>
