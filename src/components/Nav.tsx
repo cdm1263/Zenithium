@@ -1,13 +1,24 @@
+"use client";
+
 import Link from "next/link";
 import Inner from "./Inner";
 import { Switch } from "./ui/switch";
 import Seperator from "./Seperator";
+import useScrollNav from "@/hooks/useScrollNav";
+import { cn } from "@/lib/utils";
 
 const Nav = () => {
+  const { isScrolled } = useScrollNav();
+
   return (
-    <nav className="sticky top-0 inset-x-0 w-full h-14 md:h-16  backdrop-blur-md">
+    <header
+      className={cn(
+        "z-10 sticky top-0 inset-x-0 w-full h-14 md:h-16 bg-background transition-colors backdrop-blur-md duration-300",
+        isScrolled ? "bg-background/90" : "bg-transparent"
+      )}
+    >
       <Inner>
-        <div className="flex justify-between items-center h-full">
+        <nav className="flex justify-between items-center h-full">
           <Link href="/" className="flex font-semibold text-xl">
             ZENITH<span className="text-primary">IUM</span>
           </Link>
@@ -28,9 +39,9 @@ const Nav = () => {
             <Seperator className="h-2/5" />
             <Switch />
           </div>
-        </div>
+        </nav>
       </Inner>
-    </nav>
+    </header>
   );
 };
 
