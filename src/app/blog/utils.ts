@@ -42,6 +42,21 @@ const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
   return allPosts;
 };
 
+export const getAllTagsAndSeries = () => {
+  const fileNames = fs.readdirSync(directoryPath);
+  const allTags: string[][] = [];
+  const allSeries: string[] = [];
+  fileNames.forEach((fileName) => {
+    const filePath = path.join(directoryPath, fileName);
+    const { data } = readMDXFile(filePath);
+
+    allSeries.push(data.series);
+    allTags.push(data.tags);
+  });
+
+  return { allTags: [...new Set(allTags.flat())], allSeries };
+};
+
 // Note: 모든 블로그 포스트 호출
 export const getAllPosts = () => {
   return getMDXDatas(directoryPath);
