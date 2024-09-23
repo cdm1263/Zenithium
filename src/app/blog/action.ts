@@ -1,4 +1,3 @@
-// 서버 액션 정의 부분
 "use server";
 
 import { getAllPosts } from "./utils";
