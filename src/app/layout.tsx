@@ -24,7 +24,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system">
           <Nav />
           <section className="flex flex-col min-h-[calc(100vh-3.5rem)] md:min-h-[calc(100vh-4rem)]">
-            <main className="flex flex-1 flex-col h-full">{children}</main>
+            <main className="flex flex-1 flex-col h-full py-20">
+              {children}
+            </main>
             <Footer />
           </section>
         </ThemeProvider>
