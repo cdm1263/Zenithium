@@ -114,9 +114,8 @@ const Filter = ({ tags, series, className }: Props) => {
           <span
             key={tag}
             className={cn(
-              "px-2 py-1 rounded-xl text-primary shrink-0 cursor-pointer border-primary/50 border-2",
-              params.getAll("tag").includes(tag) &&
-                "bg-primary-foreground text-white"
+              "px-3 py-1 rounded-full text-sm text-primary shrink-0 cursor-pointer border-muted border-2 hover:bg-primary/30 transition-colors",
+              params.getAll("tag").includes(tag) && "bg-primary/30"
             )}
             onClick={() => tagHandler(tag)}
           >
