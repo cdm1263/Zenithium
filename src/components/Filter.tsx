@@ -41,7 +41,7 @@ const Filter = ({ tags, series, className }: Props) => {
   };
 
   const seriesHandler = (value: string) => {
-    if (value === "전체") {
+    if (value === "시리즈 전체") {
       params.delete("series");
     } else {
       params.set("series", value);
@@ -64,31 +64,38 @@ const Filter = ({ tags, series, className }: Props) => {
   };
 
   return (
-    <div className={cn("flex flex-col gap-2 lg:w-2/6", className)}>
-      {/* // Note: 정렬 */}
-      <Select onValueChange={sortHandler}>
-        <SelectTrigger>
-          <SelectValue placeholder="정렬" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="latest">최신순</SelectItem>
-          <SelectItem value="oldest">오래된순</SelectItem>
-        </SelectContent>
-      </Select>
+    <div
+      className={cn(
+        "flex flex-col gap-2 w-3/4 self-center lg:w-2/5 lg:self-start ",
+        className
+      )}
+    >
+      <div className="flex flex-col xs:flex-row gap-2">
+        {/* // Note: 정렬 */}
+        <Select onValueChange={sortHandler}>
+          <SelectTrigger>
+            <SelectValue placeholder="정렬" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="latest">최신순</SelectItem>
+            <SelectItem value="oldest">오래된순</SelectItem>
+          </SelectContent>
+        </Select>
 
-      {/* // Note: 시리즈 */}
-      <Select onValueChange={seriesHandler}>
-        <SelectTrigger>
-          <SelectValue placeholder="시리즈" />
-        </SelectTrigger>
-        <SelectContent>
-          {["전체", ...series].map((s) => (
-            <SelectItem key={s} value={s}>
-              {s}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+        {/* // Note: 시리즈 */}
+        <Select onValueChange={seriesHandler}>
+          <SelectTrigger>
+            <SelectValue placeholder="시리즈" />
+          </SelectTrigger>
+          <SelectContent>
+            {["시리즈 전체", ...series].map((s) => (
+              <SelectItem key={s} value={s}>
+                {s}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
       {/* // Note: 검색 */}
       <Input
