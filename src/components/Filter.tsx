@@ -83,7 +83,10 @@ const Filter = ({ tags, series, className }: Props) => {
         </Select>
 
         {/* // Note: 시리즈 */}
-        <Select onValueChange={seriesHandler}>
+        <Select
+          onValueChange={seriesHandler}
+          value={params.get("series") || undefined}
+        >
           <SelectTrigger>
             <SelectValue placeholder="시리즈" />
           </SelectTrigger>
@@ -110,10 +113,14 @@ const Filter = ({ tags, series, className }: Props) => {
         {tags.map((tag) => (
           <span
             key={tag}
-            className="bg-primary px-2 py-1 rounded-sm text-white shrink-0"
+            className={cn(
+              "px-2 py-1 rounded-xl text-primary shrink-0 cursor-pointer border-primary/50 border-2",
+              params.getAll("tag").includes(tag) &&
+                "bg-primary-foreground text-white"
+            )}
             onClick={() => tagHandler(tag)}
           >
-            {tag}
+            #{tag}
           </span>
         ))}
       </div>
