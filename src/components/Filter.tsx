@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,6 +11,7 @@ import {
 } from "./ui/select";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
+import useDebounce from "@/hooks/useDebounce";
 
 type Props = {
   tags: string[];
@@ -23,6 +24,16 @@ const Filter = ({ tags, series, className }: Props) => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
+  const { debouncedSearch } = useDebounce(search, 300);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      params.set("search", debouncedSearch);
+    } else {
+      params.delete("search");
+    }
+    router.push(`?${params.toString()}`);
+  }, [debouncedSearch, params]);
 
   const sortHandler = (value: string) => {
     params.set("sort", value);
@@ -39,12 +50,7 @@ const Filter = ({ tags, series, className }: Props) => {
   };
 
   const searchHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    //TODO: 디바운스 적용해야함
     setSearch(e.target.value);
-    e.target.value
-      ? params.set("search", e.target.value)
-      : params.delete("search");
-    router.push(`?${params.toString()}`);
   };
 
   const tagHandler = (tag: string) => {
