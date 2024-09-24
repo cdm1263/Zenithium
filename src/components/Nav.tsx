@@ -36,7 +36,7 @@ const Nav = () => {
             >
               Resume
             </Link>
-            <Seperator className="h-2/5" />
+            <Seperator className="h-2/5 border-l" />
             <Switch />
           </div>
         </nav>
