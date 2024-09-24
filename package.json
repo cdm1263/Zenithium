@@ -23,6 +23,7 @@
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
+    "reading-time": "^1.5.0",
     "rehype-pretty-code": "^0.14.0",
     "shiki": "^1.18.0",
     "tailwind-merge": "^2.5.2",
