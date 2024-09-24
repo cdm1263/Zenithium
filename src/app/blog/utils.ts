@@ -54,7 +54,10 @@ export const getAllTagsAndSeries = () => {
     allTags.push(data.tags);
   });
 
-  return { allTags: [...new Set(allTags.flat())], allSeries };
+  return {
+    allTags: [...new Set(allTags.flat())],
+    allSeries: [...new Set(allSeries)],
+  };
 };
 
 // Note: 모든 블로그 포스트 호출
