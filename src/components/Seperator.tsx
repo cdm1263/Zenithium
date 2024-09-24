@@ -7,10 +7,7 @@ type Props = HTMLAttributes<HTMLDivElement> & {
 
 const Seperator = ({ className, ...props }: Props) => {
   return (
-    <div
-      className={cn("border-l border-muted-foreground/30", className)}
-      {...props}
-    />
+    <div className={cn("border-muted-foreground/30", className)} {...props} />
   );
 };
 
