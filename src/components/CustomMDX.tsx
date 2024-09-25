@@ -23,7 +23,7 @@ const CustomMDX = (props: MDXRemoteProps) => {
         tagName: "span",
         properties: {
           className:
-            "text-primary text-2xl opacity-50 hover:opacity-100 transition-opacity duration-200 absolute -left-6",
+            "text-primary text-2xl opacity-50 hover:opacity-100 transition-opacity duration-200 hidden absolute lg:block lg:-left-6",
         },
         children: [{ type: "text", value: "#" }],
       },
