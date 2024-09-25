@@ -1,21 +1,7 @@
 import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
-
-export type FrontMatter = {
-  title: string;
-  description: string;
-  date: string;
-  series: string;
-  tags: string[];
-  image?: string;
-};
-
-export type Mdx = {
-  frontMatter: FrontMatter;
-  content: string;
-  slug: string;
-};
+import { FrontMatter, Mdx } from "@/lib/types";
 
 const directoryPath = path.join(process.cwd(), "blog-contents");
 
