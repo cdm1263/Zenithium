@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { getAllPosts } from "../utils";
 import Inner from "@/components/Inner";
 import CustomMDX from "@/components/CustomMDX";
+import TOC from "@/components/TOC";
+import { parseTOCHeadings } from "@/lib/utils";
 
 type Props = { params: { slug: string } };
 
@@ -30,20 +32,26 @@ const Blog = async ({ params }: Props) => {
     notFound();
   }
 
+  const toc = parseTOCHeadings(post.content);
+
   return (
     <section>
-      <Inner className="flex">
+      <Inner className="flex flex-col">
         {/* // TODO: JSON LD 관리 필요 */}
         {/* <script></script> */}
 
-        <div className="hidden w-60 xl:block bg-yellow-200 shrink-0"></div>
-        <div className="flex-1 flex flex-col">
-          <p>{post.frontMatter.title}</p>
-          <article className="prose dark:prose-invert px-2">
+        {/* // TODO: 게시글 소개 및 제목 영역 추가 */}
+        {/* <div>제목 영역</div> */}
+
+        <div className="flex justify-center lg:justify-between xl:gap-2">
+          <div className="hidden w-56 xl:block shrink-0"></div>
+          <article className="prose dark:prose-invert px-2 w-full">
             <CustomMDX source={post.content} />
           </article>
+          <TOC toc={toc} />
         </div>
-        <div className="hidden w-60 lg:block bg-yellow-200 shrink-0"></div>
+        {/* // TODO: 댓글 영역 추가 */}
+        {/* <div className="w-full h-screen bg-slate-200/50">댓글 영역</div> */}
       </Inner>
     </section>
   );
