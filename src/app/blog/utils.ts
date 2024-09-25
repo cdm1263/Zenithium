@@ -18,7 +18,7 @@ const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
   const directoryNames = fs.readdirSync(dir);
 
   const allPosts = directoryNames.map((dirName) => {
-    const filePath = path.join(directoryPath, dirName, `${dirName}.mdx`);
+    const filePath = path.join(directoryPath, dirName, "content.mdx");
     const { data: frontMatter, content } = readMDXFile(filePath);
     const slug = dirName;
 
@@ -33,7 +33,7 @@ export const getAllTagsAndSeries = () => {
   const allTags: string[][] = [];
   const allSeries: string[] = [];
   directoryNames.forEach((dirName) => {
-    const filePath = path.join(directoryPath, dirName, `${dirName}.mdx`);
+    const filePath = path.join(directoryPath, dirName, "content.mdx");
     const { data } = readMDXFile(filePath);
 
     allSeries.push(data.series);
