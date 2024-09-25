@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useDeferredValue, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Select,
   SelectContent,
@@ -25,14 +31,16 @@ const Filter = ({ tags, series, className }: Props) => {
   const router = useRouter();
   const deferredValue = useDeferredValue(search);
 
+  const delayedValue = useMemo(() => deferredValue, [deferredValue]);
+
   useEffect(() => {
-    if (deferredValue) {
-      params.set("search", deferredValue);
+    if (delayedValue) {
+      params.set("search", delayedValue);
     } else {
       params.delete("search");
     }
     router.push(`?${params.toString()}`);
-  }, [deferredValue, params]);
+  }, [delayedValue, params]);
 
   const sortHandler = (value: string) => {
     params.set("sort", value);
