@@ -4,6 +4,7 @@ import Inner from "@/components/Inner";
 import CustomMDX from "@/components/CustomMDX";
 import TOC from "@/components/TOC";
 import { parseTOCHeadings } from "@/lib/utils";
+import CoverImage from "@/components/CoverImage";
 
 type Props = { params: { slug: string } };
 
@@ -36,6 +37,7 @@ const Blog = async ({ params }: Props) => {
 
   return (
     <section>
+      <CoverImage slug={params.slug} />
       <Inner className="flex flex-col">
         {/* // TODO: JSON LD 관리 필요 */}
         {/* <script></script> */}
@@ -44,7 +46,9 @@ const Blog = async ({ params }: Props) => {
         {/* <div>제목 영역</div> */}
 
         <div className="flex justify-center gap-5">
-          <div className="hidden w-56 xl:block shrink-0"></div>
+          <div className="hidden w-56 xl:block shrink-0">
+            {/* // Todo: 추후 공간 활용 */}
+          </div>
           <article className="prose dark:prose-invert px-2 w-full">
             <CustomMDX source={post.content} />
           </article>
