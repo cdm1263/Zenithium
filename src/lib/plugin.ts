@@ -70,3 +70,17 @@ export const rehypeMessageBox = () => {
     });
   };
 };
+
+export const rehypeAddRelativeToHeadings = () => {
+  return (tree: Root) => {
+    visit(tree, "element", (node: Element) => {
+      if (/^h[1-6]$/.test(node.tagName)) {
+        // Note: h1 ~ h6 태그에 relative 클래스네임 추가
+        node.properties = {
+          ...node.properties,
+          className: (node.properties.className || "") + "relative",
+        };
+      }
+    });
+  };
+};
