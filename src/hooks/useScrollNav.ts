@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useThrottle from "./useThrottle";
 
 const useScrollNav = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,11 +11,12 @@ const useScrollNav = () => {
       setIsScrolled(false);
     }
   };
+  const throttledHandler = useThrottle(handleScroll, 100);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", throttledHandler);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", throttledHandler);
   }, []);
 
   return { isScrolled };
