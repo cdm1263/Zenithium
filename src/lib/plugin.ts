@@ -78,7 +78,7 @@ export const rehypeAddRelativeToHeadings = () => {
         // Note: h1 ~ h6 태그에 relative 클래스네임 추가
         node.properties = {
           ...node.properties,
-          className: (node.properties.className || "") + "relative",
+          className: (node.properties.className || "") + " relative",
         };
       }
     });
