@@ -43,7 +43,7 @@ const Blog = async ({ params }: Props) => {
         {/* // TODO: 게시글 소개 및 제목 영역 추가 */}
         {/* <div>제목 영역</div> */}
 
-        <div className="flex justify-center lg:justify-between xl:gap-2">
+        <div className="flex justify-center gap-5">
           <div className="hidden w-56 xl:block shrink-0"></div>
           <article className="prose dark:prose-invert px-2 w-full">
             <CustomMDX source={post.content} />
