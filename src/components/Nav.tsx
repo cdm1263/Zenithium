@@ -13,8 +13,10 @@ const Nav = () => {
   return (
     <header
       className={cn(
-        "z-10 sticky top-0 inset-x-0 w-full h-14 md:h-16 bg-background transition-colors duration-300",
-        isScrolled ? "bg-background/90 backdrop-blur-md" : "bg-transparent"
+        "z-10 sticky top-0 inset-x-0 w-full h-14 md:h-16 bg-background border-b-2 border-muted/70 transition-colors duration-300",
+        isScrolled
+          ? "bg-background/90 backdrop-blur-md"
+          : "bg-transparent text-white border-transparent"
       )}
     >
       <Inner>
@@ -37,7 +39,7 @@ const Nav = () => {
               Resume
             </Link>
             <Seperator className="h-2/5 border-l" />
-            <Switch />
+            <Switch className="text-foreground" />
           </div>
         </nav>
       </Inner>
