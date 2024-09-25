@@ -23,12 +23,12 @@ const TOC = ({ toc }: Props) => {
   return (
     <nav className="hidden h-full w-56 lg:block shrink-0 px-2 py-4 sticky top-20">
       <span className="absolute w-0.5 bg-primary/50 inset-y-0 left-0" />
-      <ul className="flex flex-col gap-y-1 ml-3">
+      <ul className="flex flex-col gap-y-px">
         {toc.map((item) => (
           <div
             key={item.id}
             className={cn("text-sm", {
-              "pl-3": item.level === 2,
+              "pl-3 my-1": item.level === 2,
               "pl-6": item.level === 3,
               "pl-9": item.level === 4,
               "pl-12": item.level === 5,
