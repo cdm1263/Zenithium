@@ -15,12 +15,12 @@ const readMDXFile = (filePath: string) => {
 
 // Note: 디렉토리의 mdx 파일들을 파싱해 배열에 담아 반환
 const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
-  const fileNames = fs.readdirSync(dir);
+  const directoryNames = fs.readdirSync(dir);
 
-  const allPosts = fileNames.map((fileName) => {
-    const filePath = path.join(directoryPath, fileName);
+  const allPosts = directoryNames.map((dirName) => {
+    const filePath = path.join(directoryPath, dirName, `${dirName}.mdx`);
     const { data: frontMatter, content } = readMDXFile(filePath);
-    const slug = fileName.replace(/\.mdx$/, "");
+    const slug = dirName;
 
     return { frontMatter: frontMatter as FrontMatter, content, slug };
   });
@@ -29,11 +29,11 @@ const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
 };
 
 export const getAllTagsAndSeries = () => {
-  const fileNames = fs.readdirSync(directoryPath);
+  const directoryNames = fs.readdirSync(directoryPath);
   const allTags: string[][] = [];
   const allSeries: string[] = [];
-  fileNames.forEach((fileName) => {
-    const filePath = path.join(directoryPath, fileName);
+  directoryNames.forEach((dirName) => {
+    const filePath = path.join(directoryPath, dirName, `${dirName}.mdx`);
     const { data } = readMDXFile(filePath);
 
     allSeries.push(data.series);
