@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <Nav />
-          <section className="flex flex-col min-h-[calc(100vh-3.5rem)] md:min-h-[calc(100vh-4rem)]">
+          <section className="flex flex-col mt-60">
             <main className="flex flex-1 flex-col h-full py-20">
               {children}
             </main>
