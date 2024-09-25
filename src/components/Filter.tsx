@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useDeferredValue, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,7 +11,6 @@ import {
 } from "./ui/select";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
-import useDebounce from "@/hooks/useDebounce";
 
 type Props = {
   tags: string[];
@@ -24,16 +23,16 @@ const Filter = ({ tags, series, className }: Props) => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
-  const { debouncedSearch } = useDebounce(search, 300);
+  const deferredValue = useDeferredValue(search);
 
   useEffect(() => {
-    if (debouncedSearch) {
-      params.set("search", debouncedSearch);
+    if (deferredValue) {
+      params.set("search", deferredValue);
     } else {
       params.delete("search");
     }
     router.push(`?${params.toString()}`);
-  }, [debouncedSearch, params]);
+  }, [deferredValue, params]);
 
   const sortHandler = (value: string) => {
     params.set("sort", value);
