@@ -23,9 +23,7 @@ export const parseTOCHeadings = (content: string): TOCItem[] => {
     const level = match[1].length;
     const title = match[2].replace(/\.$/, "");
 
-    const id =
-      title.toLowerCase().replace(/\s+/g, "-") +
-      (level > 1 ? `-${level - 1}` : "");
+    const id = title.toLowerCase().replace(/\s+/g, "-");
 
     return { id, title, level };
   });
