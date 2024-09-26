@@ -41,7 +41,7 @@ const Nav = () => {
         }}
       >
         <Inner className="flex justify-between items-center h-full relative z-10">
-          <Link href="/" className="flex font-semibold text-xl">
+          <Link href="/" className="flex font-semibold text-xl select-none">
             ZENITH<span className="text-primary">IUM</span>
           </Link>
 
