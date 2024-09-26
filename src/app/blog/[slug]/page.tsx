@@ -4,7 +4,6 @@ import Inner from "@/components/Inner";
 import CustomMDX from "@/components/CustomMDX";
 import TOC from "@/components/TOC";
 import { parseTOCHeadings } from "@/lib/utils";
-import ScrollToTop from "@/components/ScrollToTop";
 import CoverImage from "@/components/CoverImage";
 
 type Props = { params: { slug: string } };
@@ -38,7 +37,6 @@ const Blog = async ({ params }: Props) => {
 
   return (
     <>
-      <ScrollToTop />
       <section>
         <CoverImage
           slug={params.slug}
