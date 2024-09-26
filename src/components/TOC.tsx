@@ -39,7 +39,7 @@ const TOC = ({ toc }: Props) => {
               href={`#${item.id}`}
               onClick={(e) => handleClick(e, item.id)}
               className={cn(
-                "hover:text-primary font-medium",
+                "hover:text-primary font-medium transition-color duration-300",
                 activeId === item.id ? "text-primary font-bold" : ""
               )}
             >
