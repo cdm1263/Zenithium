@@ -33,7 +33,12 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
             {coverData?.description || frontMatter?.description}
           </motion.p>
           {frontMatter && content && (
-            <PostDateAndReadingTime date={frontMatter.date} content={content} />
+            <PostDateAndReadingTime
+              date={frontMatter.date}
+              content={content}
+              readingClassName="text-slate-200/70"
+              dateClassName="text-slate-200/70"
+            />
           )}
         </motion.div>
       </Inner>
