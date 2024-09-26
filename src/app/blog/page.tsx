@@ -22,9 +22,15 @@ const Page = async ({ searchParams }: Props) => {
   const filteredPosts = await filterPosts({ series, tags, search, sort });
   const { allTags, allSeries } = getAllTagsAndSeries();
 
+  const coverData = {
+    imageSrc: "/blog-cover.jpg",
+    title: "Blog",
+    description: "블로그 포스트 목록입니다.",
+  };
+
   return (
     <section>
-      <CoverImage imageSrc="/blog-cover.jpg" />
+      <CoverImage coverData={coverData} />
       <Inner className="flex flex-col lg:flex-row gap-5 z-20">
         <Filter tags={allTags} series={allSeries} />
         <Seperator className="w-full border-b my-2 lg:hidden" />
