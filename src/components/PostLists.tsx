@@ -4,6 +4,7 @@ import Link from "next/link";
 import readingTime from "reading-time";
 import Seperator from "./Seperator";
 import { FrontMatter, Mdx } from "@/lib/types";
+import PostDateAndReadingTime from "./PostDateAndReadingTime";
 
 type Props = {
   posts: Mdx[];
@@ -12,11 +13,11 @@ type Props = {
 
 const PostCard = ({
   frontMatter,
-  timeToRead,
+  content,
   slug,
 }: {
   frontMatter: FrontMatter;
-  timeToRead: number;
+  content: string;
   slug: string;
 }) => {
   const { series, title, description, date, tags } = frontMatter;
@@ -54,16 +55,7 @@ const PostCard = ({
             </Link>
           ))}
         </div>
-        <div className="flex gap-x-4 text-sm text-muted-foreground">
-          <p className="flex gap-1 items-center">
-            <CalendarDays className="w-4 h-4" />
-            {formatDate(date)}
-          </p>
-          <p className="flex gap-1 items-center">
-            <Clock className="w-4 h-4" />
-            평균 {timeToRead}분 소요
-          </p>
-        </div>
+        <PostDateAndReadingTime date={date} content={content} />
       </div>
     </div>
   );
@@ -86,7 +78,7 @@ const PostLists = ({ posts, postsLength = true }: Props) => {
           <PostCard
             slug={post.slug}
             frontMatter={post.frontMatter}
-            timeToRead={Math.ceil(readingTime(post.content).minutes)}
+            content={post.content}
           />
         </li>
       ))}
