@@ -68,6 +68,139 @@ const config: Config = {
       typography: (theme: ThemeFunction) => ({
         DEFAULT: {
           css: {
+            // Note: heading 스크롤 마진
+            "h2, h3, h4, h5, h6": {
+              scrollMarginTop: "80px",
+            },
+            // Note: 링크 스타일링
+            "p > a": {
+              textDecoration: "none",
+              color: "hsl(var(--priamry))",
+            },
+            "p > a:hover": {
+              textDecoration: "underline",
+            },
+            // Note: 문단 스타일링
+            p: {
+              marginTop: "30px",
+              marginBottom: "30px",
+            },
+            // Note: 따옴표 제거
+            "blockquote p::after": {
+              display: "none",
+            },
+            "blockquote p::before": {
+              display: "none",
+            },
+
+            // Note: 인라인 코드 스타일링
+            // 백틱 제거
+            ":not(pre) > code::before": {
+              display: "none",
+            },
+            ":not(pre) > code::after": {
+              display: "none",
+            },
+            // 라이트, 다크 테마 공통
+            ":not(pre) > code": {
+              fontWeight: "inherit",
+              position: "relative",
+              color: "hsla(var(--destructive) / 0.7)",
+              backgroundColor: "hsl(var(--muted))",
+              bottom: 1,
+              margin: "0 2px",
+              border: "1px solid hsla(var(--muted-foreground) / 0.2)",
+              borderRadius: 4,
+              padding: "2px 6px",
+              overflowWrap: "break-word",
+            },
+            // 다크 테마 설정
+            ".dark :not(pre) > code": {
+              color: "var(--shiki-dark)",
+            },
+
+            code: {
+              counterReset: "line",
+            },
+
+            "code::before": {
+              content: "none",
+            },
+            "code::after": {
+              content: "none",
+            },
+
+            // Note: 코드 블록 스타일링
+            pre: {
+              paddingRight: 0,
+              paddingLeft: 0,
+              color: "var(--shiki-light)",
+              backgroundColor: "var(--shiki-light-bg)",
+              border: "1px solid hsla(var(--muted-foreground) / 0.2)",
+            },
+
+            ".dark pre": {
+              backgroundColor: "var(--shiki-dark-bg)",
+              color: "var(--shiki-dark)",
+            },
+
+            // Note: 코드 블록 타이틀 스타일링
+            "figcaption[data-rehype-pretty-code-title]": {
+              border: "1px solid hsla(var(--muted-foreground) / 0.2)",
+              width: "fit-content",
+              padding: "4px 10px",
+              borderRadius: "4px 4px 0 0",
+              color: "hsl(var(--primary))",
+              backgroundColor: "hsl(var(--muted))",
+              fontWeight: 600,
+            },
+            "figcaption[data-rehype-pretty-code-title] + pre": {
+              borderRadius: 0,
+            },
+
+            // Note: 코드 블록 내 텍스트 스타일링
+            "pre > code > span": {
+              paddingLeft: "1.1rem",
+              paddingRight: "1rem",
+            },
+            "pre code span": {
+              color: "var(--shiki-light)",
+            },
+            ".dark pre code span": {
+              color: "var(--shiki-dark)",
+            },
+
+            // Note: 코드 블록 라인 넘버
+            "code[data-line-numbers] > [data-line]::before": {
+              counterIncrement: "line",
+              content: "counter(line)",
+
+              display: "inline-block",
+              width: "8px",
+              marginRight: "20px",
+              textAlign: "right",
+              color: "grey",
+            },
+
+            // Note: 코드 블록 라인 넘버의 자리수마다 차지하는 너비 설정
+            'code[data-line-numbers-max-digits="2"] > [data-line]::before': {
+              width: "1rem",
+            },
+            'code[data-line-numbers-max-digits="3"] > [data-line]::before': {
+              width: "2rem",
+            },
+            'code[data-line-numbers-max-digits="4"] > [data-line]::before': {
+              width: "3rem",
+            },
+
+            // Note: 코드 블록 라인 하이라이트
+            "[data-highlighted-line]": {
+              backgroundColor: "rgba(253, 224, 71, 0.5)",
+            },
+            ".dark [data-highlighted-line]": {
+              backgroundColor: "rgba(253, 224, 71, 0.2)",
+            },
+
             // Note: message box 기본 스타일
             ".message-box": {
               padding: "8px 16px",
