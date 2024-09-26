@@ -26,7 +26,8 @@ export default function RootLayout({
           <Nav />
           <CoverImage />
           <section className="flex flex-col">
-            <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[500px] z-20">
+            <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[500px] z-20 relative">
+              <div className="pointer-events-none absolute inset-x-0 -top-8 h-8 bg-gradient-to-t from-background" />
               {children}
             </main>
             <Footer />
