@@ -1,7 +1,4 @@
-import { formatDate } from "@/lib/utils";
-import { CalendarDays, Clock } from "lucide-react";
 import Link from "next/link";
-import readingTime from "reading-time";
 import Seperator from "./Seperator";
 import { FrontMatter, Mdx } from "@/lib/types";
 import PostDateAndReadingTime from "./PostDateAndReadingTime";
