@@ -45,7 +45,7 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
           className="object-cover z-0"
         />
       </motion.div>
-      <div className="absolute inset-0 bg-black opacity-40" />
+      <div className="absolute inset-0 bg-black opacity-50" />
     </div>
   );
 };
