@@ -5,6 +5,7 @@ import remarkBreaks from "remark-breaks";
 import { rehypeAddRelativeToHeadings, rehypeMessageBox } from "@/lib/plugin";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import SmoothScroll from "./SmoothScroll";
 
 // TODO: 스타일링 필요
 
@@ -33,22 +34,25 @@ const CustomMDX = (props: MDXRemoteProps) => {
   };
 
   return (
-    <MDXRemote
-      {...props}
-      components={{ ...components, ...(props.components || {}) }}
-      options={{
-        mdxOptions: {
-          remarkPlugins: [remarkGfm, remarkBreaks],
-          rehypePlugins: [
-            [rehypePrettyCode, prettyCodeOptions],
-            [rehypeMessageBox],
-            [rehypeSlug],
-            [rehypeAddRelativeToHeadings],
-            [rehypeAutolinkHeadings, AutoLinkOptions],
-          ],
-        },
-      }}
-    />
+    <>
+      <SmoothScroll />
+      <MDXRemote
+        {...props}
+        components={{ ...components, ...(props.components || {}) }}
+        options={{
+          mdxOptions: {
+            remarkPlugins: [remarkGfm, remarkBreaks],
+            rehypePlugins: [
+              [rehypePrettyCode, prettyCodeOptions],
+              [rehypeMessageBox],
+              [rehypeSlug],
+              [rehypeAddRelativeToHeadings],
+              [rehypeAutolinkHeadings, AutoLinkOptions],
+            ],
+          },
+        }}
+      />
+    </>
   );
 };
 
