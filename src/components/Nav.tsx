@@ -14,9 +14,9 @@ const Nav = () => {
     <header className="z-50 fixed top-0 inset-x-0 w-full">
       <nav
         className={cn(
-          "h-14 md:h-16 border-b-2 border-muted/50 transition-colors duration-300",
+          "h-14 md:h-16 border-b-2 border-muted/50 transition-colors ease-in",
           isScrolled
-            ? "bg-background/80 backdrop-blur-md"
+            ? "bg-background/80 backdrop-blur-md text-foreground"
             : "bg-transparent text-white border-transparent"
         )}
       >
