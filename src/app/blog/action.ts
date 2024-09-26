@@ -13,11 +13,6 @@ export const filterPosts = async ({ series, tags, search, sort }: Props) => {
   const originalPosts = getAllPosts();
   let posts = originalPosts;
 
-  // Note: 모든 태그
-  const allTags = [
-    ...new Set(originalPosts.map((post) => post.frontMatter.tags).flat()),
-  ];
-
   // Note: 태그 필터링
   if (tags) {
     posts = posts.filter((post) => {
