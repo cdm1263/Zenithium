@@ -16,7 +16,7 @@ const Nav = () => {
   const color = useTransform(
     scrollY,
     [0, 50],
-    ["hsl(0, 0%, 100%)", "hsl(var(--foreground))"]
+    ["white", "hsl(var(--foreground))"]
   );
   const borderColor = useTransform(
     scrollY,
