@@ -1,6 +1,13 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { TOCItem } from "./types";
+import { unified } from "unified";
+import rehypeSlug from "rehype-slug";
+import { visit } from "unist-util-visit";
+import { Element, Node, Text } from "hast";
+import rehypeStringify from "rehype-stringify";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -15,16 +22,40 @@ export const formatDate = (dateString: string) => {
   return `${currentYear}-${currentMonth}-${currentDate}`;
 };
 
-export const parseTOCHeadings = (content: string): TOCItem[] => {
-  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
-  const matches = content.matchAll(headingRegex);
+const getTextFromNode = (node: Node): string => {
+  if (node.type === "text") {
+    return (node as Text).value;
+  }
 
-  return Array.from(matches).map((match) => {
-    const level = match[1].length;
-    const title = match[2].replace(/\.$/, "");
+  if ((node as Element).children) {
+    return (node as Element).children.map(getTextFromNode).join("");
+  }
 
-    const id = title.toLowerCase().replace(/\s+/g, "-");
+  return "";
+};
 
-    return { id, title, level };
-  });
+// Note: TOC headings를 rehype slug 플러그인의 규칙에 맞게 파싱
+export const parseTOCHeadings = async (content: string) => {
+  const tocItems: TOCItem[] = [];
+
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeSlug)
+    .use(() => (tree: Node) => {
+      visit(tree, "element", (node: Element) => {
+        if (/^h[1-6]$/.test(node.tagName)) {
+          const level = parseInt(node.tagName.charAt(1));
+          const id = node.properties?.id;
+          const title = getTextFromNode(node);
+
+          tocItems.push({ id: id as string, title, level });
+        }
+      });
+    })
+    .use(rehypeStringify);
+
+  await processor.process(content);
+
+  return tocItems;
 };
