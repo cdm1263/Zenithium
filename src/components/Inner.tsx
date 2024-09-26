@@ -10,7 +10,7 @@ const Inner = ({ className, children }: Props) => {
   return (
     <div
       className={cn(
-        "h-full w-full max-w-screen-xl px-3 md:px-20 mx-auto",
+        "h-full w-full max-w-screen-xl px-5 md:px-20 mx-auto",
         className
       )}
     >
