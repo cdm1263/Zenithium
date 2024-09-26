@@ -34,7 +34,7 @@ const Blog = async ({ params }: Props) => {
     notFound();
   }
 
-  const toc = parseTOCHeadings(post.content);
+  const toc = await parseTOCHeadings(post.content);
 
   return (
     <>
