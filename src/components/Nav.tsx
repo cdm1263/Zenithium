@@ -11,16 +11,16 @@ const Nav = () => {
   const { isScrolled } = useScrollNav();
 
   return (
-    <header
-      className={cn(
-        "z-10 sticky top-0 inset-x-0 w-full h-14 md:h-16 bg-background border-b-2 border-muted/70 transition-colors duration-300",
-        isScrolled
-          ? "bg-background/90 backdrop-blur-md"
-          : "bg-transparent text-white border-transparent"
-      )}
-    >
-      <Inner>
-        <nav className="flex justify-between items-center h-full">
+    <header className="z-50 fixed top-0 inset-x-0 w-full">
+      <nav
+        className={cn(
+          "h-14 md:h-16 border-b-2 border-muted/50 transition-colors duration-300",
+          isScrolled
+            ? "bg-background/80 backdrop-blur-md"
+            : "bg-transparent text-white border-transparent"
+        )}
+      >
+        <Inner className="flex justify-between items-center h-full">
           <Link href="/" className="flex font-semibold text-xl">
             ZENITH<span className="text-primary">IUM</span>
           </Link>
@@ -41,8 +41,8 @@ const Nav = () => {
             <Seperator className="h-2/5 border-l" />
             <Switch className="text-foreground" />
           </div>
-        </nav>
-      </Inner>
+        </Inner>
+      </nav>
     </header>
   );
 };
