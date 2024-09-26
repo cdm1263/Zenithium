@@ -93,6 +93,21 @@ const config: Config = {
               display: "none",
             },
 
+            // Note: heading link 스타일링
+            ".anchor": {
+              opacity: 0.15,
+              position: "absolute",
+              inset: "0",
+              width: "100%",
+              maxWidth: "700px",
+              cursor: "pointer",
+              transition: "opacity 0.3s ease-in-out",
+            },
+
+            ".anchor:hover": {
+              opacity: 1,
+            },
+
             // Note: 인라인 코드 스타일링
             // 백틱 제거
             ":not(pre) > code::before": {

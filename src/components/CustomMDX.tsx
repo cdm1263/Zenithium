@@ -17,13 +17,15 @@ const CustomMDX = (props: MDXRemoteProps) => {
   };
 
   const AutoLinkOptions = {
+    properties: {
+      className: ["anchor"],
+    },
     content: [
       {
         type: "element",
         tagName: "span",
         properties: {
-          className:
-            "text-primary text-2xl opacity-50 hover:opacity-100 transition-opacity duration-200 hidden absolute lg:block lg:-left-6",
+          className: "text-primary text-2xl absolute lg:block lg:-left-6",
         },
         children: [{ type: "text", value: "#" }],
       },
