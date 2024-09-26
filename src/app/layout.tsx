@@ -4,7 +4,6 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
-import CoverImage from "@/components/CoverImage";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,14 +23,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <Nav />
-          <CoverImage />
-          <section className="flex flex-col">
-            <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[500px] z-20 relative">
-              <div className="pointer-events-none absolute inset-x-0 -top-8 h-8 bg-gradient-to-t from-background" />
-              {children}
-            </main>
-            <Footer />
-          </section>
+          <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[500px] relative">
+            <div className="pointer-events-none absolute inset-x-0 -top-8 h-8 bg-gradient-to-t from-background" />
+            {children}
+          </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

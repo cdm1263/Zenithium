@@ -5,6 +5,7 @@ import CustomMDX from "@/components/CustomMDX";
 import TOC from "@/components/TOC";
 import { parseTOCHeadings } from "@/lib/utils";
 import ScrollToTop from "@/components/ScrollToTop";
+import CoverImage from "@/components/CoverImage";
 
 type Props = { params: { slug: string } };
 
@@ -39,6 +40,7 @@ const Blog = async ({ params }: Props) => {
     <>
       <ScrollToTop />
       <section>
+        <CoverImage slug={params.slug} frontMatter={post.frontMatter} />
         <Inner className="flex flex-col">
           {/* // TODO: JSON LD 관리 필요 */}
           {/* <script></script> */}
