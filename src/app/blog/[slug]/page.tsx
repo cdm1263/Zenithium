@@ -40,7 +40,11 @@ const Blog = async ({ params }: Props) => {
     <>
       <ScrollToTop />
       <section>
-        <CoverImage slug={params.slug} frontMatter={post.frontMatter} />
+        <CoverImage
+          slug={params.slug}
+          frontMatter={post.frontMatter}
+          content={post.content}
+        />
         <Inner className="flex flex-col">
           {/* // TODO: JSON LD 관리 필요 */}
           {/* <script></script> */}
