@@ -4,7 +4,7 @@ import Inner from "@/components/Inner";
 import CustomMDX from "@/components/CustomMDX";
 import TOC from "@/components/TOC";
 import { parseTOCHeadings } from "@/lib/utils";
-import CoverImage from "@/components/CoverImage";
+import ScrollToTop from "@/components/ScrollToTop";
 
 type Props = { params: { slug: string } };
 
@@ -36,28 +36,30 @@ const Blog = async ({ params }: Props) => {
   const toc = parseTOCHeadings(post.content);
 
   return (
-    <section>
-      <CoverImage slug={params.slug} />
-      <Inner className="flex flex-col">
-        {/* // TODO: JSON LD 관리 필요 */}
-        {/* <script></script> */}
+    <>
+      <ScrollToTop />
+      <section>
+        <Inner className="flex flex-col">
+          {/* // TODO: JSON LD 관리 필요 */}
+          {/* <script></script> */}
 
-        {/* // TODO: 게시글 소개 및 제목 영역 추가 */}
-        {/* <div>제목 영역</div> */}
+          {/* // TODO: 게시글 소개 및 제목 영역 추가 */}
+          {/* <div>제목 영역</div> */}
 
-        <div className="flex justify-center gap-5">
-          <div className="hidden w-56 xl:block shrink-0">
-            {/* // Todo: 추후 공간 활용 */}
+          <div className="flex justify-center gap-5">
+            <div className="hidden w-56 xl:block shrink-0">
+              {/* // Todo: 추후 공간 활용 */}
+            </div>
+            <article className="prose dark:prose-invert px-2 w-full">
+              <CustomMDX source={post.content} />
+            </article>
+            <TOC toc={toc} />
           </div>
-          <article className="prose dark:prose-invert px-2 w-full">
-            <CustomMDX source={post.content} />
-          </article>
-          <TOC toc={toc} />
-        </div>
-        {/* // TODO: 댓글 영역 추가 */}
-        {/* <div className="w-full h-screen bg-slate-200/50">댓글 영역</div> */}
-      </Inner>
-    </section>
+          {/* // TODO: 댓글 영역 추가 */}
+          {/* <div className="w-full h-screen bg-slate-200/50">댓글 영역</div> */}
+        </Inner>
+      </section>
+    </>
   );
 };
 

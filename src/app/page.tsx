@@ -3,7 +3,6 @@ import PostLists from "@/components/PostLists";
 import { getAllPosts } from "./blog/utils";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
-import CoverImage from "@/components/CoverImage";
 
 const Home = () => {
   const posts = getAllPosts()
@@ -16,7 +15,6 @@ const Home = () => {
 
   return (
     <Inner>
-      <CoverImage />
       <PostLists posts={posts} postsLength={false} />
       <Link
         href="/blog"
