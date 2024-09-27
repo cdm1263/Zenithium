@@ -26,7 +26,8 @@ const CustomMDX = (props: MDXRemoteProps) => {
         type: "element",
         tagName: "span",
         properties: {
-          className: "text-primary text-2xl absolute lg:block lg:-left-6",
+          className:
+            "text-primary text-2xl absolute hidden lg:block lg:-left-6",
         },
         children: [{ type: "text", value: "#" }],
       },
