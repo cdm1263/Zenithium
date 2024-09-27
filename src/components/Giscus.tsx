@@ -46,7 +46,7 @@ const Giscus = () => {
   }, [theme]);
 
   return (
-    <div className="w-full max-w-screen-sm h-full">
+    <div className="w-full max-w-screen-sm h-full self-center">
       <section ref={ref} />
     </div>
   );

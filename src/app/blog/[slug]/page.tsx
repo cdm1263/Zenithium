@@ -45,7 +45,7 @@ const Blog = async ({ params }: Props) => {
           frontMatter={post.frontMatter}
           content={post.content}
         />
-        <Inner className="flex flex-col items-center">
+        <Inner className="flex flex-col">
           {/* // TODO: JSON LD 관리 필요 */}
           {/* <script></script> */}
 
@@ -61,7 +61,7 @@ const Blog = async ({ params }: Props) => {
             </article>
             <TOC toc={toc} />
           </div>
-          <Seperator className="border-t mt-20 mb-10 w-full max-w-screen-sm" />
+          <Seperator className="border-t mt-20 mb-10 w-full max-w-screen-sm self-center" />
           <Giscus />
         </Inner>
       </section>
