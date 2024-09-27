@@ -22,17 +22,17 @@ const FloatingScroller = () => {
   return (
     <motion.div
       onClick={scrollToTop}
-      className="w-12 h-12 fixed bottom-8 right-8 rounded-full flex items-center justify-center hover:bg-primary cursor-pointer group"
+      className="w-12 h-12 fixed bottom-4 right-4 md:bottom-8 md:right-8 rounded-full flex items-center justify-center hover:bg-primary cursor-pointer group"
       style={{
         background: `conic-gradient(
             hsl(var(--primary) / 0.6) ${progressValue * 360}deg, 
-            hsla(var(--foreground) / 0.1) ${progressValue * 360}deg
+            hsla(var(--accent-2)) ${progressValue * 360}deg
           )`,
       }}
       whileHover={{
         background: `conic-gradient(
             hsl(var(--primary) / 1) ${progressValue * 360}deg, 
-            hsla(var(--foreground) / 0.1) ${progressValue * 360}deg
+            hsla(var(--accent-2)) ${progressValue * 360}deg
         )`,
       }}
     >
