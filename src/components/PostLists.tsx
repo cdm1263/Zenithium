@@ -21,6 +21,7 @@ const PostCard = ({
   return (
     <div className="flex py-4 gap-5 w-full">
       <Link
+        scroll
         href={`/blog/${slug}`}
         className="min-w-[200px] border-2 rounded-lg flex justify-center items-center"
       >
@@ -33,7 +34,7 @@ const PostCard = ({
         >
           {series}
         </Link>
-        <Link href={`/blog/${slug}`} className="group">
+        <Link scroll href={`/blog/${slug}`} className="group">
           <p className="text-2xl font-bold group-hover:text-primary/90 transition-colors duration-200">
             {title}
           </p>
