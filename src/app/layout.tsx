@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
+import FloatingScroller from "@/components/FloatingScroller";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <FloatingScroller />
         </ThemeProvider>
       </body>
     </html>
