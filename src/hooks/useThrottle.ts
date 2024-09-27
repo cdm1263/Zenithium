@@ -1,9 +1,9 @@
 import { useRef } from "react";
 
-const useThrottle = (callback: (...args: any[]) => void, delay: number) => {
+const useThrottle = (callback: (...args: unknown[]) => void, delay: number) => {
   const lastRun = useRef<number>(Date.now());
 
-  return (...args: any[]) => {
+  return (...args: unknown[]) => {
     const timeElapsed = Date.now() - lastRun.current;
 
     if (timeElapsed >= delay) {
