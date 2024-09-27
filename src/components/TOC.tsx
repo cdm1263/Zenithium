@@ -22,7 +22,7 @@ const TOC = ({ toc }: Props) => {
 
   return (
     <nav className="hidden h-full w-56 lg:block shrink-0 px-2 py-4 sticky top-20">
-      <span className="absolute w-0.5 bg-primary/50 inset-y-0 left-0" />
+      <span className="absolute w-0.5 bg-primary/30 inset-y-0 left-0" />
       <ul className="flex flex-col gap-y-px">
         {toc.map((item) => (
           <div
@@ -39,7 +39,7 @@ const TOC = ({ toc }: Props) => {
               href={`#${item.id}`}
               onClick={(e) => handleClick(e, item.id)}
               className={cn(
-                "hover:text-primary font-medium transition-color duration-300",
+                "text-muted-foreground/70 hover:text-primary font-medium transition-color duration-300",
                 activeId === item.id ? "text-primary font-bold" : ""
               )}
             >
