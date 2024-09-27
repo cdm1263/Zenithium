@@ -17,16 +17,16 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
   const { scrollY } = useScroll();
   const srpingOptions = { stiffness: 200, damping: 20 };
 
-  const transfromedScale = useTransform(scrollY, [0, 500], [1, 1.1]);
-  const transfromedY = useTransform(scrollY, [0, 500], [0, -100]);
-  const transfromedOpacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const transfromedScale = useTransform(scrollY, [0, 600], [1, 1.1]);
+  const transfromedY = useTransform(scrollY, [0, 600], [0, -100]);
+  const transfromedOpacity = useTransform(scrollY, [0, 600], [1, 0]);
 
   const scale = useSpring(transfromedScale, srpingOptions);
   const y = useSpring(transfromedY, srpingOptions);
   const opacity = useSpring(transfromedOpacity, srpingOptions);
 
   return (
-    <div className="fixed inset-x-0 top-0 h-[500px] -z-10 overflow-hidden">
+    <div className="fixed inset-x-0 top-0 h-[600px] -z-10 overflow-hidden">
       <Inner className="absolute inset-0 z-10">
         <motion.div
           className="flex flex-col h-full justify-center text-slate-200"
@@ -53,6 +53,7 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
           src={coverData?.imageSrc || `/postAssets/${slug}/cover.jpg`}
           alt="cover"
           fill
+          priority
           className="object-cover z-0"
         />
       </motion.div>

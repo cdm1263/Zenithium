@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <Nav />
-          <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[500px] relative">
+          <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[600px] relative">
             <div className="pointer-events-none absolute inset-x-0 -top-8 h-8 bg-gradient-to-t from-background" />
             {children}
           </main>
