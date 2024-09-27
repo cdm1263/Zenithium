@@ -5,6 +5,8 @@ import CustomMDX from "@/components/CustomMDX";
 import TOC from "@/components/TOC";
 import { parseTOCHeadings } from "@/lib/utils";
 import CoverImage from "@/components/CoverImage";
+import Giscus from "@/components/Giscus";
+import Seperator from "@/components/Seperator";
 
 type Props = { params: { slug: string } };
 
@@ -43,7 +45,7 @@ const Blog = async ({ params }: Props) => {
           frontMatter={post.frontMatter}
           content={post.content}
         />
-        <Inner className="flex flex-col">
+        <Inner className="flex flex-col items-center">
           {/* // TODO: JSON LD 관리 필요 */}
           {/* <script></script> */}
 
@@ -59,8 +61,8 @@ const Blog = async ({ params }: Props) => {
             </article>
             <TOC toc={toc} />
           </div>
-          {/* // TODO: 댓글 영역 추가 */}
-          {/* <div className="w-full h-screen bg-slate-200/50">댓글 영역</div> */}
+          <Seperator className="border-t mt-20 mb-10 w-full max-w-screen-sm" />
+          <Giscus />
         </Inner>
       </section>
     </>
