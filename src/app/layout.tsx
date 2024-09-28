@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import FloatingScroller from "@/components/FloatingScroller";
+import localFont from "next/font/local";
 
-const inter = Inter({ subsets: ["latin"] });
+const nanumSquare = localFont({
+  src: "../../public/font/NanumSquareRoundB.ttf",
+  display: "swap",
+  variable: "--font-nanumsquare",
+});
 
 // TODO: 정적 메타데이터 내용 추가
 export const metadata: Metadata = {
@@ -20,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={`${nanumSquare.variable}`}>
+      <body className={nanumSquare.className}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <Nav />
           <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[600px] relative">
