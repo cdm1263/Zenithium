@@ -42,7 +42,7 @@ const PostCard = ({
             {description}
           </p>
         </Link>
-        <div className="flex gap-2 mb-3">
+        <div className="flex gap-2 mb-3 flex-wrap">
           {tags.map((tag) => (
             <Link
               href={`/blog?tag=${tag}`}
