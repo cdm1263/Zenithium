@@ -60,9 +60,6 @@ const Blog = async ({ params }: Props) => {
           {/* // TODO: JSON LD 관리 필요 */}
           {/* <script></script> */}
 
-          {/* // TODO: 게시글 소개 및 제목 영역 추가 */}
-          {/* <div>제목 영역</div> */}
-
           <div className="flex justify-center gap-5">
             <div className="hidden w-56 xl:block shrink-0">
               {/* // Todo: 추후 공간 활용 */}
