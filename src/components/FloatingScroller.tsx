@@ -34,6 +34,7 @@ const FloatingScroller = () => {
             hsl(var(--primary) / 1) ${progressValue * 360}deg, 
             hsla(var(--accent-2)) ${progressValue * 360}deg
         )`,
+        transition: { duration: 0.1 },
       }}
     >
       <div className="w-10 h-10 bg-background rounded-full flex items-center justify-center">
