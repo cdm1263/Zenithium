@@ -72,7 +72,7 @@ const Blog = async ({ params }: Props) => {
             </article>
             <TOC toc={toc} />
           </div>
-          <Seperator className="border-t mt-20 mb-10 w-full max-w-screen-sm self-center" />
+          <Seperator className="border-t m-20 lg:mt-[120px] mb-10 w-full max-w-screen-sm lg:max-w-none xl:max-w-screen-sm self-center" />
           <NeighborPosts beforePost={beforePost} afterPost={afterPost} />
           <Giscus />
         </Inner>
