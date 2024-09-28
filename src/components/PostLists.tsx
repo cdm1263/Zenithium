@@ -30,7 +30,7 @@ const PostCard = ({
       <div className="flex flex-col">
         <Link
           href={`/blog/?series=${series}`}
-          className="text-sm hover:underline text-muted-foreground font-semibold mb-3"
+          className="text-sm hover:underline text-muted-foreground font-semibold mb-3 w-fit"
         >
           {series}
         </Link>
