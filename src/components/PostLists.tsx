@@ -19,18 +19,18 @@ const PostCard = ({
 }) => {
   const { series, title, description, date, tags } = frontMatter;
   return (
-    <div className="flex py-4 gap-5 w-full">
+    <div className="flex flex-col sm:flex-row py-4 gap-5 w-full">
       <Link
         scroll
         href={`/blog/${slug}`}
-        className="min-w-[200px] border-2 rounded-lg flex justify-center items-center"
+        className="min-w-[200px] min-h-[200px] border-2 rounded-lg flex justify-center items-center mb-2"
       >
         이미지
       </Link>
       <div className="flex flex-col">
         <Link
           href={`/blog/?series=${series}`}
-          className="text-sm hover:underline text-muted-foreground font-semibold"
+          className="text-sm hover:underline text-muted-foreground font-semibold mb-3"
         >
           {series}
         </Link>
@@ -38,11 +38,11 @@ const PostCard = ({
           <p className="text-2xl font-bold group-hover:text-primary/90 transition-colors duration-200">
             {title}
           </p>
-          <p className="text-lg text-muted-foreground group-hover:underline font-semibold mb-1">
+          <p className="text-lg text-muted-foreground group-hover:underline font-semibold mb-3">
             {description}
           </p>
         </Link>
-        <div className="flex gap-2 mb-2">
+        <div className="flex gap-2 mb-3">
           {tags.map((tag) => (
             <Link
               href={`/blog?tag=${tag}`}
