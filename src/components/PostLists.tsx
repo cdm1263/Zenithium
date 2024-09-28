@@ -30,7 +30,7 @@ const PostCard = ({
       <div className="flex flex-col">
         <Link
           href={`/blog/?series=${series}`}
-          className="text-sm hover:underline text-muted-foreground font-semibold mb-3 w-fit"
+          className="text-sm hover:underline decoration-dashed text-muted-foreground font-semibold mb-3 w-fit"
         >
           {series}
         </Link>
@@ -38,7 +38,10 @@ const PostCard = ({
           <p className="text-2xl font-bold group-hover:text-primary/90 transition-colors duration-200">
             {title}
           </p>
-          <p className="text-lg text-muted-foreground group-hover:underline font-semibold mb-3">
+          <p
+            className="text-lg text-muted-foreground group-hover:underline 
+          group-hover:underline-offset-[5px] decoration-dashed font-semibold mb-3"
+          >
             {description}
           </p>
         </Link>
@@ -47,7 +50,7 @@ const PostCard = ({
             <Link
               href={`/blog?tag=${tag}`}
               key={tag}
-              className="text-primary text-sm hover:underline font-semibold"
+              className="text-primary text-sm hover:underline decoration-dashed font-semibold"
             >
               #{tag}
             </Link>
