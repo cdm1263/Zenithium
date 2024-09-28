@@ -76,10 +76,11 @@ const config: Config = {
             // Note: 링크 스타일링
             "p > a": {
               textDecoration: "none",
+              textUnderlineOffset: "5px",
               color: "hsl(var(--primary))",
             },
             "p > a:hover": {
-              textDecoration: "underline",
+              textDecoration: "underline dashed",
             },
             // Note: 문단 스타일링
             p: {
