@@ -218,6 +218,14 @@ const config: Config = {
               backgroundColor: "rgba(253, 224, 71, 0.2)",
             },
 
+            // Note: 캡션 타이틀 스타일링
+            "figcaption[data-rehype-pretty-code-caption]": {
+              textAlign: "center",
+              marginTop: "8px",
+              color: "hsl(var(--muted-foreground))",
+              fontStyle: "italic",
+            },
+
             // Note: message box 기본 스타일
             ".message-box": {
               padding: "8px 16px",
