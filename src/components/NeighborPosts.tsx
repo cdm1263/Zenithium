@@ -7,7 +7,7 @@ type Props = {
 
 const NeighborPosts = ({ beforePost, afterPost }: Props) => {
   return (
-    <div className="max-w-screen-sm self-center w-full flex my-10 min-h-20 items-center justify-between">
+    <div className="max-w-screen-sm self-center w-full flex mb-10 min-h-20 items-center justify-between">
       {beforePost ? (
         <Link
           className="flex flex-col gap-2 max-w-[40%] min-w-[100px] group"
