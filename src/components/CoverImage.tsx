@@ -32,10 +32,10 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
           className="flex flex-col h-full justify-center text-slate-200"
           style={{ opacity, y }}
         >
-          <motion.p className="text-5xl font-bold mb-10">
+          <motion.p className="text-3xl md:text-5xl font-bold mb-10 break-keep">
             {coverData?.title || frontMatter?.title}
           </motion.p>
-          <motion.p className="text-xl font-semibold mb-3">
+          <motion.p className="text-md md:text-xl font-semibold mb-3 break-keep ">
             {coverData?.description || frontMatter?.description}
           </motion.p>
           {frontMatter && content && (
