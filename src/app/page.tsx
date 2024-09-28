@@ -6,13 +6,7 @@ import Link from "next/link";
 import CoverImage from "@/components/CoverImage";
 
 const Home = () => {
-  const posts = getAllPosts()
-    .sort((a, b) => {
-      return new Date(b.frontMatter.date) > new Date(a.frontMatter.date)
-        ? 1
-        : -1;
-    })
-    .slice(0, 3);
+  const posts = getAllPosts().slice(0, 3);
 
   // Todo: 커버 데이터 설정 필요
   const coverData = {

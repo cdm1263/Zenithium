@@ -48,5 +48,7 @@ export const getAllTagsAndSeries = () => {
 
 // Note: 모든 블로그 포스트 호출
 export const getAllPosts = () => {
-  return getMDXDatas(directoryPath);
+  return getMDXDatas(directoryPath).sort((a, b) => {
+    return new Date(b.frontMatter.date) > new Date(a.frontMatter.date) ? 1 : -1;
+  });
 };
