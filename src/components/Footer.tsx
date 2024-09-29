@@ -17,13 +17,15 @@ const Footer = () => {
           <Link href="/api/rss">
             <Rss className={iconStyle} />
           </Link>
-          <SVGtoComponent
-            SVG={Github}
-            className={cn(
-              iconStyle,
-              "fill-foreground hover:fill-muted-foreground"
-            )}
-          />
+          <Link target="_blank" href="https://github.com/cdm1263">
+            <SVGtoComponent
+              SVG={Github}
+              className={cn(
+                iconStyle,
+                "fill-foreground hover:fill-muted-foreground"
+              )}
+            />
+          </Link>
         </div>
         <p className="text-lg text-muted-foreground">
           &copy; {new Date().getFullYear()}, All rights reserved.
