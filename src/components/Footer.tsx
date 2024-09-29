@@ -6,8 +6,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 const Footer = () => {
-  const iconStyle =
-    "h-7 w-7 text-foreground hover:text-muted-foreground transition-all";
+  const iconStyle = "h-7 w-7 text-foreground hover:text-primary transition-all";
 
   return (
     <footer className="bg-muted h-60">
@@ -20,10 +19,7 @@ const Footer = () => {
           <Link target="_blank" href="https://github.com/cdm1263">
             <SVGtoComponent
               SVG={Github}
-              className={cn(
-                iconStyle,
-                "fill-foreground hover:fill-muted-foreground"
-              )}
+              className={cn(iconStyle, "fill-foreground hover:fill-primary")}
             />
           </Link>
         </div>
