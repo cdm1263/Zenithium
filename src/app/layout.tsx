@@ -15,7 +15,7 @@ const nanumSquare = localFont({
 // TODO: 정적 메타데이터 내용 추가
 export const metadata: Metadata = {
   title: "개발 블로그 Zenithium",
-  description: "To Zenith, 최고의 개발자를 향해",
+  description: "To Zenith",
 };
 
 export default function RootLayout({

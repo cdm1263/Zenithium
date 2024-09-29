@@ -8,7 +8,7 @@ import CoverImage from "@/components/CoverImage";
 
 export const metadata = {
   title: "Blog - 개발 블로그 Zenithium",
-  description: "To Zenith, 최고의 개발자를 향해",
+  description: "To Zenith",
 };
 
 type Props = {
