@@ -8,11 +8,10 @@ import CoverImage from "@/components/CoverImage";
 const Home = () => {
   const posts = getAllPosts().slice(0, 3);
 
-  // Todo: 커버 데이터 설정 필요
   const coverData = {
     imageSrc: "/home-cover.jpg",
-    title: "홈화면",
-    description: "홈화면 설명",
+    title: "개발 블로그 Zenithium",
+    description: "To Zenith. 어제보다 한 걸음 위로",
   };
 
   return (
