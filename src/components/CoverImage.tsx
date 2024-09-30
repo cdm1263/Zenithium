@@ -7,6 +7,7 @@ import PostDateAndReadingTime from "./PostDateAndReadingTime";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import TagSelector from "./TagSelector";
 import { useRouter } from "next/navigation";
+import { ChartColumnStacked } from "lucide-react";
 
 type Props = {
   coverData?: { imageSrc: string; title: string; description: string };
@@ -35,6 +36,12 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
           className="flex flex-col h-full justify-center text-slate-200"
           style={{ opacity, y }}
         >
+          {frontMatter && (
+            <p className="mb-5 text-md flex items-center gap-1 text-gray-200/80">
+              <ChartColumnStacked className="h-5 w-5" />
+              {frontMatter.series}
+            </p>
+          )}
           <motion.p className="text-3xl md:text-5xl font-bold mb-10 break-keep">
             {coverData?.title || frontMatter?.title}
           </motion.p>
@@ -56,6 +63,7 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
                     key={tag}
                     tagName={tag}
                     handler={() => router.push(`/blog?tag=${tag}`)}
+                    className="text-gray-200/80 border-gray-200/80"
                   />
                 ))}
               </div>
