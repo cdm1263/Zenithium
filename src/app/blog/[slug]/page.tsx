@@ -9,6 +9,7 @@ import Giscus from "@/components/Giscus";
 import Seperator from "@/components/Seperator";
 import NeighborPosts from "@/components/NeighborPosts";
 import { Metadata } from "next";
+import { baseUrl } from "@/app/sitemap";
 
 type Props = { params: { slug: string } };
 
@@ -32,6 +33,12 @@ export const generateMetadata = ({ params }: Props): Metadata | undefined => {
     frontMatter: { title, description, date, updated, image, tags },
   } = post;
 
+  const ogImage = `${baseUrl}/api/og?title=${encodeURIComponent(
+    title
+  )}&description=${encodeURIComponent(description)}${
+    image ? `&bg=${encodeURIComponent(image)}` : ""
+  }`;
+
   return {
     title,
     description,
@@ -43,20 +50,18 @@ export const generateMetadata = ({ params }: Props): Metadata | undefined => {
       ...(updated && { modifiedTime: updated }),
       authors: ["Dongmin"],
       tags: tags,
+      images: [
+        {
+          url: ogImage,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [ogImage],
     },
-    ...(image && {
-      openGraph: {
-        images: [{ url: image }],
-      },
-      twitter: {
-        images: [image],
-      },
-    }),
     other: {
       "article:published_time": date,
       ...(updated && {
