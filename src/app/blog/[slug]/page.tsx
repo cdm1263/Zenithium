@@ -36,7 +36,7 @@ export const generateMetadata = ({ params }: Props): Metadata | undefined => {
   const ogImage = `${baseUrl}/api/og?title=${encodeURIComponent(
     title
   )}&description=${encodeURIComponent(description)}${
-    image ? `&bg=${encodeURIComponent(image)}` : ""
+    image ? `&bg=${baseUrl + encodeURIComponent(image)}` : ""
   }`;
 
   return {
