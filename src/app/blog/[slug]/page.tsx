@@ -75,6 +75,10 @@ const Blog = async ({ params }: Props) => {
   const allPosts = getAllPosts();
   const post = allPosts.find((post) => post.slug === params.slug);
 
+  if (!post) {
+    notFound();
+  }
+
   const getNeighborPost = (index: number) =>
     allPosts[index]
       ? { slug: allPosts[index].slug, title: allPosts[index].frontMatter.title }
@@ -84,24 +88,50 @@ const Blog = async ({ params }: Props) => {
   const beforePost = getNeighborPost(postIndex - 1);
   const afterPost = getNeighborPost(postIndex + 1);
 
-  if (!post) {
-    notFound();
-  }
+  const {
+    slug,
+    content,
+    frontMatter: { title, description, image, date, updated },
+  } = post;
 
-  const toc = await parseTOCHeadings(post.content);
+  const toc = await parseTOCHeadings(content);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${baseUrl}/blog/${slug}`,
+    },
+    headline: title,
+    description: description,
+    image: `${baseUrl}/api/og?title=${encodeURIComponent(
+      title
+    )}&description=${encodeURIComponent(description)}${
+      image ? `&bg=${baseUrl + encodeURIComponent(image)}` : ""
+    }`,
+    url: `${baseUrl}/blug/${slug}`,
+    datePublished: date,
+    dateModified: updated ?? date,
+    author: {
+      "@type": "Person",
+      name: "Dongmin",
+    },
+  };
 
   return (
     <>
       <section>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <CoverImage
           slug={params.slug}
           frontMatter={post.frontMatter}
           content={post.content}
         />
         <Inner className="flex flex-col">
-          {/* // TODO: JSON LD 관리 필요 */}
-          {/* <script></script> */}
-
           <div className="flex justify-center gap-5">
             <div className="hidden w-56 xl:block shrink-0">
               {/* // Todo: 추후 공간 활용 */}
