@@ -120,33 +120,31 @@ const Blog = async ({ params }: Props) => {
   };
 
   return (
-    <>
-      <section>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <CoverImage
-          slug={params.slug}
-          frontMatter={post.frontMatter}
-          content={post.content}
-        />
-        <Inner className="flex flex-col">
-          <div className="flex justify-center gap-5">
-            <div className="hidden w-56 xl:block shrink-0">
-              {/* // Todo: 추후 공간 활용 */}
-            </div>
-            <article className="prose dark:prose-invert px-2 w-full">
-              <CustomMDX source={post.content} />
-            </article>
-            <TOC toc={toc} />
+    <section>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <CoverImage
+        slug={params.slug}
+        frontMatter={post.frontMatter}
+        content={post.content}
+      />
+      <Inner className="flex flex-col">
+        <div className="flex justify-center gap-5">
+          <div className="hidden w-56 xl:block shrink-0">
+            {/* // Todo: 추후 공간 활용 */}
           </div>
-          <Seperator className="border-t m-20 lg:mt-[120px] mb-10 w-full max-w-screen-sm lg:max-w-none xl:max-w-screen-sm self-center" />
-          <NeighborPosts beforePost={beforePost} afterPost={afterPost} />
-          <Giscus />
-        </Inner>
-      </section>
-    </>
+          <article className="prose dark:prose-invert px-2 w-full">
+            <CustomMDX source={post.content} />
+          </article>
+          <TOC toc={toc} />
+        </div>
+        <Seperator className="border-t m-20 lg:mt-[120px] mb-10 w-full max-w-screen-sm lg:max-w-none xl:max-w-screen-sm self-center" />
+        <NeighborPosts beforePost={beforePost} afterPost={afterPost} />
+        <Giscus />
+      </Inner>
+    </section>
   );
 };
 
