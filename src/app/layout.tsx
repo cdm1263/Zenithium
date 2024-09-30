@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import FloatingScroller from "@/components/FloatingScroller";
 import localFont from "next/font/local";
+import { baseUrl } from "./sitemap";
 
 const nanumSquare = localFont({
   src: "../../public/font/NanumSquareRoundB.ttf",
@@ -12,10 +13,46 @@ const nanumSquare = localFont({
   variable: "--font-nanumsquare",
 });
 
-// TODO: 정적 메타데이터 내용 추가
 export const metadata: Metadata = {
-  title: "개발 블로그 Zenithium",
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: "개발 블로그 Zenithium",
+    template: "%s - 개발 블로그 Zenithium",
+  },
   description: "To Zenith",
+  openGraph: {
+    title: "개발 블로그 Zenithium",
+    description: "To Zenith",
+    url: baseUrl,
+    siteName: "개발 블로그 Zenithium",
+    locale: "ko_KR",
+    type: "website",
+    images: [
+      {
+        url: `${baseUrl}/api/og`,
+        width: 1200,
+        height: 630,
+        alt: "개발 블로그 Zenithium OG 이미지",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "개발 블로그 Zenithium",
+    description: "To Zenith",
+    images: [`${baseUrl}/api/og`],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
