@@ -229,6 +229,14 @@ const config: Config = {
               fontStyle: "italic",
             },
 
+            //Note: 이미지 캡션 스타일링
+            "figcaption[image-caption]": {
+              textAlign: "center",
+              marginTop: "8px",
+              color: "hsl(var(--muted-foreground))",
+              fontStyle: "italic",
+            },
+
             // Note: message box 기본 스타일
             ".message-box": {
               padding: "8px 16px",
