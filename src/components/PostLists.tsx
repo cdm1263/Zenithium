@@ -2,6 +2,7 @@ import Link from "next/link";
 import Seperator from "./Seperator";
 import { FrontMatter, Mdx } from "@/lib/types";
 import PostDateAndReadingTime from "./PostDateAndReadingTime";
+import NextImage from "next/image";
 
 type Props = {
   posts: Mdx[];
@@ -17,15 +18,24 @@ const PostCard = ({
   content: string;
   slug: string;
 }) => {
-  const { series, title, description, date, tags } = frontMatter;
+  const { series, title, description, date, tags, image } = frontMatter;
   return (
-    <div className="flex flex-col sm:flex-row py-4 gap-5 w-full">
+    <div className="flex flex-col sm:flex-row sm:items-center py-4 gap-5 w-full">
       <Link
         scroll
         href={`/blog/${slug}`}
-        className="min-w-[200px] min-h-[200px] border-2 rounded-lg flex justify-center items-center mb-2"
+        className="min-w-60 min-h-[200px] relative border-2 rounded-lg flex justify-center items-center mb-2 overflow-hidden group"
       >
-        이미지
+        {image ? (
+          <NextImage
+            src={image}
+            alt={title}
+            fill
+            className="object-cover hover:scale-110 transition-transform duration-500"
+          />
+        ) : (
+          "이미지"
+        )}
       </Link>
       <div className="flex flex-col">
         <Link
@@ -40,7 +50,7 @@ const PostCard = ({
           </p>
           <p
             className="text-lg text-muted-foreground group-hover:underline 
-          group-hover:underline-offset-[5px] decoration-dashed font-semibold mb-3"
+          underline-offset-[5px] decoration-dashed font-semibold mb-3"
           >
             {description}
           </p>
