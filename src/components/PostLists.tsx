@@ -3,6 +3,7 @@ import Seperator from "./Seperator";
 import { FrontMatter, Mdx } from "@/lib/types";
 import PostDateAndReadingTime from "./PostDateAndReadingTime";
 import NextImage from "next/image";
+import { ChartColumnStacked } from "lucide-react";
 
 type Props = {
   posts: Mdx[];
@@ -19,6 +20,7 @@ const PostCard = ({
   slug: string;
 }) => {
   const { series, title, description, date, tags, image } = frontMatter;
+
   return (
     <div className="flex flex-col sm:flex-row sm:items-center py-4 gap-5 w-full">
       <Link
@@ -40,8 +42,9 @@ const PostCard = ({
       <div className="flex flex-col">
         <Link
           href={`/blog/?series=${series}`}
-          className="text-sm hover:underline decoration-dashed text-muted-foreground font-semibold mb-3 w-fit"
+          className="text-sm flex gap-x-1 items-center hover:underline decoration-dashed text-muted-foreground font-semibold mb-3 w-fit"
         >
+          <ChartColumnStacked className="h-4 w-4" />
           {series}
         </Link>
         <Link scroll href={`/blog/${slug}`} className="group">
