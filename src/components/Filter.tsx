@@ -12,6 +12,7 @@ import {
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
 import useDebounce from "@/hooks/useDebounce";
+import TagSelector from "./TagSelector";
 
 type Props = {
   tags: string[];
@@ -111,16 +112,14 @@ const Filter = ({ tags, series, className }: Props) => {
       {/* // Note: 태그 */}
       <div className="flex gap-1 flex-wrap">
         {tags.map((tag) => (
-          <span
+          <TagSelector
             key={tag}
-            className={cn(
-              "px-3 py-1 rounded-full text-sm text-primary shrink-0 cursor-pointer border-muted border-2 hover:bg-primary/30 transition-colors select-none",
-              params.getAll("tag").includes(tag) && "bg-primary/30"
-            )}
-            onClick={() => tagHandler(tag)}
-          >
-            #{tag}
-          </span>
+            tagName={tag}
+            className={
+              params.getAll("tag").includes(tag) ? "bg-primary/30" : ""
+            }
+            handler={() => tagHandler(tag)}
+          />
         ))}
       </div>
     </div>
