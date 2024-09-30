@@ -8,6 +8,7 @@ import CoverImage from "@/components/CoverImage";
 import Giscus from "@/components/Giscus";
 import Seperator from "@/components/Seperator";
 import NeighborPosts from "@/components/NeighborPosts";
+import { Metadata } from "next";
 
 type Props = { params: { slug: string } };
 
@@ -21,13 +22,49 @@ export const generateStaticParams = async () => {
   }));
 };
 
-// TODO: 동적 메타데이터 관리 필요
+export const generateMetadata = ({ params }: Props): Metadata | undefined => {
+  const posts = getAllPosts();
+  const post = posts.find((post) => post.slug === params.slug);
 
-// export const generateMetadata = ({ params }) => {
-//   const posts = getAllPosts();
-//   if (!posts) return;
+  if (!post) return;
 
-// };
+  const {
+    frontMatter: { title, description, date, updated, image, tags },
+  } = post;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      publishedTime: date,
+      ...(updated && { modifiedTime: updated }),
+      authors: ["Dongmin"],
+      tags: tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    ...(image && {
+      openGraph: {
+        images: [{ url: image }],
+      },
+      twitter: {
+        images: [image],
+      },
+    }),
+    other: {
+      "article:published_time": date,
+      ...(updated && {
+        "article:modified_time": updated,
+      }),
+    },
+  };
+};
 
 const Blog = async ({ params }: Props) => {
   const allPosts = getAllPosts();
