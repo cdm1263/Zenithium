@@ -3,7 +3,7 @@ import { HTMLAttributes } from "react";
 
 type Props = HTMLAttributes<HTMLSpanElement> & {
   tagName: string;
-  className: string;
+  className?: string;
   handler: (tagName: string, ...args: unknown[]) => void;
 };
 
