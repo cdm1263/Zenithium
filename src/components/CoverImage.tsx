@@ -5,6 +5,8 @@ import NextImage from "next/image";
 import Inner from "./Inner";
 import PostDateAndReadingTime from "./PostDateAndReadingTime";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import TagSelector from "./TagSelector";
+import { useRouter } from "next/navigation";
 
 type Props = {
   coverData?: { imageSrc: string; title: string; description: string };
@@ -14,6 +16,7 @@ type Props = {
 };
 
 const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
+  const router = useRouter();
   const { scrollY } = useScroll();
   const srpingOptions = { stiffness: 200, damping: 20 };
 
@@ -39,12 +42,24 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
             {coverData?.description || frontMatter?.description}
           </motion.p>
           {frontMatter && content && (
-            <PostDateAndReadingTime
-              date={frontMatter.date}
-              content={content}
-              readingClassName="text-slate-200/70"
-              dateClassName="text-slate-200/70"
-            />
+            <div className="flex flex-col gap-y-5">
+              <PostDateAndReadingTime
+                date={frontMatter.date}
+                content={content}
+                readingClassName="text-slate-200/70"
+                dateClassName="text-slate-200/70"
+              />
+
+              <div className="flex gap-x-2">
+                {frontMatter.tags.map((tag) => (
+                  <TagSelector
+                    key={tag}
+                    tagName={tag}
+                    handler={() => router.push(`/blog?tag=${tag}`)}
+                  />
+                ))}
+              </div>
+            </div>
           )}
         </motion.div>
       </Inner>
