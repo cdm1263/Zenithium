@@ -63,7 +63,7 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
                     key={tag}
                     tagName={tag}
                     handler={() => router.push(`/blog?tag=${tag}`)}
-                    className="text-gray-200/80 border-gray-200/80"
+                    className="text-gray-200/80 border-gray-200/20"
                   />
                 ))}
               </div>
