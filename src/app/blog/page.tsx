@@ -7,7 +7,7 @@ import Seperator from "@/components/Seperator";
 import CoverImage from "@/components/CoverImage";
 
 export const metadata = {
-  title: "Blog - 개발 블로그 Zenithium",
+  title: "Blog",
   description: "To Zenith",
 };
 

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Resume - 개발 블로그 Zenithium",
+  title: "Resume",
   description: "To Zenith",
 };
 
