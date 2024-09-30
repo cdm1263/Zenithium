@@ -10,6 +10,7 @@ export type FrontMatter = {
   date: string;
   series: string;
   tags: string[];
+  updated?: string;
   image?: string;
 };
 
