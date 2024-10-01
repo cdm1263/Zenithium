@@ -32,18 +32,21 @@ export const sections: ResumeSection[] = [
         subtitle: "아이고",
         period: "2024.05 ~ 2024.06",
         content: contents.get("aigoo") as string,
+        href: "https://github.com/cdm1263/AIGOO-frontend",
       },
       {
         title: "Foodie Log",
         subtitle: "푸디로그",
         period: "2024.03 ~ 2024.04",
         content: contents.get("foodie-log") as string,
+        href: "https://github.com/FoodieLog/foodie-log-client",
       },
       {
         title: "Pokehub",
         subtitle: "포켓허브",
         period: "2023.11 ~ 2024.02",
         content: contents.get("pokehub") as string,
+        href: "https://github.com/side-project-pokehub/my-pokemon",
       },
     ],
   },
@@ -52,7 +55,7 @@ export const sections: ResumeSection[] = [
     description: "다양한 경험",
     items: [
       {
-        title: "앱손 & 멋쟁이 사자처럼 해커톤 참여",
+        title: "앱손 코리아 & 멋쟁이 사자처럼 해커톤 참여",
         subtitle: "Epson Innovation Challenge Korea",
         period: "2024.05 ~ 2024.06",
         content: contents.get("epson") as string,
