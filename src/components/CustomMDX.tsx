@@ -11,8 +11,8 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import SmoothScroll from "./SmoothScroll";
 import remarkUnwrapImages from "remark-unwrap-images";
-// TODO: 스타일링 필요
 
+// TODO: 추후 컴포넌트 추가
 const components = {};
 
 const CustomMDX = (props: MDXRemoteProps) => {
