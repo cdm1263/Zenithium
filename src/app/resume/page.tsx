@@ -11,7 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { about, ResumeContent, sections } from "@/lib/resume";
+import { about, ResumeContent, sections } from "./resume";
 
 export const metadata = {
   title: "Resume",
