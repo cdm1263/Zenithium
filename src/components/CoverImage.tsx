@@ -52,6 +52,7 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
             <div className="flex flex-col gap-y-5">
               <PostDateAndReadingTime
                 date={frontMatter.date}
+                updated={frontMatter.updated}
                 content={content}
                 readingClassName="text-slate-200/70"
                 dateClassName="text-slate-200/70"
