@@ -29,7 +29,9 @@ const PostCard = ({
       7
     ) {
       return (
-        <div className="text-sm text-yellow-500 order-1 xs:order-2">New</div>
+        <div className="text-sm font-bold text-yellow-500 order-1 xs:order-2">
+          New
+        </div>
       );
     } else if (
       updated &&
@@ -38,7 +40,9 @@ const PostCard = ({
         7
     ) {
       return (
-        <div className="text-sm text-green-500 order-1 xs:order-2">Update</div>
+        <div className="text-sm font-bold text-green-500 order-1 xs:order-2">
+          Update
+        </div>
       );
     }
   };
