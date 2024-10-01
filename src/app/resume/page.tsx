@@ -74,7 +74,7 @@ const ContentContainer = ({
   return (
     <div
       className={cn(
-        "flex flex-col border-2 border-muted rounded-lg px-4 pt-4 pb-3 sm:mx-4",
+        "flex flex-col border-2 border-muted rounded-lg px-4 pt-4 pb-3 sm:mx-2",
         className
       )}
     >
