@@ -5,15 +5,15 @@ import { FrontMatter, Mdx } from "@/lib/types";
 
 const directoryPath = path.join(process.cwd(), "blog-contents");
 
-// Note: 개별 mdx 파일 데이터 파싱
-const readMDXFile = (filePath: string) => {
+// Info: 개별 mdx 파일 데이터 파싱
+export const readMDXFile = (filePath: string) => {
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const mdxData = matter(fileContent);
 
   return mdxData;
 };
 
-// Note: 디렉토리의 mdx 파일들을 파싱해 배열에 담아 반환
+// Info: 디렉토리의 mdx 파일들을 파싱해 배열에 담아 반환
 const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
   const directoryNames = fs.readdirSync(dir);
 
@@ -28,6 +28,7 @@ const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
   return allPosts;
 };
 
+// Info: 모든 태그와 시리즈 배열 반환
 export const getAllTagsAndSeries = () => {
   const directoryNames = fs.readdirSync(directoryPath);
   const allTags: string[][] = [];
@@ -46,7 +47,7 @@ export const getAllTagsAndSeries = () => {
   };
 };
 
-// Note: 모든 블로그 포스트 호출
+// Info: 모든 블로그 포스트 호출
 export const getAllPosts = () => {
   return getMDXDatas(directoryPath).sort((a, b) => {
     return new Date(b.frontMatter.date) > new Date(a.frontMatter.date) ? 1 : -1;
