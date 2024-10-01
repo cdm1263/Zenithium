@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import FloatingScroller from "@/components/FloatingScroller";
 import localFont from "next/font/local";
 import { baseUrl } from "./sitemap";
+import { Toaster } from "@/components/ui/toaster";
 
 const nanumSquareRound = localFont({
   src: [
@@ -91,6 +92,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <FloatingScroller />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
