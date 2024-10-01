@@ -10,9 +10,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        nanumsquare: ["var(--font-nanumsquare)"],
-      },
       screens: {
         xs: "400px",
       },
