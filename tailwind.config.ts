@@ -74,12 +74,12 @@ const config: Config = {
               scrollMarginTop: "80px",
             },
             // Note: 링크 스타일링
-            "p > a": {
+            ":not(h1, h2, h3, h4, h5, h6) > a": {
               textDecoration: "none",
               textUnderlineOffset: "5px",
               color: "hsl(var(--primary))",
             },
-            "p > a:hover": {
+            ":not(h1, h2, h3, h4, h5, h6) > a:hover": {
               textDecoration: "underline dashed",
             },
             // Note: 문단 스타일링
