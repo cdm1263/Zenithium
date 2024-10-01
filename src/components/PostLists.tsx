@@ -19,7 +19,29 @@ const PostCard = ({
   content: string;
   slug: string;
 }) => {
-  const { series, title, description, date, tags, image } = frontMatter;
+  const { series, title, description, date, tags, image, updated } =
+    frontMatter;
+
+  const renderNeworUpdated = () => {
+    if (
+      (new Date().getTime() - new Date(date).getTime()) /
+        (1000 * 60 * 60 * 24) <=
+      7
+    ) {
+      return (
+        <div className="text-sm text-yellow-500 order-1 xs:order-2">New</div>
+      );
+    } else if (
+      updated &&
+      (new Date().getTime() - new Date(updated).getTime()) /
+        (1000 * 60 * 60 * 24) <=
+        7
+    ) {
+      return (
+        <div className="text-sm text-green-500 order-1 xs:order-2">Update</div>
+      );
+    }
+  };
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center py-4 gap-5 w-full">
@@ -48,9 +70,12 @@ const PostCard = ({
           {series}
         </Link>
         <Link scroll href={`/blog/${slug}`} className="group">
-          <p className="text-2xl font-bold group-hover:text-primary/90 transition-colors duration-200">
-            {title}
-          </p>
+          <div className="flex gap-2 flex-col xs:flex-row xs:items-center">
+            <span className="order-2 xs:order-1 text-2xl font-bold group-hover:text-primary/90 transition-colors duration-200">
+              {title}
+            </span>
+            {renderNeworUpdated()}
+          </div>
           <p
             className="text-lg text-muted-foreground group-hover:underline 
           underline-offset-[5px] decoration-dashed font-semibold mb-3"
