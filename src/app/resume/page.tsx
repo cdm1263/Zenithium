@@ -26,8 +26,8 @@ const Title = ({
   description: string;
 }) => {
   return (
-    <div className="flex items-end mb-4">
-      <h3 className="text-3xl font-semibold mr-2">{title}</h3>
+    <div className="flex flex-col xs:flex-row xs:items-end mb-4">
+      <h3 className="text-3xl font-semibold xs:mr-2">{title}</h3>
       <span className="text-muted-foreground">{description}</span>
     </div>
   );
@@ -74,7 +74,7 @@ const ContentContainer = ({
   return (
     <div
       className={cn(
-        "flex flex-col border-2 border-muted rounded-lg px-4 pt-4 pb-3 mx-4",
+        "flex flex-col border-2 border-muted rounded-lg px-4 pt-4 pb-3 sm:mx-4",
         className
       )}
     >
@@ -98,7 +98,9 @@ const AccordionSection = ({
       collapsible
     >
       <AccordionItem value={title}>
-        <AccordionTrigger>{title}</AccordionTrigger>
+        <AccordionTrigger className="text-md sm:text-xl">
+          {title}
+        </AccordionTrigger>
         <AccordionContent>
           <SubTitle subtitle={subtitle} period={period} href={href} />
           <div className="prose dark:prose-invert">
@@ -114,7 +116,7 @@ const Resume = () => {
   const coverData = {
     imageSrc: "/resume-cover.jpg",
     title: "Resume",
-    description: "저는 이런 개발자 입니다.",
+    description: "저를 소개합니다.",
   };
 
   return (
@@ -130,6 +132,8 @@ const Resume = () => {
           </div>
           <SocialIcons />
         </div>
+
+        {/* // Info: 경력사항, 프로젝트, 경험, 오픈소스, 교육 */}
         {sections.map((section) => (
           <div key={section.title}>
             <Title title={section.title} description={section.description} />
