@@ -13,6 +13,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.0",
+    "@radix-ui/react-toast": "^1.2.1",
     "@svgr/webpack": "^8.1.0",
     "@types/hast": "^3.0.4",
     "@types/rss": "^0.0.32",
