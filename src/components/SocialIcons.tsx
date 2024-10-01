@@ -29,7 +29,7 @@ const SocialIcons = () => {
   };
 
   return (
-    <div className="flex items-center gap-x-3">
+    <div className="flex items-center gap-x-2">
       <Link
         href="https://github.com/cdm1263"
         target="_blank"
@@ -38,7 +38,7 @@ const SocialIcons = () => {
             variant: "outline",
             size: "sm",
           }),
-          "group"
+          "group px-2"
         )}
       >
         <SVGtoComponent
@@ -54,7 +54,7 @@ const SocialIcons = () => {
             variant: "outline",
             size: "sm",
           }),
-          "group"
+          "group px-2"
         )}
       >
         <SVGtoComponent
@@ -69,7 +69,7 @@ const SocialIcons = () => {
             variant: "outline",
             size: "sm",
           }),
-          "group"
+          "group px-2"
         )}
       >
         <Mail className="h-5 w-5 group-hover:text-primary transition-colors" />
