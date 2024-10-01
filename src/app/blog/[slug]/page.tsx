@@ -10,6 +10,7 @@ import Seperator from "@/components/Seperator";
 import NeighborPosts from "@/components/NeighborPosts";
 import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
+import SeriesAccordion from "@/components/SeriesAccordion";
 
 type Props = { params: { slug: string } };
 
@@ -91,8 +92,12 @@ const Blog = async ({ params }: Props) => {
   const {
     slug,
     content,
-    frontMatter: { title, description, image, date, updated },
+    frontMatter: { title, description, image, date, updated, series },
   } = post;
+
+  const allSameSeries = allPosts.filter(
+    (post) => post.frontMatter.series === series
+  );
 
   const toc = await parseTOCHeadings(content);
 
@@ -142,6 +147,12 @@ const Blog = async ({ params }: Props) => {
         </div>
         <Seperator className="border-t m-20 lg:mt-[120px] mb-10 w-full max-w-screen-sm lg:max-w-none xl:max-w-screen-sm self-center" />
         <NeighborPosts beforePost={beforePost} afterPost={afterPost} />
+        <SeriesAccordion
+          allSameSeries={allSameSeries}
+          thisSeries={series}
+          thisSlug={slug}
+        />
+
         <Giscus />
       </Inner>
     </section>
