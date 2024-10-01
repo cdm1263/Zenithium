@@ -7,10 +7,30 @@ import FloatingScroller from "@/components/FloatingScroller";
 import localFont from "next/font/local";
 import { baseUrl } from "./sitemap";
 
-const nanumSquare = localFont({
-  src: "../../public/font/NanumSquareRoundB.ttf",
-  display: "swap",
-  variable: "--font-nanumsquare",
+const nanumSquareRound = localFont({
+  src: [
+    {
+      path: "../../public/font/NanumSquareRoundL.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/NanumSquareRoundR.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/NanumSquareRoundB.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/font/NanumSquareRoundEB.ttf",
+      weight: "800",
+      style: "normal",
+    },
+  ],
+  variable: "--font-nanum",
 });
 
 export const metadata: Metadata = {
@@ -61,8 +81,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${nanumSquare.variable}`}>
-      <body className={nanumSquare.className}>
+    <html lang="en" className={`${nanumSquareRound.variable}`}>
+      <body className={nanumSquareRound.className}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <Nav />
           <main className="flex flex-1 flex-col h-full py-20 bg-background mt-[600px] relative">
