@@ -6,7 +6,7 @@ import { FrontMatter, Mdx } from "@/lib/types";
 const directoryPath = path.join(process.cwd(), "blog-contents");
 
 // Info: 개별 mdx 파일 데이터 파싱
-export const readMDXFile = (filePath: string) => {
+const readMDXFile = (filePath: string) => {
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const mdxData = matter(fileContent);
 
@@ -26,6 +26,23 @@ const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
   });
 
   return allPosts;
+};
+
+// Info: resume 페이지에서 사용
+export const getResumeMDXDatas: (dir: string) => Map<string, string> = (
+  dir: string
+) => {
+  const fileNames = fs.readdirSync(dir);
+  const contents = new Map();
+
+  fileNames.forEach((fileName) => {
+    const filePath = path.join(dir, fileName);
+    const { content } = readMDXFile(filePath);
+
+    contents.set(fileName.replace(".mdx", ""), content);
+  });
+
+  return contents;
 };
 
 // Info: 모든 태그와 시리즈 배열 반환
