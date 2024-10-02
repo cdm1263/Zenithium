@@ -18,9 +18,12 @@ const Giscus = () => {
     scriptElem.crossOrigin = "anonymous";
 
     scriptElem.setAttribute("data-repo", "cdm1263/Zenithium");
-    scriptElem.setAttribute("data-repo-id", process.env.REPO_KEY!);
+    scriptElem.setAttribute("data-repo-id", process.env.NEXT_PUBLIC_REPO_KEY!);
     scriptElem.setAttribute("data-category", "Announcements");
-    scriptElem.setAttribute("data-category-id", process.env.CATEGORY_KEY!);
+    scriptElem.setAttribute(
+      "data-category-id",
+      process.env.NEXT_PUBLIC_CATEGORY_KEY!
+    );
     scriptElem.setAttribute("data-mapping", "pathname");
     scriptElem.setAttribute("data-strict", "0");
     scriptElem.setAttribute("data-reactions-enabled", "1");
