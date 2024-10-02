@@ -42,6 +42,14 @@ export const metadata: Metadata = {
     template: "%s - 개발 블로그 Zenithium",
   },
   description: "To Zenith. 어제보다 한 걸음 위로",
+  keywords: [
+    "Zenithium",
+    "제니시움",
+    "개발",
+    "프론트엔드",
+    "개발 블로그",
+    "개발자",
+  ],
   openGraph: {
     title: "개발 블로그 Zenithium",
     description: "To Zenith. 어제보다 한 걸음 위로",
