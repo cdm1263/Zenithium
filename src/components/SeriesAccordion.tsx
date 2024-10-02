@@ -31,8 +31,11 @@ const SeriesAccordion = ({ allSameSeries, thisSeries, thisSlug }: Props) => {
                 >
                   <li
                     className={cn(
-                      "text:md xs:text-lg hover:bg-primary/20 transition-colors cursor-pointer px-3 py-1 rounded-md",
-                      { "bg-primary/10": thisSlug === sameSeries.slug }
+                      "text:md xs:text-lg hover:bg-primary/20 hover:text-foreground transition-colors cursor-pointer px-3 py-1 rounded-md font-semibold text-muted-foreground",
+                      {
+                        "bg-primary/10 text-foreground":
+                          thisSlug === sameSeries.slug,
+                      }
                     )}
                   >
                     <span className="mr-2">{index + 1}.</span>
