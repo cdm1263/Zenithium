@@ -13,8 +13,7 @@ export const GET = async (req: Request) => {
     join(
       process.cwd(),
       "public",
-      bgPath ? "postAssets" : "",
-      bgPath ?? "home-cover.jpg",
+      bgPath ? `postAssets/${bgPath}` : "home-cover.jpg",
       bgPath ? "cover.jpg" : ""
     )
   );
