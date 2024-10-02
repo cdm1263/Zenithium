@@ -63,15 +63,15 @@ const CoverImage = ({
                   date={frontMatter.date}
                   updated={frontMatter.updated}
                   content={content}
-                  readingClassName="text-slate-200/70"
-                  dateClassName="text-slate-200/70"
+                  readingClassName="text-slate-200 "
+                  dateClassName="text-slate-200 "
                 />
 
                 {views && (
                   <Suspense>
-                    <div className="flex items-center text-muted-foreground gap-x-2">
+                    <div className="flex items-center text-slate-200 gap-x-2">
                       <Eye className="h-4 w-4" />
-                      <span className="text-md">{views}회 조회</span>
+                      <span className="text-sm">{views}회 조회</span>
                     </div>
                   </Suspense>
                 )}
