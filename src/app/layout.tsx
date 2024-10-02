@@ -7,6 +7,7 @@ import FloatingScroller from "@/components/FloatingScroller";
 import localFont from "next/font/local";
 import { baseUrl } from "./sitemap";
 import { Toaster } from "@/components/ui/toaster";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 const nanumSquareRound = localFont({
   src: [
@@ -81,6 +82,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID as string;
   return (
     <html lang="en" className={`${nanumSquareRound.variable}`}>
       <body className={nanumSquareRound.className}>
@@ -93,6 +95,8 @@ export default function RootLayout({
           <Footer />
           <FloatingScroller />
           <Toaster />
+          <GoogleTagManager gtmId={gaId} />
+          <GoogleAnalytics gaId={gaId} />
         </ThemeProvider>
       </body>
     </html>
