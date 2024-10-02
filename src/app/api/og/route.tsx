@@ -12,7 +12,6 @@ export const GET = async (req: Request) => {
   const bgData = await readFile(
     join(
       process.cwd(),
-      "public",
       bgPath ? `postAssets/${bgPath}` : "home-cover.jpg",
       bgPath ? "cover.jpg" : ""
     )
