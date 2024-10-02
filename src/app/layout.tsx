@@ -41,10 +41,10 @@ export const metadata: Metadata = {
     default: "개발 블로그 Zenithium",
     template: "%s - 개발 블로그 Zenithium",
   },
-  description: "To Zenith",
+  description: "To Zenith, 어제보다 한 걸음 위로",
   openGraph: {
     title: "개발 블로그 Zenithium",
-    description: "To Zenith",
+    description: "To Zenith, 어제보다 한 걸음 위로",
     url: baseUrl,
     siteName: "개발 블로그 Zenithium",
     locale: "ko_KR",
