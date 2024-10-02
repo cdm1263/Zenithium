@@ -32,13 +32,14 @@ export const generateMetadata = ({ params }: Props): Metadata | undefined => {
   if (!post) return;
 
   const {
+    dirName,
     frontMatter: { title, description, date, updated, image, tags },
   } = post;
 
   const ogImage = `${baseUrl}/api/og?title=${encodeURIComponent(
     title
   )}&description=${encodeURIComponent(description)}${
-    image ? `&bg=${baseUrl + encodeURIComponent(image)}` : ""
+    image ? `&bg=${encodeURIComponent(dirName)}` : ""
   }`;
 
   return {
@@ -93,6 +94,7 @@ const Blog = async ({ params }: Props) => {
   const {
     slug,
     content,
+    dirName,
     frontMatter: { title, description, image, date, updated, series },
   } = post;
 
@@ -114,7 +116,7 @@ const Blog = async ({ params }: Props) => {
     image: `${baseUrl}/api/og?title=${encodeURIComponent(
       title
     )}&description=${encodeURIComponent(description)}${
-      image ? `&bg=${baseUrl + encodeURIComponent(image)}` : ""
+      image ? `&bg=${encodeURIComponent(dirName)}` : ""
     }`,
     url: `${baseUrl}/blug/${slug}`,
     datePublished: date,

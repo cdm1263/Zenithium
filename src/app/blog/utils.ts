@@ -22,7 +22,7 @@ const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
     const { data: frontMatter, content } = readMDXFile(filePath);
     const slug = dirName;
 
-    return { frontMatter: frontMatter as FrontMatter, content, slug };
+    return { frontMatter: frontMatter as FrontMatter, content, slug, dirName };
   });
 
   return allPosts;

@@ -18,4 +18,5 @@ export type Mdx = {
   frontMatter: FrontMatter;
   content: string;
   slug: string;
+  dirName: string;
 };
