@@ -1,6 +1,5 @@
-import { readFile } from "fs/promises";
+import { baseUrl } from "@/app/sitemap";
 import { ImageResponse } from "next/og";
-import { join } from "path";
 
 export const GET = async (req: Request) => {
   const url = new URL(req.url);
@@ -9,16 +8,9 @@ export const GET = async (req: Request) => {
     url.searchParams.get("description") ?? "To Zenith. 어제보다 한 걸음 위로";
   const bgPath = url.searchParams.get("bg");
 
-  const bgData = await readFile(
-    join(
-      process.cwd(),
-      "public",
-      bgPath ? `postAssets/${bgPath}` : "home-cover.jpg",
-      bgPath ? "cover.jpg" : ""
-    )
-  );
-  const base64Image = Buffer.from(bgData).toString("base64");
-  const bgSrc = `data:image/jpeg;base64,${base64Image}`;
+  const bgSrc = `${baseUrl}/${
+    bgPath ? `postAssets/${bgPath}/cover.jpg` : "home-cover.jpg"
+  }`;
 
   return new ImageResponse(
     (
