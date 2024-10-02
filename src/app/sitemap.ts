@@ -1,8 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "./blog/utils";
 
-// TODO: 배포 이후 baseUrl 변경
-export const baseUrl = "http://localhost:3000";
+export const baseUrl = "https://www.zenithium.info/";
 
 type Sitemap = () => MetadataRoute.Sitemap;
 
