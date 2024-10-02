@@ -12,25 +12,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { about, ResumeContent, sections } from "./resume";
+import SectionTitle from "@/components/SectionTitle";
 
 export const metadata = {
   title: "Resume",
   description: "To Zenith",
-};
-
-const Title = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) => {
-  return (
-    <div className="flex flex-col xs:flex-row xs:items-end mb-4">
-      <h3 className="text-3xl font-semibold xs:mr-2">{title}</h3>
-      <span className="text-muted-foreground">{description}</span>
-    </div>
-  );
 };
 
 const SubTitle = ({
@@ -136,7 +122,10 @@ const Resume = () => {
         {/* // Info: 경력사항, 프로젝트, 경험, 오픈소스, 교육 */}
         {sections.map((section) => (
           <div key={section.title}>
-            <Title title={section.title} description={section.description} />
+            <SectionTitle
+              title={section.title}
+              description={section.description}
+            />
             <div className="flex flex-col gap-y-4">
               {section.items.map((item) => (
                 <AccordionSection key={item.title} {...item} />
