@@ -9,7 +9,11 @@ export const GET = async (req: Request) => {
   const bgPath = url.searchParams.get("bg");
 
   const bgSrc = `${baseUrl}/${
-    bgPath ? `postAssets/${bgPath}/cover.jpg` : "home-cover.jpg"
+    bgPath === "resume-cover.jpg" || bgPath === "blog-cover.jpg"
+      ? bgPath
+      : bgPath
+      ? `postAssets/${bgPath}/cover.jpg`
+      : "home-cover.jpg"
   }`;
 
   const font = await fetch(
