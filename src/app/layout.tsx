@@ -90,7 +90,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID as string;
+  const gaId = process.env.GOOGLE_APPLICATION_ID as string;
   return (
     <html lang="en" className={`${nanumSquareRound.variable}`}>
       <body className={nanumSquareRound.className}>
