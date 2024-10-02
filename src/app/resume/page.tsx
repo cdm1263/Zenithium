@@ -13,10 +13,25 @@ import {
 } from "@/components/ui/accordion";
 import { about, ResumeContent, sections } from "./resume";
 import SectionTitle from "@/components/SectionTitle";
+import { baseUrl } from "../sitemap";
+
+const description = "저를 소개합니다.";
 
 export const metadata = {
   title: "Resume",
-  description: "To Zenith",
+  description: "To Zenith. 어제보다 한 걸음 위로",
+  openGraph: {
+    title: "Resume - 개발 블로그 Zenithium",
+    description,
+    images: [
+      {
+        url: `${baseUrl}/api/og?description=${description}&bg=resume-cover.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "개발 블로그 Zenithium OG 이미지",
+      },
+    ],
+  },
 };
 
 const SubTitle = ({
@@ -102,7 +117,7 @@ const Resume = () => {
   const coverData = {
     imageSrc: "/resume-cover.jpg",
     title: "Resume",
-    description: "저를 소개합니다.",
+    description,
   };
 
   return (

@@ -5,10 +5,26 @@ import Filter from "@/components/Filter";
 import { filterPosts } from "./action";
 import Seperator from "@/components/Seperator";
 import CoverImage from "@/components/CoverImage";
+import { Metadata } from "next";
+import { baseUrl } from "../sitemap";
 
-export const metadata = {
+const description = "블로그 포스트 목록입니다.";
+
+export const metadata: Metadata = {
   title: "Blog",
-  description: "To Zenith",
+  description: "To Zenith. 어제보다 한 걸음 위로",
+  openGraph: {
+    title: "Blog - 개발 블로그 Zenithium",
+    description,
+    images: [
+      {
+        url: `${baseUrl}/api/og?description=${description}&bg=blog-cover.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "개발 블로그 Zenithium OG 이미지",
+      },
+    ],
+  },
 };
 
 type Props = {
@@ -25,7 +41,7 @@ const Page = async ({ searchParams }: Props) => {
   const coverData = {
     imageSrc: "/blog-cover.jpg",
     title: "Blog",
-    description: "블로그 포스트 목록입니다.",
+    description,
   };
 
   return (
