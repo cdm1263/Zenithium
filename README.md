@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# [Zenithium](https://www.zenithium.info)
 
-## Getting Started
+To Zenith, 어제보다 한걸음 더 나아간 개발자를 목표로 제작한 개인 블로그 서비스 입니다.
 
-First, run the development server:
+## 포스트 작성 가이드
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- blog-content/{slug}/content.mdx 의 형태로 포스트 생성
+- 정적 이미지는 public/postAssets/{slug}/{파일명}.jpg 에 추가
+- 게시물 메타데이터인 Front Matter는 아래의 타입으로 작성
+
+```ts
+type FrontMatter = {
+  title: string; // 제목
+  description: string; // 설명
+  date: string; // 작성 날짜
+  series: string; // 시리즈
+  tags: string[]; // 태그
+  updated?: string; // 업데이트 날짜 (없으면 공백)
+  image?: string; // 커버 이미지
+};
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- mdx snippet 추가
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```json
+"Post Matter": {
+    "prefix": "post",
+    "body": [
+      "---",
+      "title: \"$1\"",
+      "description: \"$2\"",
+      "date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+      "updated: \"$3\"",
+      "series: \"$4\"",
+      "image: \"\"",
+      "tags:",
+      "  - $5",
+      "---",
+      "",
+      "$0"
+    ],
+    "description": "Front Matter 작성"
+  },
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `rehype-pretty-code`의 코드블록 규칙 따름 (highlight, caption, title...)
+- `rehype-message-box` 커스텀 메시지 박스 규칙은 아래 코드와 같이 작성
 
-## Learn More
+```mdx
+// blue
+::: note 내용
 
-To learn more about Next.js, take a look at the following resources:
+// purple
+::: important 내용
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+// yellow
+::: warning 내용
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+// red
+::: caution 내용
 
-## Deploy on Vercel
+// green
+::: tip 내용
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## resume 작성 가이드
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- resume-content/{slug}.mdx 의 형태로 생성
+- `resume.ts`에 추가할 section을 객체에 추가
+
+```ts
+export const sections: ResumeSection[] = [
+  {
+    title: "Projects",
+    description: "프로젝트",
+    items: [
+      ...
+      {
+        title: "Zenithium",
+        subtitle: "제니시움",
+        period: "2024.09 ~ 2024.10",
+        content: contents.get("zenithium") as string,
+        href: "https://github.com/cdm1263/Zenithium",
+      },
+      ...
+    ],
+  },
+];
+```
