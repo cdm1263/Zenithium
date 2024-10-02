@@ -7,16 +7,24 @@ import PostDateAndReadingTime from "./PostDateAndReadingTime";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import TagSelector from "./TagSelector";
 import { useRouter } from "next/navigation";
-import { ChartColumnStacked } from "lucide-react";
+import { ChartColumnStacked, Eye } from "lucide-react";
+import { Suspense } from "react";
 
 type Props = {
   coverData?: { imageSrc: string; title: string; description: string };
   slug?: string;
   frontMatter?: FrontMatter;
   content?: string;
+  views?: number;
 };
 
-const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
+const CoverImage = ({
+  coverData,
+  slug,
+  frontMatter,
+  content,
+  views,
+}: Props) => {
   const router = useRouter();
   const { scrollY } = useScroll();
   const srpingOptions = { stiffness: 200, damping: 20 };
@@ -50,13 +58,24 @@ const CoverImage = ({ coverData, slug, frontMatter, content }: Props) => {
           </motion.p>
           {frontMatter && content && (
             <div className="flex flex-col gap-y-5">
-              <PostDateAndReadingTime
-                date={frontMatter.date}
-                updated={frontMatter.updated}
-                content={content}
-                readingClassName="text-slate-200/70"
-                dateClassName="text-slate-200/70"
-              />
+              <div className="flex gap-x-4">
+                <PostDateAndReadingTime
+                  date={frontMatter.date}
+                  updated={frontMatter.updated}
+                  content={content}
+                  readingClassName="text-slate-200/70"
+                  dateClassName="text-slate-200/70"
+                />
+
+                {views && (
+                  <Suspense>
+                    <div className="flex items-center text-muted-foreground gap-x-2">
+                      <Eye className="h-4 w-4" />
+                      <span className="text-md">{views}회 조회</span>
+                    </div>
+                  </Suspense>
+                )}
+              </div>
 
               <div className="flex gap-x-2">
                 {frontMatter.tags.map((tag) => (
