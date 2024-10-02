@@ -11,6 +11,7 @@ import NeighborPosts from "@/components/NeighborPosts";
 import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
 import SeriesAccordion from "@/components/SeriesAccordion";
+import { getPageViews } from "./actions";
 
 type Props = { params: { slug: string } };
 
@@ -124,6 +125,8 @@ const Blog = async ({ params }: Props) => {
     },
   };
 
+  const pageViews = await getPageViews(slug);
+
   return (
     <section>
       <script
@@ -134,6 +137,7 @@ const Blog = async ({ params }: Props) => {
         slug={params.slug}
         frontMatter={post.frontMatter}
         content={post.content}
+        views={pageViews}
       />
       <Inner className="flex flex-col">
         <div className="flex justify-center gap-5">
