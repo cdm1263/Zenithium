@@ -19,7 +19,7 @@ export async function GET(req: Request) {
         filter: {
           fieldName: "pagePath",
           stringFilter: {
-            matchType: "EXACT",
+            matchType: "ENDS_WITH",
             value: path,
           },
         },
