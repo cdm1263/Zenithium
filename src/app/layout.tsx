@@ -7,7 +7,7 @@ import FloatingScroller from "@/components/FloatingScroller";
 import localFont from "next/font/local";
 import { baseUrl } from "./sitemap";
 import { Toaster } from "@/components/ui/toaster";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 
 const nanumSquareRound = localFont({
   src: [
@@ -103,6 +103,7 @@ export default function RootLayout({
           <Footer />
           <FloatingScroller />
           <Toaster />
+          <GoogleTagManager gtmId={gaId} />
           <GoogleAnalytics gaId={gaId} />
         </ThemeProvider>
       </body>
