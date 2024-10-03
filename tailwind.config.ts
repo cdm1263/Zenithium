@@ -90,6 +90,7 @@ const config: Config = {
             // Note: 이미지 스타일링
             img: {
               borderRadius: "6px",
+              width: "100%",
               border: "1px solid hsla(var(--muted-foreground) / 0.2)",
             },
 
