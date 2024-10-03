@@ -1,0 +1,191 @@
+---
+title: "Header & Footer"
+description: "테마 전환 토글 만들기 및 svg 이미지를 컴포넌트로 사용하기"
+date: 2024-10-03 09:59:48
+updated: ""
+series: "Zenithium 제작기"
+image: "/postAssets/header-footer/cover.jpg"
+tags:
+  - Blog
+  - Next.js
+---
+
+블로그의 Header와 Footer를 만드는 과정에서 중요한 역할을 한 제작 요소 두 가지를 소개하려고 합니다.
+
+light/dark 테마를 변경할 수 있는 **테마 토글 스위치**와 svg 파일을 컴포넌트로 사용하는 **SVGtoComponent** 입니다.
+
+## 테마 토글 스위치
+
+요즘 서비스에서는 테마를 라이트/다크/시스템 3가지로 정의합니다.
+라이트와 다크는 단순히 css 클래스로 구분 가능하다고 하지만 시스템 테마는 어떻게 구분할까요?
+
+이는 `prefers-color-scheme` 라는 css 미디어 속성값으로 확인할 수 있습니다. 시스템의 색상 테마 설정을 우선적으로 적용하기 위해 도입된 기능입니다.
+
+![브라우저 개발자 도구의 요소-스타일 에서 확인할 수 있다](/postAssets/header-footer/브라우저-테마-스타일.png)
+
+그럼 이걸 어떻게 이용하면 좋을까요?
+
+Next.js 설치 과정을 통해 Tailwind CSS 환경을 구축하면 기본적으로 light/dark/system 테마에 대한 기본 프리셋을 제공합니다. 저희는 이걸 전환해 주기만 하면 끝입니다.
+
+```css {6} caption="Next.js를 통한 Tailwind CSS 설치 시 자동으로 구성"
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+```
+
+### Next Themes
+
+여기서 아주 유용한 라이브러리가 **next-themes** 입니다.
+shadcn ui와 연계되어 클라이언트에서의 테마 전환을 굉장히 쉽게 할 수 있게 만들어주는 라이브러리죠.
+
+```bash
+npm install next-themes
+```
+
+설치가 완료되었다면 theme provider를 설정해 줍니다. [shadcn 공식 문서](https://ui.shadcn.com/docs/dark-mode/next)에 나와 있는 코드를 그대로 사용하시면 쉽습니다.
+여기까지 했다면 벌써 끝난거나 마찬가지 입니다.
+
+```tsx
+const { theme, setTheme, systemTheme } = useTheme();
+```
+
+next-themes는 `useTheme`라는 훅을 지원하는데 정말 익숙한 형태의 무언가가 보이지 않나요?
+
+```ts caption="useTheme훅의 반환값 타입 일부분"
+interface UseThemeProps {
+  theme?: string | undefined;
+  setTheme: React.Dispatch<React.SetStateAction<string>>;
+  systemTheme?: "dark" | "light" | undefined;
+  ...
+}
+```
+
+네 맞습니다. 저희가 자주 쓰던 `useState`의 형태와 동일합니다.
+`systemTheme`를 불러와서 초기 테마값을 확인하고, 토글 스위치를 누르면 기존 테마의 반대 테마를 `setTheme`로 전달하면 끝입니다.
+
+### 토글 스위치 제작
+
+```tsx title="switch.tsx"
+const { theme, setTheme, systemTheme } = useTheme();
+const [mount, setMount] = useState(false);
+
+useEffect(() => {
+  setMount(true);
+}, []);
+
+const currentTheme = mount
+  ? theme === "system"
+    ? systemTheme
+    : theme
+  : "light";
+
+const toggleTheme = () => {
+  setTheme(currentTheme === "dark" ? "light" : "dark");
+};
+```
+
+저는 shadcn의 switch 컴포넌트를 직접 커스터마이징 하기로 했습니다.
+SSR의 Hydration이 동작한 이후에 모든 로직을 처리하기 위해 `mount` state를 정의해 주었고 앞서 `useTheme`로 불러온 값으로 현재 테마인 `currentTheme`를 정의했습니다.
+
+그리고 `toggleTheme` 핸들러에 현재 테마와 반대되는 값을 `setTheme`로 전달해 주기만 하면 끝!
+
+```tsx caption="해와 달 아이콘 transition을 위한 동적 스타일"
+<>
+  <Moon
+    className={cn(
+      "absolute h-2.5 w-2.5 m-auto inset-0",
+      `${mount ? (theme === "dark" ? "opacity-70" : "opacity-0") : "opacity-0"}`
+    )}
+  />
+  <Sun
+    className={cn(
+      "absolute h-2.5 w-2.5 m-auto inset-0",
+      `${
+        mount ? (theme === "light" ? "opacity-70" : "opacity-0") : "opacity-70"
+      }`
+    )}
+  />
+</>
+```
+
+저는 여기에 추가로 해와 달 아이콘까지 스타일링 해서 꾸며주었습니다. 제 블로그 우측 위에 있는 토글 스위치를 한번 눌러보세요. 그럴싸하지 않나요?
+
+많은 분들에게 도움이 되시길 바라는 마음에 [토글 스위치 코드 전문 링크](https://github.com/cdm1263/Zenithium/blob/main/src/components/ui/switch.tsx)도 추가했습니다.
+
+## Footer에 Github 아이콘 추가
+
+Header를 만들었으니 Footer도 만들어야겠죠.
+Footer에는 RSS와 Github 링크로 연결할 아이콘만 있으면 됩니다. 간단하네요.
+
+그런데 여기서 한 가지 문제가 생깁니다. Lucide React 패키지에서 Github 아이콘의 사용을 deprecate 한겁니다.
+
+> @deprecated
+> Brand icons have been deprecated and are due to be removed, please refer to https://github.com/lucide-icons/lucide/issues/670. We recommend using https://simpleicons.org/?q=gitlab instead. This icon will be removed in v1.0
+
+물론 Lucide React를 1.0으로 업데이트 하지 않고 그냥 사용하면 쓸 수는 있습니다. 하지만 라이브러리에 그렇게까지 묶여있고 싶지 않았습니다. 그래서 svg 이미지를 가져와 컴포넌트로 사용할 준비를 합니다.
+
+### 웹팩 플러그인 추가
+
+```bash
+npm install @svgr/webpack
+```
+
+웹팩 번들러 환경에서 svg를 리액트 컴포넌트로 사용해보신 분들이라면 아마 대부분 이 플러그인을 사용해본 경험이 있으실거라고 생각합니다. 저도 이 플러그인을 자주 사용하는 편입니다.
+
+```js title="next.config.mjs"
+const nextConfig = {
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+
+    return config;
+  },
+};
+```
+
+다만 이렇게 svg를 컴포넌트로 사용할 수는 있지만 매 번 다른 형태의 svg에 일관된 스타일을 적용하는것도 일이라고 생각했습니다.
+그래서 svg 컴포넌트에 일관된 스타일을 적용하고 개별 스타일을 추가할 수 있는 형태의 공통 컴포넌트를 제작했습니다.
+
+### svg 아이콘 손쉽게 관리하기
+
+```tsx
+type Props = {
+  SVG: FunctionComponent<SVGProps<SVGSVGElement>>;
+  className?: string;
+};
+
+const SVGtoComponent = ({ SVG, className }: Props) => {
+  return <SVG className={cn("w-fit h-fit", className)} />;
+};
+
+export default SVGtoComponent;
+```
+
+svg 컴포넌트와 className을 props로 받아서 기존 svg 컴포넌트에 주입하는 단순한 형태입니다. shadcn ui의 Tailwind CSS 유틸함수인 `cn`을 이용해 공통 스타일과 개별 스타일을 모두 사용할 수 있도록 구성하였습니다.
+
+단순한 형태이지만 여러 아이콘의 스타일을 일관되게 적용시켜야 할 때 용이하게 사용할 수 있죠.
+
+```tsx caption="또한 직관적인 컴포넌트명으로 용도를 바로 파악할 수 있다"
+<section>
+  <SVGtoComponent SVG={Github} className="fill-foreground" />
+  <SVGtoComponent SVG={Velog} className="fill-green" />
+</section>
+```
+
+이렇게 Footer 제작까지 마무리가 됩니다.
+물론 Footer에 포함된 RSS는 나중에 별도의 포스팅으로 다룰 예정입니다. 실제로 제작 과정에서 RSS는 제외하고 아이콘만 먼저 추가하고 다음 단계로 넘어갔거든요.
+
+## 마무리
+
+다음 포스트에서는 개발 블로그의 꽃인 마크다운 파일을 파싱하는 과정을 다뤄보려고 합니다. 이 부분에서는 다룰 내용이 많아 여차하면 2부로 나눠서 만들 수도 있겠다 생각이 드네요.
+그럼 다음 포스트도 기대해주세요!
