@@ -56,14 +56,14 @@ tags:
 ## 프로젝트 구성
 
 먼저 Next.js 구성과 함께 프로젝트를 시작했습니다. canary 버전을 사용하기 위해 조금 특별하게 셋팅을 시작했어요.
-~~사실 뒤늦게 깨달은 내용이지만 해당 버전으로는 PPR을 사용할 수 없어 결국 PPR 사용은 나중으로 미뤄지게 되었습니다 ㅠㅠ~~
 
 ```bash
 npx create-next-app@v14.1.1-canary.46
 ```
 
+::: caution 현재 최신 canary버전 이외에는 아래 내용 적용시 빌드 에러 발생
+
 ```js title="next.config.mjs"
-// 현재 15버전 최신 canary에서만 PPR 사용 가능하므로 적용하면 빌드 에러 발생
 const nextConfig = {
   experimental: {
     ppr: true,
@@ -71,7 +71,9 @@ const nextConfig = {
 };
 ```
 
-shadcn ui init과 초기 라우트 설정 등을 하고 초기 설정은 마무리가 되었습니다.
+(사실 뒤늦게 깨달은 내용이지만 [해당 버전으로는 PPR을 사용할 수 없어](https://nextjs.org/docs/messages/ppr-preview) 결국 PPR 사용은 나중으로 미뤄지게 되었습니다 ㅠㅠ)
+
+추가로 shadcn ui init과 초기 라우트 설정 등을 하고 초기 설정은 마무리가 되었습니다.
 이후 본격적인 제작 내용은 다음 포스트를 기대해주세요.
 
 ## 참고 블로그 리스트
