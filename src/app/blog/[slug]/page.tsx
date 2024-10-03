@@ -88,8 +88,8 @@ const Blog = async ({ params }: Props) => {
       : null;
 
   const postIndex = allPosts.findIndex((post) => post.slug === params.slug);
-  const beforePost = getNeighborPost(postIndex - 1);
-  const afterPost = getNeighborPost(postIndex + 1);
+  const beforePost = getNeighborPost(postIndex + 1);
+  const afterPost = getNeighborPost(postIndex - 1);
 
   const {
     slug,
