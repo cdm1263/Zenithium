@@ -17,7 +17,7 @@ const components = {};
 
 const CustomMDX = (props: MDXRemoteProps) => {
   const prettyCodeOptions = {
-    theme: { dark: "houston", light: "github-light" },
+    theme: { dark: "github-dark-dimmed", light: "github-light" },
     grid: true,
   };
 
