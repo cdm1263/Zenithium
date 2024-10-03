@@ -58,7 +58,7 @@ const CoverImage = ({
           </motion.p>
           {frontMatter && content && (
             <div className="flex flex-col gap-y-5">
-              <div className="flex gap-x-4">
+              <div className="flex gap-x-4 flex-wrap">
                 <PostDateAndReadingTime
                   date={frontMatter.date}
                   updated={frontMatter.updated}
