@@ -2,7 +2,7 @@
 title: "기획과 초기 설정"
 description: "프로젝트 초기 설정 과정을 정리했습니다"
 date: 2024-10-03 07:42:13
-updated: ""
+updated: "2024-10-03 09:46:00"
 series: "Zenithium 제작기"
 image: "/postAssets/blog-init/cover.jpg"
 tags:
@@ -56,20 +56,20 @@ tags:
 ## 프로젝트 구성
 
 먼저 Next.js 구성과 함께 프로젝트를 시작했습니다. canary 버전을 사용하기 위해 조금 특별하게 셋팅을 시작했어요.
+~~사실 뒤늦게 깨달은 내용이지만 해당 버전으로는 PPR을 사용할 수 없어 결국 PPR 사용은 나중으로 미뤄지게 되었습니다 ㅠㅠ~~
 
 ```bash
 npx create-next-app@v14.1.1-canary.46
 ```
 
 ```js title="next.config.mjs"
+// 현재 15버전 최신 canary에서만 PPR 사용 가능하므로 적용하면 빌드 에러 발생
 const nextConfig = {
   experimental: {
     ppr: true,
   },
 };
 ```
-
-사실 저는 PPR 활성화를 프로젝트 초기가 아니라 막바지에 했지만 자칫하면 활성화를 깜빡해 나중에 PPR이 동작하지 않는 문제를 맞이할 수 있으니 미리 설정해 두는것을 추천드립니다.
 
 shadcn ui init과 초기 라우트 설정 등을 하고 초기 설정은 마무리가 되었습니다.
 이후 본격적인 제작 내용은 다음 포스트를 기대해주세요.
