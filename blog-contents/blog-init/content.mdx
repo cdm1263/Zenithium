@@ -1,0 +1,84 @@
+---
+title: "기획과 초기 설정"
+description: "프로젝트 초기 설정 과정을 정리했습니다"
+date: 2024-10-03 07:42:13
+updated: ""
+series: "Zenithium 제작기"
+image: "/postAssets/blog-init/cover.jpg"
+tags:
+  - Next.js
+  - Blog
+---
+
+블로그를 제작해야겠다고 마음을 먹은 이후, 먼저 큰 틀을 잡아 나갔습니다.
+어떤 기술을 사용할지, 레이아웃은 어떻게 구성할지 등등을 미리 정해야 이후 과정이 수월하게 진행될 것이기 때문이죠.
+
+## 문서로 정리
+
+먼저 사용할 기술, 만들 페이지, 세부 제작 요소 등을 메모했습니다. 저는 **Notion**을 이용했어요.
+
+### 기술
+
+![Notion에 필요한 정보 나열](/postAssets/blog-init/노션-메모1.png)
+
+사용할 기술에는 근거를 가지고 접근해야겠죠?
+
+1. Next.js : SSR과 SSG를 편하게 이용할 수 있고, Next canary 의 실험적 기능인 [PPR](https://nextjs.org/docs/app/api-reference/next-config-js/ppr)을 사용하기 위해 도입
+2. Tailwind CSS & shadcn ui : UI를 쉽고 빠르게 구성할 수 있음
+3. Giscus : Github의 Discussions를 활용해 댓글을 주고 받을 수 있는 라이브러리
+4. mdx : 마크다운을 JSX 처럼 사용할 수 있는 파일 유형
+5. Framer Motion : 애니메이션과 트랜지션을 쉽게 만들 수 있음
+6. Lucide React : 아이콘 라이브러리
+7. React Query : 비동기 데이터 전역 상태관리 라이브러리 (미사용)
+8. Google Analytics : 서비스 이용 통계를 측정하고 관리할 수 있음
+
+물론 기술 결정에 정답은 없습니다! 사용하고자 하는 기술이 있다면 그걸 사용하시면 됩니다.
+
+이렇게 사용할 기술의 큰 틀을 정했다면 다음으로는 제작할 페이지와 그 페이지에 필요한 세부 요소를 간략하게 정리해줍니다.
+
+### 제작 요소
+
+![제작 요소들](/postAssets/blog-init/노션-메모2.png)
+
+블로그에 어떤 요소들이 들어가야 하는지는 여러 블로그 레퍼런스들을 참고하면서 하나하나 적어보면 좋습니다. 제가 가장 많이 참고한 블로그들은 글 맨 아래에 남겨두었어요.
+
+## 대략적인 레이아웃 그리기
+
+이제 블로그의 틀을 잡을 차례입니다. 어느 위치에 어떤 기능이 들어갈지를 간단하게 그림으로 표현하는거죠.
+
+저는 [excalidraw](https://excalidraw.com/) 라는 서비스를 이용했습니다. 단순한 도형과 텍스트로 편하게 레이아웃을 구성할 수 있다는 점이 매력적이었어요.
+
+![직접 그린 레이아웃 (제작 과정에서 적잖은 부분이 수정됐다)](/postAssets/blog-init/레이아웃-그림.png)
+
+제작 과정에서 디자인 기획이 바뀔 수 있지만 최소한의 **가이드라인**을 잡는다는 느낌으로 구성을 해보았습니다. 가이드라인이 있고 없고에 따라 작업 효율이 정말 많이 차이나기 때문에 최대한 많은 페이지를 만들고 작업하시는걸 추천드립니다.
+~~저는 레주메 페이지 가이드라인을 안잡아서 작업이 꽤나 늘어졌거든요.~~
+
+## 프로젝트 구성
+
+먼저 Next.js 구성과 함께 프로젝트를 시작했습니다. canary 버전을 사용하기 위해 조금 특별하게 셋팅을 시작했어요.
+
+```bash
+npx create-next-app@v14.1.1-canary.46
+```
+
+```js title="next.config.mjs"
+const nextConfig = {
+  experimental: {
+    ppr: true,
+  },
+};
+```
+
+사실 저는 PPR 활성화를 프로젝트 초기가 아니라 막바지에 했지만 자칫하면 활성화를 깜빡해 나중에 PPR이 동작하지 않는 문제를 맞이할 수 있으니 미리 설정해 두는것을 추천드립니다.
+
+shadcn ui init과 초기 라우트 설정 등을 하고 초기 설정은 마무리가 되었습니다.
+이후 본격적인 제작 내용은 다음 포스트를 기대해주세요.
+
+## 참고 블로그 리스트
+
+- [재그지그의 개발 블로그](https://wormwlrm.github.io/)
+- [D5BL5G](https://d5br5.dev/blog)
+- [정현수님 블로그](https://junghyeonsu.com/)
+- [김평안님 블로그](https://bepyan.me/)
+- [Kille님 블로그](https://kilee.dev/)
+- [HEROPY.DEV](https://www.heropy.dev/)
