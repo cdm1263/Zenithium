@@ -1,3 +1,5 @@
+"use server";
+
 import { baseUrl } from "@/app/sitemap";
 import { unstable_noStore as noStore } from "next/cache";
 
