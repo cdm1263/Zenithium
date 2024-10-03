@@ -87,6 +87,12 @@ const config: Config = {
             "h2, h3, h4, h5, h6": {
               scrollMarginTop: "80px",
             },
+            // Note: 이미지 스타일링
+            img: {
+              borderRadius: "6px",
+              border: "1px solid hsla(var(--muted-foreground) / 0.2)",
+            },
+
             // Note: 링크 스타일링
             ":not(h1, h2, h3, h4, h5, h6) > a": {
               textDecoration: "none",
