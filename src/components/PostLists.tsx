@@ -4,6 +4,7 @@ import { FrontMatter, Mdx } from "@/lib/types";
 import PostDateAndReadingTime from "./PostDateAndReadingTime";
 import NextImage from "next/image";
 import { ChartColumnStacked } from "lucide-react";
+import { getCommentCounts } from "@/lib/github";
 
 type Props = {
   posts: Mdx[];
@@ -13,10 +14,12 @@ type Props = {
 const PostCard = ({
   frontMatter,
   content,
+  comment,
   slug,
 }: {
   frontMatter: FrontMatter;
   content: string;
+  comment: number;
   slug: string;
 }) => {
   const { series, title, description, date, tags, image, updated } =
@@ -75,9 +78,12 @@ const PostCard = ({
         </Link>
         <Link scroll href={`/blog/${slug}`} className="group">
           <div className="flex gap-2 flex-col xs:flex-row xs:items-center">
-            <span className="order-2 xs:order-1 text-2xl font-bold group-hover:text-primary/90 transition-colors duration-200">
-              {title}
-            </span>
+            <div className="flex items-center order-2 xs:order-1 gap-x-2">
+              <span className="text-2xl font-bold group-hover:text-primary/90 transition-colors duration-200">
+                {title}
+              </span>
+              <span className="text-sm">({comment})</span>
+            </div>
             {renderNeworUpdated()}
           </div>
           <p
@@ -104,7 +110,14 @@ const PostCard = ({
   );
 };
 
-const PostLists = ({ posts, postsLength = true }: Props) => {
+const PostLists = async ({ posts, postsLength = true }: Props) => {
+  const commentCounts = await getCommentCounts(
+    "cdm1263",
+    "zenithium",
+    process.env.NEXT_PUBLIC_CATEGORY_KEY!,
+    posts.map((post) => post.slug)
+  );
+
   return (
     <ul className="flex flex-col w-full gap-3">
       {postsLength ? (
@@ -122,6 +135,7 @@ const PostLists = ({ posts, postsLength = true }: Props) => {
             slug={post.slug}
             frontMatter={post.frontMatter}
             content={post.content}
+            comment={commentCounts[post.slug]}
           />
         </li>
       ))}
