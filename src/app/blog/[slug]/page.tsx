@@ -45,6 +45,7 @@ export const generateMetadata = ({ params }: Props): Metadata | undefined => {
   return {
     title,
     description,
+    keywords: tags,
     openGraph: {
       title,
       description,
