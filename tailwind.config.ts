@@ -194,7 +194,7 @@ const config: Config = {
               fontWeight: 600,
             },
             "figcaption[data-rehype-pretty-code-title] + pre": {
-              borderRadius: 0,
+              borderTopLeftRadius: 0,
             },
 
             // Note: 코드 블록 내 텍스트 스타일링
