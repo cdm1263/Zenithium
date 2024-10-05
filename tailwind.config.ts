@@ -185,6 +185,7 @@ const config: Config = {
             // Note: 코드 블록 타이틀 스타일링
             "figcaption[data-rehype-pretty-code-title]": {
               border: "1px solid hsla(var(--muted-foreground) / 0.2)",
+              borderBottom: "none",
               width: "fit-content",
               padding: "4px 10px",
               borderRadius: "4px 4px 0 0",
