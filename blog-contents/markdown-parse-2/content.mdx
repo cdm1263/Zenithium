@@ -1,0 +1,202 @@
+---
+title: "마크다운 불러오기 2탄"
+description: "MDXRemote와 Typography로 마크다운 파싱하기"
+date: 2024-10-05 20:53:04
+updated: ""
+series: "Zenithium 제작기"
+image: "/postAssets/markdown-parse-2/cover.jpg"
+tags:
+  - Next.js
+  - Blog
+  - MDX
+---
+
+이전 포스트에서 Content를 MDX에서 분리해 가져왔죠. 하지만 아직 마크다운 문법으로 쓰인 문자열입니다. `next-mdx-remote/rsc` 라이브러리를 활용해 HTML로 변환해 보도록 하겠습니다.
+
+## Content 파싱하기
+
+먼저 라이브러리를 설치하고 구성요소인 `MDXRemote`를 불러옵니다.
+
+::: important 해당 패키지는 서버 컴포넌트에서만 사용할 수 있습니다.
+
+```bash
+npm install next-mdx-remote/rsc
+```
+
+저는 `MDXRemote`를 재사용하면서 옵션을 추가하기 위해 `CustomMDX`라는 별도의 컴포넌트로 구성했어요.
+
+```tsx title="CustomMDX.tsx"
+const CustomMDX = (props: MDXRemoteProps) => {
+  const components = {};
+
+  <MDXRemote
+    {...props}
+    components={{ ...components, ...(props.components || {}) }}
+    options={{
+      mdxOptions: {
+        remarkPlugins: [],
+        rehypePlugins: [],
+        recmaPlugins: [],
+      },
+    }}
+  />;
+};
+
+export default CustomMDX;
+```
+
+기본 구성은 이렇게 되어 있습니다. `MDXRemote`에 대해서 하나하나 간단히 살펴보죠.
+
+### source
+
+필수로 들어가야 하는 property 입니다. 파싱해야 할 Content를 담으면 이를 HTML의 형태로 변환합니다.
+
+```tsx
+<MDXRemote source={post.content} />
+```
+
+### components
+
+HTML로 파싱된 Content에 추가적인 스타일, 레이아웃 작업을 할 때 커스텀 컴포넌트를 주입해 사용할 수 있습니다.
+
+```tsx caption="a 태그를 꾸미는 코드"
+const CustomAnchor = ({ children, href, ...props }: CustomAnchorProps) => (
+  <a href={href} {...props} className="text-primary text-sm break-keep">
+    {children}
+  </a>
+);
+
+const components = {
+  a: CustomAnchor,
+};
+
+<MDXRemote components={components} />;
+```
+
+이를 활용해 이미지에 캡션을 추가하거나 코드 복사 버튼을 만드는 등 다양한 커스터마이징이 가능합니다.
+
+### remark, rehype, recma
+
+이 3가지는 이름조차 생소한데요. 이 과정들을 거쳐야 Content가 비로소 HTML로 변환됩니다.
+
+remark는 마크다운을 HTML로 변환하고, rehype는 변환된 HTML에 추가적인 변환 작업을 수행합니다. recma는 마크다운에 포함된 스크립트를 파싱하고 변환하는 역할을 합니다.
+
+코드를 조금 더 깊게 살펴볼까요?
+
+```js {11,17,19} caption="MDXRemote 내부의 remark, rehype, recma plugins 처리 로직"
+export function createProcessor(options) {
+  // settings: 사용자가 추가한 mdxOptions
+  const settings = options || {};
+
+  const pipeline = unified().use(remarkParse);
+
+  const remarkRehypeOptions = settings.remarkRehypeOptions || {};
+
+  pipeline
+    .use(remarkMarkAndUnravel)
+    .use(settings.remarkPlugins || [])
+    .use(remarkRehype, {
+      ...remarkRehypeOptions,
+      allowDangerousHtml: true,
+      passThrough: [...(remarkRehypeOptions.passThrough || []), ...nodeTypes],
+    })
+    .use(settings.rehypePlugins || []);
+
+  pipeline.use(recmaStringify, settings).use(settings.recmaPlugins || []);
+
+  return pipeline;
+}
+```
+
+복잡해 보이지만 최대한 핵심 코드만 가지고 왔으니 가볍게 둘러봅시다.
+
+기본적으로 remark, rehype, recma는 **unified**라는 텍스트 처리 라이브러리의 하위 집합으로, `use` 함수에 원하는 작업을 담아 이를 체이닝하여 순서대로 처리하게 됩니다.
+
+unified 라이브러리의 `unified`함수로 파이프라인을 생성하고 파싱에 필요한 필수 플러그인들인 remarkParse, remarkRehype 등을 `use`함수로 동작시킵니다.
+
+사용자가 추가한 옵션들은 `settings` 변수에 담기게 되고, 이를 하이라이트 표시한 구간에서 사용하고 있습니다. 필수 remark, rehype, recma 플러그인들이 실행된 이후에 최종적으로 사용자의 옵션 플러그인들이 동작하고 있네요.
+
+원래는 직접 파이프라인을 구성해 플러그인을 적용시켜야 하지만 `MDXRemote`가 내부적으로 상기 필수 로직을 구현해 두었기 때문에 추가로 적용하고 싶은 플러그인을 옵션 객체에 배열로 추가해주기만 하면 됩니다.
+
+::: tip 이미 만들어진 플러그인을 설치하거나 직접 제작해서 사용할 수 있습니다.
+
+```tsx caption="플러그인 적용"
+<MDXRemote
+  options={{
+    mdxOptions: {
+      remarkPlugins: [myRemark1, myRemark2, myRemark3],
+      rehypePlugins: [myRehype1, myRehype2, myRehype3],
+      recmaPlugins: [myRecma1, myRecma2, myRecma3],
+    },
+  }}
+/>
+```
+
+```tsx title="/blog/[slug]/page.tsx"
+<CustomMDX source={post.content} />
+```
+
+이렇게 만들어진 CustomMDX 컴포넌트를 사용해 최종적으로 MDX를 화면에 보여줄 수 있게 됐네요!
+
+![마크다운이 파싱되어 화면에 나타난다](/postAssets/markdown-parse-2/MDX-파싱-결과.png)
+
+## Tailwind Typography
+
+어라 플러그인을 분명 적용했는데도 불구하고 파싱된 결과물에 스타일이 적용이 전혀 안되어 있습니다. 왜 그럴까요?
+
+Tailwind CSS는 모든 브라우저 스타일을 초기화 시킵니다. 그래야 개발자가 의도한 스타일을 적용할 수 있기 때문이죠. 하지만 지금처럼 부분적으로 따로 정의한 스타일을 적용해야 하는 경우가 있으면 문제가 생깁니다.
+
+이런 경우에 사용할 수 있는 것이 [Tailwind Typography](https://tailwindcss.com/blog/tailwindcss-typography) 입니다. `prose` 클래스네임을 포함한 구역을 한정해 따로 정의한 스타일을 적용할 수 있게 하는 Tailwind CSS 공식 플러그인입니다.
+
+```bash
+npm install -D @tailwindcss/typography
+```
+
+```ts title="tailwind.config.ts"
+const config: Config = {
+  plugins: [require("@tailwindcss/typography")],
+};
+```
+
+Typography 를 설치하고 플러그인 설정을 완료한 뒤, MDX를 렌더링 될 구역에 `prose` 클래스네임을 적용해 줍니다.
+
+```tsx caption="dark 테마에 대한 prose도 적용해야 한다."
+<div className="prose dark:prose-invert">
+  <CustomMDX source={post.content} />
+</div>
+```
+
+이렇게 Typography를 적용하고 나면 비로소 브라우저의 기본 스타일이 적용된 Content가 화면에 나타나게 됩니다.
+
+![깔끔하게 화면에 표시되는 Content](/postAssets/markdown-parse-2/Typography-적용.png)
+
+여기에 추가로 나만의 스타일을 적용해 꾸미고 싶다면 `tailwind.config.ts`에서 typography가 적용된 구역에 대한 스타일을 명시해 주면 됩니다.
+
+```ts title="tailwind.config.ts"
+const config: Config = {
+  theme: {
+    extend: {
+      typography: () => ({
+        DEFAULT: {
+          css: {
+            "h2, h3, h4, h5, h6": {
+              scrollMarginTop: "80px",
+            },
+
+            // 추가하고자 하는 스타일 입력
+          },
+        },
+      }),
+    },
+  },
+};
+```
+
+## 마무리
+
+위에서 설명한 rehype, remark 플러그인에 대한 내용을 다음 포스트에서 더 자세히 다뤄볼 예정입니다. `rehyp-pretty-code`나 `rehype-slug`와 같은 유용한 플러그인을 적용하는 방법을 소개하고 추가로 커스텀 플러그인을 만드는 방법도 써 보려고 하니 기대해주세요!
+
+## 참고 자료
+
+- [Markdown을 HTML로 변환 (unified, remark, rehype)](https://www.daleseo.com/unified-remark-rehype/)
+- [Next.js mdx plugin](https://bepyan.github.io/blog/nextjs-blog/3-mdx-plugin)
