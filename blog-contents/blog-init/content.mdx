@@ -2,7 +2,7 @@
 title: "기획과 초기 설정"
 description: "프로젝트 초기 설정 과정을 정리했습니다"
 date: 2024-10-03 07:42:13
-updated: "2024-10-03 09:46:00"
+updated: "2024-10-07 07:49:00"
 series: "Zenithium 제작기"
 image: "/postAssets/blog-init/cover.jpg"
 tags:
@@ -61,7 +61,7 @@ tags:
 npx create-next-app@v14.1.1-canary.46
 ```
 
-::: caution 현재 최신 canary버전 이외에는 아래 내용 적용시 빌드 에러 발생
+::: caution package.json에서 next 버전에 ^ 플래그가 없어야 합니다.
 
 ```js title="next.config.mjs"
 const nextConfig = {
@@ -70,8 +70,6 @@ const nextConfig = {
   },
 };
 ```
-
-(사실 뒤늦게 깨달은 내용이지만 [해당 버전으로는 PPR을 사용할 수 없어](https://nextjs.org/docs/messages/ppr-preview) 결국 PPR 사용은 나중으로 미뤄지게 되었습니다 ㅠㅠ)
 
 추가로 shadcn ui init과 초기 라우트 설정 등을 하고 초기 설정은 마무리가 되었습니다.
 이후 본격적인 제작 내용은 다음 포스트를 기대해주세요.
