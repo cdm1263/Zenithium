@@ -20,7 +20,7 @@ const CustomImg = ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
       </span>
     )}
     <DialogContent className="max-w-screen-lg">
-      <img src={src!} alt={alt!} className="w-full" />
+      <img src={src!} alt={alt!} className="w-full rounded-md" />
     </DialogContent>
   </Dialog>
 );
