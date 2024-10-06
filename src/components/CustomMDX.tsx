@@ -7,7 +7,7 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import SmoothScroll from "./SmoothScroll";
 import remarkUnwrapImages from "remark-unwrap-images";
-import { components } from "./CustomMDXComponents";
+import components from "./CustomMDXComponents";
 
 const CustomMDX = (props: MDXRemoteProps) => {
   const prettyCodeOptions = {

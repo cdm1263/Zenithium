@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { AnchorHTMLAttributes, ImgHTMLAttributes } from "react";
 import { MDXComponents } from "mdx/types";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
@@ -33,7 +34,9 @@ const CustomAnchor = ({
   </a>
 );
 
-export const components: MDXComponents = {
+const components: MDXComponents = {
   img: CustomImg,
   a: CustomAnchor,
 };
+
+export default components;
