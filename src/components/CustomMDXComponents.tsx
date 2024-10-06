@@ -1,4 +1,4 @@
-import { ImgHTMLAttributes } from "react";
+import { AnchorHTMLAttributes, ImgHTMLAttributes } from "react";
 import { MDXComponents } from "mdx/types";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
@@ -24,6 +24,16 @@ const CustomImg = ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
   </Dialog>
 );
 
+const CustomAnchor = ({
+  children,
+  ...props
+}: AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  <a {...props} target="_blank">
+    {children}
+  </a>
+);
+
 export const components: MDXComponents = {
   img: CustomImg,
+  a: CustomAnchor,
 };
