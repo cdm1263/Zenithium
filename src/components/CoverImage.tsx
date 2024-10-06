@@ -69,7 +69,7 @@ const CoverImage = ({
 
                 {views && (
                   <Suspense>
-                    <div className="flex items-center text-slate-200 gap-x-2">
+                    <div className="flex items-center text-slate-200 gap-x-1">
                       <Eye className="h-4 w-4" />
                       <span className="text-sm">{views}회 조회</span>
                     </div>
