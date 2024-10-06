@@ -147,7 +147,7 @@ const Blog = async ({ params }: Props) => {
           <div className="hidden w-56 xl:block shrink-0">
             {/* // Todo: 추후 공간 활용 */}
           </div>
-          <article className="prose dark:prose-invert px-2 w-full">
+          <article className="prose dark:prose-invert w-full">
             <CustomMDX source={post.content} />
           </article>
           <TOC toc={toc} />
