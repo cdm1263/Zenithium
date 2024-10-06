@@ -85,29 +85,30 @@ export const rehypeAddRelativeToHeadings = () => {
   };
 };
 
-export const rehypeImageCaption = () => {
-  return (tree: Root) => {
-    visit(tree, "element", (node: Element, index, parent) => {
-      if (node.tagName === "img" && parent && typeof index === "number") {
-        const alt = (node.properties.alt as string) || "";
+// Note: 미사용
+// export const rehypeImageCaption = () => {
+//   return (tree: Root) => {
+//     visit(tree, "element", (node: Element, index, parent) => {
+//       if (node.tagName === "img" && parent && typeof index === "number") {
+//         const alt = (node.properties.alt as string) || "";
 
-        const figureNode: Element = {
-          type: "element",
-          tagName: "figure",
-          properties: {},
-          children: [
-            node,
-            {
-              type: "element",
-              tagName: "figcaption",
-              properties: { "image-caption": "" },
-              children: [{ type: "text", value: alt }],
-            },
-          ],
-        };
+//         const figureNode: Element = {
+//           type: "element",
+//           tagName: "figure",
+//           properties: {},
+//           children: [
+//             node,
+//             {
+//               type: "element",
+//               tagName: "figcaption",
+//               properties: { "image-caption": "" },
+//               children: [{ type: "text", value: alt }],
+//             },
+//           ],
+//         };
 
-        parent.children[index] = figureNode;
-      }
-    });
-  };
-};
+//         parent.children[index] = figureNode;
+//       }
+//     });
+//   };
+// };

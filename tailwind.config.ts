@@ -87,13 +87,6 @@ const config: Config = {
             "h2, h3, h4, h5, h6": {
               scrollMarginTop: "80px",
             },
-            // Note: 이미지 스타일링
-            img: {
-              borderRadius: "6px",
-              width: "100%",
-              border: "1px solid hsla(var(--muted-foreground) / 0.2)",
-            },
-
             // Note: 링크 스타일링
             ":not(h1, h2, h3, h4, h5, h6) > a": {
               textDecoration: "none",
@@ -242,14 +235,6 @@ const config: Config = {
 
             // Note: 캡션 타이틀 스타일링
             "figcaption[data-rehype-pretty-code-caption]": {
-              textAlign: "center",
-              marginTop: "8px",
-              color: "hsl(var(--muted-foreground))",
-              fontStyle: "italic",
-            },
-
-            //Note: 이미지 캡션 스타일링
-            "figcaption[image-caption]": {
               textAlign: "center",
               marginTop: "8px",
               color: "hsl(var(--muted-foreground))",
