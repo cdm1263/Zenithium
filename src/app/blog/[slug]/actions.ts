@@ -1,7 +1,7 @@
 "use server";
 
 import { baseUrl } from "@/app/sitemap";
-import { unstable_noStore as noStore } from "next/cache";
+import { unstable_noStore as noStore, revalidatePath } from "next/cache";
 
 export const getPageViews = async (slug: string) => {
   noStore();
@@ -12,5 +12,6 @@ export const getPageViews = async (slug: string) => {
   }
 
   const { pageViews } = await res.json();
+  revalidatePath(`/blog/${slug}`);
   return pageViews;
 };
