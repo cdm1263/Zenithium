@@ -2,18 +2,12 @@ import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
-import {
-  rehypeAddRelativeToHeadings,
-  rehypeImageCaption,
-  rehypeMessageBox,
-} from "@/lib/plugin";
+import { rehypeAddRelativeToHeadings, rehypeMessageBox } from "@/lib/plugin";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import SmoothScroll from "./SmoothScroll";
 import remarkUnwrapImages from "remark-unwrap-images";
-
-// TODO: 추후 컴포넌트 추가
-const components = {};
+import { components } from "./CustomMDXComponents";
 
 const CustomMDX = (props: MDXRemoteProps) => {
   const prettyCodeOptions = {
@@ -49,7 +43,6 @@ const CustomMDX = (props: MDXRemoteProps) => {
             remarkPlugins: [remarkGfm, remarkBreaks, remarkUnwrapImages],
             rehypePlugins: [
               [rehypePrettyCode, prettyCodeOptions],
-              rehypeImageCaption,
               rehypeMessageBox,
               rehypeSlug,
               [rehypeAddRelativeToHeadings],
