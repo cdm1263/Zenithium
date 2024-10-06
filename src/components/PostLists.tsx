@@ -25,11 +25,13 @@ const PostCard = ({
   const { series, title, description, date, tags, image, updated } =
     frontMatter;
 
+  const MAXIMUM_DAYS = 7;
+
   const renderNeworUpdated = () => {
     if (
       (new Date().getTime() - new Date(date).getTime()) /
         (1000 * 60 * 60 * 24) <=
-      7
+      MAXIMUM_DAYS
     ) {
       return (
         <div className="text-sm font-bold text-yellow-500 order-1 xs:order-2">
@@ -40,7 +42,7 @@ const PostCard = ({
       updated &&
       (new Date().getTime() - new Date(updated).getTime()) /
         (1000 * 60 * 60 * 24) <=
-        7
+        MAXIMUM_DAYS
     ) {
       return (
         <div className="text-sm font-bold text-green-500 order-1 xs:order-2">
