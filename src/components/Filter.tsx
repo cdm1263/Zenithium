@@ -54,14 +54,14 @@ const Filter = ({ tags, series, className }: Props) => {
     setSearch(e.target.value);
   };
 
-  const tagHref = (tag: string) => {
+  const tagHandler = (tag: string) => {
     const currentTags = params.getAll("tag");
     if (currentTags.includes(tag)) {
       const newTags = currentTags.filter((currentTag) => currentTag !== tag);
       params.delete("tag");
       newTags.forEach((newTag) => params.append("tag", newTag));
     } else params.append("tag", tag);
-    return `?${params.toString()}`;
+    router.push(`?${params.toString()}`);
   };
 
   return (
@@ -118,7 +118,7 @@ const Filter = ({ tags, series, className }: Props) => {
             className={
               params.getAll("tag").includes(tag) ? "bg-primary/30" : ""
             }
-            href={tagHref(tag)}
+            tagEvent={() => tagHandler(tag)}
           />
         ))}
       </div>

@@ -56,7 +56,7 @@ const CoverImage = ({
               <TagSelector
                 key={tag}
                 tagName={tag}
-                href={`/blog?tag=${tag}`}
+                tagEvent={`/blog?tag=${tag}`}
                 className="text-gray-200/80 border-gray-200/20"
               />
             ))}
