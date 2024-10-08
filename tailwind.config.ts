@@ -236,6 +236,23 @@ const config: Config = {
               fontStyle: "italic",
             },
 
+            // Note: 테이블 스타일링
+
+            table: {
+              border: "1px solid hsla(var(--muted-foreground)/0.5)",
+            },
+            "table > thead": {
+              borderColor: "hsla(var(--muted-foreground)/0.5)",
+              backgroundColor: "hsla(var(--muted))",
+            },
+            "table > thead > tr > th, table > tbody > tr > td": {
+              padding: "6px 12px",
+            },
+            "table > thead > tr > th:not(:first-child), table > tbody > tr > td:not(:first-child)":
+              {
+                borderLeft: "1px solid hsla(var(--muted-foreground)/0.5)",
+              },
+
             // Note: message box 기본 스타일
             ".message-box": {
               padding: "8px 16px",
