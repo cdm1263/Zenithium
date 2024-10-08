@@ -239,7 +239,7 @@ const config: Config = {
             // Note: 테이블 스타일링
 
             table: {
-              border: "1px solid hsla(var(--muted-foreground)/0.5)",
+              // border: "1px solid hsla(var(--muted-foreground)/0.5)",
             },
             "table > thead": {
               borderColor: "hsla(var(--muted-foreground)/0.5)",
