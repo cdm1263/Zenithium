@@ -228,6 +228,16 @@ const config: Config = {
               backgroundColor: "rgba(253, 224, 71, 0.2)",
             },
 
+            // Note: 코드 블록 단어 하이라이트
+
+            "[data-highlighted-chars]": {
+              backgroundColor: "hsla(var(--primary)/0.3)",
+              // backgroundColor: "rgba(253, 224, 71, 0.4)",
+            },
+            ".dark [data-highlighted-chars]": {
+              backgroundColor: "hsla(var(--primary)/0.4)",
+            },
+
             // Note: 캡션 타이틀 스타일링
             "figcaption[data-rehype-pretty-code-caption]": {
               textAlign: "center",
