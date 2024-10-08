@@ -1,21 +1,25 @@
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
-import rehypePrettyCode from "rehype-pretty-code";
+import rehypePrettyCode, {
+  type Options as RehypePrettyCodeOptions,
+} from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import { rehypeAddRelativeToHeadings, rehypeMessageBox } from "@/lib/plugin";
 import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeAutolinkHeadings, {
+  type Options as RehypeAutoLinkOptions,
+} from "rehype-autolink-headings";
 import SmoothScroll from "./SmoothScroll";
 import remarkUnwrapImages from "remark-unwrap-images";
 import components from "./CustomMDXComponents";
 
 const CustomMDX = (props: MDXRemoteProps) => {
-  const prettyCodeOptions = {
+  const prettyCodeOptions: RehypePrettyCodeOptions = {
     theme: { dark: "github-dark-dimmed", light: "github-light" },
     grid: true,
   };
 
-  const AutoLinkOptions = {
+  const AutoLinkOptions: RehypeAutoLinkOptions = {
     properties: {
       className: ["anchor"],
     },
@@ -45,7 +49,7 @@ const CustomMDX = (props: MDXRemoteProps) => {
               [rehypePrettyCode, prettyCodeOptions],
               rehypeMessageBox,
               rehypeSlug,
-              [rehypeAddRelativeToHeadings],
+              rehypeAddRelativeToHeadings,
               [rehypeAutolinkHeadings, AutoLinkOptions],
             ],
           },
