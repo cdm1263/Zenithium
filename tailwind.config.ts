@@ -136,7 +136,6 @@ const config: Config = {
             ":not(pre) > code": {
               fontWeight: "inherit",
               position: "relative",
-              color: "hsla(var(--destructive) / 0.7)",
               backgroundColor: "hsl(var(--muted))",
               bottom: 1,
               margin: "0 2px",
@@ -145,20 +144,16 @@ const config: Config = {
               padding: "2px 6px",
               overflowWrap: "break-word",
             },
+            ":not(pre) > code > span[data-line] span": {
+              color: "var(--shiki-light)",
+            },
             // 다크 테마 설정
-            ".dark :not(pre) > code": {
+            ".dark :not(pre) > code > span[data-line] span": {
               color: "var(--shiki-dark)",
             },
 
             code: {
               counterReset: "line",
-            },
-
-            "code::before": {
-              content: "none",
-            },
-            "code::after": {
-              content: "none",
             },
 
             // Note: 코드 블록 스타일링
