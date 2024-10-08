@@ -15,7 +15,6 @@ import components from "./CustomMDXComponents";
 const CustomMDX = (props: MDXRemoteProps) => {
   const prettyCodeOptions: RehypePrettyCodeOptions = {
     theme: { dark: "material-theme-darker", light: "github-light" },
-    grid: true,
   };
 
   const AutoLinkOptions: RehypeAutoLinkOptions = {
