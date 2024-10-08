@@ -10,7 +10,6 @@ import rehypeAutolinkHeadings, {
   type Options as RehypeAutoLinkOptions,
 } from "rehype-autolink-headings";
 import SmoothScroll from "./SmoothScroll";
-import remarkUnwrapImages from "remark-unwrap-images";
 import components from "./CustomMDXComponents";
 
 const CustomMDX = (props: MDXRemoteProps) => {
@@ -44,7 +43,7 @@ const CustomMDX = (props: MDXRemoteProps) => {
         components={{ ...components, ...(props.components || {}) }}
         options={{
           mdxOptions: {
-            remarkPlugins: [remarkGfm, remarkBreaks, remarkUnwrapImages],
+            remarkPlugins: [remarkGfm, remarkBreaks],
             rehypePlugins: [
               [rehypePrettyCode, prettyCodeOptions],
               rehypeMessageBox,
