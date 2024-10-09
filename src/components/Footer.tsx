@@ -1,6 +1,6 @@
 import { Rss } from "lucide-react";
 import Inner from "./Inner";
-import Github from "/public/github.svg";
+import Github from "/public/icons/github.svg";
 import SVGtoComponent from "./SVGtoComponent";
 import { cn } from "@/lib/utils";
 import Link from "next/link";

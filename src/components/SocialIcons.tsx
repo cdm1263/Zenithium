@@ -1,9 +1,9 @@
 "use client";
 
 import SVGtoComponent from "@/components/SVGtoComponent";
-import Github from "/public/github.svg";
-import LinkedIn from "/public/linkedin.svg";
-import Notion from "/public/notion.svg";
+import Github from "/public/icons/github.svg";
+import LinkedIn from "/public/icons/linkedin.svg";
+import Notion from "/public/icons/notion.svg";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
