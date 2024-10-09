@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 
 const CustomImg = ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
   <Dialog>
-    <DialogTrigger asChild className="">
+    <DialogTrigger asChild>
       <img
         src={src!}
         alt={alt!}
@@ -19,7 +19,7 @@ const CustomImg = ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
         {alt}
       </span>
     )}
-    <DialogContent className="max-w-screen-lg">
+    <DialogContent className="max-w-screen-md">
       <img src={src!} alt={alt!} className="w-full rounded-md" />
     </DialogContent>
   </Dialog>
