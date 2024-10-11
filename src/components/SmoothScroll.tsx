@@ -15,6 +15,8 @@ export const scrollSmooth = () => {
           behavior: "smooth",
           block: "start",
         });
+
+        window.history.pushState(null, "", targetId);
       }
     });
   });
