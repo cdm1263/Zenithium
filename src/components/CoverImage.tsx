@@ -51,7 +51,7 @@ const CoverImage = ({
             )}
           </div>
 
-          <div className="flex gap-x-2">
+          <div className="flex gap-2 flex-wrap">
             {frontMatter.tags.map((tag) => (
               <TagSelector
                 key={tag}
