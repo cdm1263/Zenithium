@@ -17,7 +17,7 @@ const CustomMDX = (props: MDXRemoteProps) => {
     theme: { dark: "material-theme-darker", light: "github-light" },
   };
 
-  const AutoLinkOptions: RehypeAutoLinkOptions = {
+  const autoLinkOptions: RehypeAutoLinkOptions = {
     properties: {
       className: ["anchor"],
     },
@@ -48,7 +48,7 @@ const CustomMDX = (props: MDXRemoteProps) => {
               rehypeMessageBox,
               rehypeSlug,
               rehypeAddRelativeToHeadings,
-              [rehypeAutolinkHeadings, AutoLinkOptions],
+              [rehypeAutolinkHeadings, autoLinkOptions],
             ],
           },
         }}
