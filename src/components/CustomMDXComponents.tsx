@@ -29,7 +29,7 @@ const CustomAnchor = ({
   children,
   ...props
 }: AnchorHTMLAttributes<HTMLAnchorElement>) => (
-  <a {...props} target={props.className === "anchor" ? "_self" : "_blank"}>
+  <a {...props} target={props.href?.startsWith("#") ? "_self" : "_blank"}>
     {children}
   </a>
 );
