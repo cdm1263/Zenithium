@@ -131,11 +131,13 @@ const seriesHandler = (value: string) => {
 ```tsx
 const tagHandler = (tag: string) => {
   const currentTags = params.getAll("tag");
+
   if (currentTags.includes(tag)) {
     const newTags = currentTags.filter((currentTag) => currentTag !== tag);
     params.delete("tag");
     newTags.forEach((newTag) => params.append("tag", newTag));
   } else params.append("tag", tag);
+
   router.push(`?${params.toString()}`);
 };
 
