@@ -35,6 +35,7 @@ const TOC = ({ toc }: Props) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
+      window.history.pushState(null, "", `#${id}`);
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
