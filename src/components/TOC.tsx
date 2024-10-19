@@ -49,7 +49,7 @@ const TOC = ({ toc }: Props) => {
       <span className="absolute w-0.5 bg-primary/30 inset-y-0 left-0" />
       <ul className="flex flex-col gap-y-px">
         {toc.map((item) => (
-          <div
+          <li
             key={item.id}
             className={cn("text-sm", {
               "pl-3 my-1": item.level === 2,
@@ -69,7 +69,7 @@ const TOC = ({ toc }: Props) => {
             >
               {item.title}
             </Link>
-          </div>
+          </li>
         ))}
       </ul>
     </nav>
