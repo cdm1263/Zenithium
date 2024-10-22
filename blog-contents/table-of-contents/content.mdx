@@ -1,0 +1,187 @@
+---
+title: "TOC(목차) 만들기"
+description: "제목에 따른 목차를 생성하는 방법을 소개합니다."
+date: 2024-10-20 08:54:17
+updated: ""
+series: "Zenithium 제작기"
+image: "/postAssets/table-of-contents/cover.jpg"
+tags:
+  - Blog
+  - Next.js
+  - Rehype
+  - TOC
+---
+
+이번 포스트에서는 블로그의 각 구간의 제목을 표시하는 목차인 **TOC**(**Table of Contents**)를 제작하는 과정을 소개하려고 합니다.
+
+많은 블로그 서비스에서는 이 기능을 내장하고 있어 따로 구현할 필요가 없지만 이걸 직접 구현해야하는 저로서는 생각보다 막막했는데요. 먼저 크게 신경써야 할 부분을 정리하면 다음과 같았습니다.
+
+1. 마크다운의 Content에서 헤딩 태그만 추출하기
+2. 각 헤딩태그의 레벨에 따라 들여쓰기 스타일 추가하기
+3. 뷰포트에 포함된 제목에 별도 스타일 지정하기
+
+그럼 이 부분을 중심으로 TOC를 제작해 볼까요?
+
+## 목차에 제목 추가하기
+
+먼저 목차에 제목을 추가하기 위해서는 Contents에서 `<h1>{:html}`부터 `<h6>{:html}` 까지의 헤딩 태그를 추출해 내야 했습니다. 이걸 어떻게 추출하면 좋을까요?
+
+저의 경우 `gray-matter`가 마크다운을 문자열로 파싱한 상태의 Content를 받았기 때문에 이를 HTML로 다시 한번 파싱해야 했습니다. 본문 영역에서는 `MDXRemote`라는 컴포넌트로 Content를 넘겨주면 [내부에서 파싱](https://zenithium.info/blog/markdown-parse-2#remark-rehype-recma)을 하기 때문에 직접 기능을 구성할 필요가 없지만, TOC에서는 손수 만들어야 하죠.
+
+그래서 `MDXRemote`와 유사한 방식으로 코드를 작성했습니다.
+
+### 플러그인으로 파싱하기
+
+```ts caption="트리에서 헤딩 태그를 추적해 필요 데이터만 추출하는 함수" {15}
+export const parseTOCHeadings = async (content: string) => {
+  const tocItems: TOCItem[] = [];
+
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeSlug)
+    .use(() => (tree: Node) => {
+      visit(tree, "element", (node: Element) => {
+        if (/^h[1-6]$/.test(node.tagName)) {
+          const level = parseInt(node.tagName.charAt(1));
+          const id = node.properties?.id;
+          const title = getTextFromNode(node);
+
+          tocItems.push({ id: id as string, title, level });
+        }
+      });
+    })
+    .use(rehypeStringify);
+
+  await processor.process(content);
+
+  return tocItems;
+};
+```
+
+`MDXRemote`에서 사용된 파싱 플러그인 `remark-parse`와 `remark-rehype`를 적용하고, 후술할 제목 추적 기능의 구현을 위해 `rehype-slug` 플러그인도 적용했습니다.
+
+여기서 제가 추출한 데이터는 각 헤딩태그의 level, title, 그리고 id 입니다.
+
+- level : `<h1>{:html}`의 `1` 과 같이 헤딩 태그의 수준을 나타내는 숫자. 들여쓰기 스타일을 위해 필요
+- title : 각 헤딩 태그 내부에 적힌 텍스트
+- id : `rehype-slug` 플러그인으로 만들어진 각 헤딩 태그의 `id` 속성값
+
+지난번 '마크다운 불러오기 3' 포스트에서 소개한 [unist-util-visit](https://www.zenithium.info/blog/markdown-parse-3#unist-util-visit)의 `visit` 함수를 사용해 헤딩 태그를 찾아 위의 3종류의 데이터를 얻어냅니다.
+
+### TOC 컴포넌트에 제목 표시하기
+
+이제 이 데이터를 TOC 컴포넌트에서 잘 가공해 봅시다.
+
+```tsx title="TOC.tsx"
+<ul className="flex flex-col gap-y-px">
+  {toc.map((item) => (
+    <li
+      key={item.id}
+      className={cn("text-sm", {
+        "pl-3 my-1": item.level === 2,
+        "pl-6": item.level === 3,
+        "pl-9": item.level === 4,
+        "pl-12": item.level === 5,
+        "pl-[60px]": item.level === 6,
+      })}
+    >
+      {item.title}
+    </li>
+  ))}
+</ul>
+```
+
+각 헤딩 태그에서 추출한 데이터를 컴포넌트에 추가합니다. 아까 얻은 데이터 중 `level`을 활용해 왼쪽 여백을 지정하면 타이틀의 포함 관계를 표현할 수 있죠.
+
+## 현재 위치의 제목 추적하기
+
+여타 블로그들의 TOC를 보면 화면 스크롤 위치에 있는 타이틀에 하이라이트 등의 스타일 변화가 있는걸 볼 수 있죠. 이건 어떻게 구현할까요?
+
+제 이전 포스트중 마크다운을 파싱하는 과정에서 [rehype-slug 플러그인](https://www.zenithium.info/blog/markdown-parse-3#rehype-slug)에 대한 내용을 다룬적이 있습니다. 이번에도 같은 플러그인으로 헤딩 태그를 파싱했는데 그 이유가 바로 여기에 있습니다.
+
+![TOC와 본문간의 매칭](/postAssets/table-of-contents/TOC-본문-매칭.png)
+
+해딩 태그에 포함된 `id` 속성으로 어떤 헤딩 태그를 TOC에서 추적해야 하는지 판단해야 합니다. 그런데 이때 본문과 TOC의 `id`가 동일하게 파싱되어있지 않으면 정상적으로 동작하지 않죠. 그래서 본문에서 사용한 `rehype-slug`를 TOC에서도 사용하였습니다.
+
+### useObserveTOC 커스텀 훅 만들기
+
+먼저 `IntersectionObserver`를 활용해 뷰포트에 등장한 타이틀, 즉 헤딩 태그를 추적합니다.
+
+```tsx caption="TOC 데이터에 포함된 id로 헤딩 태그를 모두 관찰하고 현재 뷰포트에 있는 헤딩태그의 id는 activeId로 전달"
+const useObserveTOC = ({ toc }: Props) => {
+  const [activeId, setActiveId] = useState("");
+  const observerOptions = {
+    rootMargin: "0px 0px -40% 0px",
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveId(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    // h1~h6 에 해당하는 요소 관찰
+    toc.forEach((item) => {
+      const element = document.getElementById(item.id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, [toc]);
+
+  return { activeId };
+};
+```
+
+`IntersectionObserver`는 첫 번째 인자로 **대상이 관찰되면 호출될 옵저버 함수**를 정의하고, 두 번째 인자로 옵션을 지정할 수 있습니다.
+
+옵션 값으로는 `root`, `rootMargin`, `threshold` 를 지정할 수 있습니다.
+
+- `root` : 관찰 대상이 포함된 루트 요소 (기본값은 뷰표트)
+- `rootMargin` : 루트 요소의 범위의 여백
+- `threshold` : 대상이 관찰 되었음을 판단하기 위해 **루트 요소에 어느정도 포함되어 있는지**에 대한 백분율
+
+루트 요소를 뷰포트로 하고 하단 여백을 40% 줄여 뷰포트 하단에서 40% 위치에 헤딩 태그가 관찰되면 옵저버 함수가 동작하도록 옵션값을 설정했습니다.
+
+```tsx title="TOC.tsx"
+const TOC = ({ toc }: Props) => {
+  const { activeId } = useObserveTOC({ toc });
+
+  <ul className="flex flex-col gap-y-px">
+    {toc.map((item) => (
+      <li
+        key={item.id}
+        className={cn("text-sm", {
+          "pl-3 my-1": item.level === 2,
+          "pl-6": item.level === 3,
+          "pl-9": item.level === 4,
+          "pl-12": item.level === 5,
+          "pl-[60px]": item.level === 6,
+        })}
+      >
+        <Link
+          href={`#${item.id}`}
+          className={cn(
+            "text-muted-foreground/70 hover:text-primary font-medium transition-color duration-300",
+            activeId === item.id ? "text-primary font-bold" : ""
+          )}
+        >
+          {item.title}
+        </Link>
+      </li>
+    ))}
+  </ul>;
+};
+```
+
+관찰중인 `activeId`와 `id`가 같은 TOC 내 헤딩 태그는 스타일을 추가로 지정하는 코드를 작성했습니다. 또한, `<Link>{:html}`태그를 사용하여 본문의 해당 `id`를 가진 페이지로 이동하도록 라우터 이동을 구현했습니다.
+
+## 마무리
+
+이 밖에도 `useEffect` 훅을 활용해 추가 동작을 구현한 부분이 있지만 중요 기능은 아니라서 다루지는 않았습니다. 궁금하신 분들은 제 [TOC 컴포넌트 코드](https://github.com/cdm1263/Zenithium/blob/main/src/components/TOC.tsx)를 참고해주세요.
+
+다음 포스트는 RSS에 대해서 다뤄보려고 하니 많은 관심 부탁드려요!
