@@ -44,9 +44,9 @@ const CoverImageLayout = ({
               {frontMatter.series}
             </p>
           )}
-          <motion.p className="text-3xl md:text-5xl font-bold mb-10 break-keep">
+          <motion.h1 className="text-3xl md:text-5xl font-bold mb-10 break-keep">
             {coverData?.title || frontMatter?.title}
-          </motion.p>
+          </motion.h1>
           <motion.p className="text-md md:text-xl font-semibold mb-3 break-keep ">
             {coverData?.description || frontMatter?.description}
           </motion.p>
