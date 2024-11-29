@@ -17,7 +17,7 @@ export const GET = () => {
     ttl: 60,
   });
 
-  allPosts.map(({ frontMatter: { title, description, date }, slug }) => {
+  allPosts.forEach(({ frontMatter: { title, description, date }, slug }) => {
     feed.item({
       title,
       description,
