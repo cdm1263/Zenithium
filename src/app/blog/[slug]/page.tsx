@@ -119,7 +119,7 @@ const Blog = async ({ params }: Props) => {
     )}&description=${encodeURIComponent(description)}${
       image ? `&bg=${encodeURIComponent(dirName)}` : ""
     }`,
-    url: `${baseUrl}/blug/${slug}`,
+    url: `${baseUrl}/blog/${slug}`,
     datePublished: date,
     dateModified: updated ?? date,
     author: {
