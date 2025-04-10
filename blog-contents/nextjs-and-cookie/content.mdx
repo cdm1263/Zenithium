@@ -328,7 +328,7 @@ export async function POST(request: NextRequest) {
 
 이 로직을 모든 API에 공통적으로 적용시키기 위해 모듈화 된 API 호출 함수를 만들었어요.
 
-```ts showLineNumbers {37-44} caption="토큰 갱신 로직을 포함한 API 호출 함수"
+```ts showLineNumbers {37-52} caption="토큰 갱신 로직을 포함한 API 호출 함수"
 "use server";
 
 import { cookies } from "next/headers";
