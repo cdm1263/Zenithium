@@ -291,6 +291,7 @@ Next.js의 서버는 자체적인 node.js 서버이기 때문에 클라이언트
 ![Next.js 서버에서 쿠키를 송수신 하는 과정](/postAssets/nextjs-and-cookie/쿠키-송수신.png)
 
 그래서 로그인 후 받은 토큰을 직접 서버의 쿠키에 저장하기로 했어요.
+우선 클라이언트에서 쿠키를 조회하는 과정이 불필요하다고 생각되어 백엔드에서 accessToken은 헤더에, refreshToken은 바디에 실어 보내기로 했어요.
 
 ```ts caption="쿠키 전달 로직을 포함한 로그인 Route Handler" {20-21, 40-41}
 import { NextRequest, NextResponse } from "next/server";
@@ -356,6 +357,8 @@ export async function POST(request: NextRequest) {
 
 와 그럼 이제 토큰 만료에 따른 토큰 갱신 로직만 만들면 끝이겠죠? 사실 여기부터가 진짜 문제였어요.
 
+### 서버액션? 서버함수?
+
 토큰 갱신 로직은 다음과 같은 순서로 이루어집니다.
 
 1. 만료된 accessToken을 사용해 API 호출
@@ -372,13 +375,6 @@ export async function POST(request: NextRequest) {
 import { cookies } from "next/headers";
 
 // ... 생략
-요.
-
-### 서버액션? 서버함수?
-
-우선 클라이언트에서 쿠키를 조회하는 과정이 불필요하다고 생각되어 백엔드에서 accessToken은 헤더에, refreshToken은 바디에 실어 보내기로 했어요.
-
-그리고 프론트엔드에서는 토큰을 쿠키에 저장하는 Route Handler를 구현했습니다.
 
 const makeRequest = async <T>(
   url: string,
