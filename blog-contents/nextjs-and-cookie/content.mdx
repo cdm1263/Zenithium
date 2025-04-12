@@ -2,7 +2,7 @@
 title: "Next.js에서의 Cookie와의 전쟁"
 description: "Cookie로 인증하는게 이렇게나 어려웠나..."
 date: 2025-04-10 13:19:03
-updated: ""
+updated: 2025-04-12 22:25:00
 series: "트러블 슈팅"
 image: "/postAssets/nextjs-and-cookie/cover.jpg"
 tags:
@@ -109,7 +109,7 @@ const GoogleCallback = () => {
 export default GoogleCallback;
 ```
 
-별도의 구글 콜백 페이지를 구성하고, 쿼리를 통해 전달되는 구글 인가 코드를 추출해 백엔드로 전달합니다.
+ky 라이브러리를 활용해 apiClient라는 클라이언트 비동기 요청 함수를 만들었습니다. 별도의 구글 콜백 페이지를 구성하고, 쿼리를 통해 전달되는 구글 인가 코드를 추출해 백엔드로 전달합니다.
 그럼 백엔드에서는 구글 인가 코드를 통해 구글에서 토큰을 발급받고, 토큰을 쿠키에 저장해 프론트엔드로 전달합니다.
 
 ![된다!](/postAssets/nextjs-and-cookie/요청있음.png)
@@ -187,22 +187,63 @@ const UserSettings = () => {
 ```
 
 이번엔 데이터가 잘 조회됐습니다. 도대체 왜 이럴까요?
+여기서 로그인 API 호출을 ky 라이브러리를 사용하는 대신 서버에서 호출하면 어떻게 될까요?
+로그인 로직을 Route Handler로 구현해보기로 했어요.
 
-> **The App Router uses React streaming for Server Side Rendering (SSR) and React Server Components (RSC). With streaming, we may have already starting sending a portion of the body before a component could attempt to set headers. This makes traditional APIs where you set a header while rendering impractical for App Router.**
-> 앱 라우터는 서버 사이드 렌더링(SSR) 및 리액트 서버 컴포넌트(RSC)에 React 스트리밍을 사용합니다. 스트리밍을 사용하면 구성 요소가 헤더를 설정하려고 시도하기 전에 이미 본문의 일부를 보내기 시작했을 수 있습니다. 이로 인해 렌더링하는 동안 헤더를 설정하는 기존 API는 App Router에서 실용적이지 않습니다.
+```ts title="/api/login.ts"
+import { NextRequest, NextResponse } from "next/server";
 
-**서버 컴포넌트에서는 응답 헤더를 설정할 수 없기 때문에 쿠키를 헤더에 자동으로 실어 보내는건 불가능하다는 이야기였습니다.**
+const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
 
-그럼 쿠키를 직접 실어서 보내야 하는 걸까요? 그것도 해보기로 했습니다.
+export async function POST(request: NextRequest) {
+  const { code } = await request.json();
+
+  try {
+    await fetch(`${API_URL}oauth/login`, {
+      method: "POST",
+      body: JSON.stringify({ code }),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("인증 처리 중 오류:", error);
+    return NextResponse.json({
+      success: false,
+      message: "인증 처리 중 오류가 발생했습니다.",
+    });
+  }
+}
+```
+
+이 Route Handler로 로그인을 하면 쿠키가 정상적으로 받아 질까요?
+**클라이언트 컴포넌트, 서버 컴포넌트 모두에서 쿠키를 받을 수 없었습니다!**
+
+정리를 하자면 다음과 같습니다.
+
+1. ky 라이브러리(클라이언트) API 호출
+
+- 클라이언트 컴포넌트 : 쿠키 수신 성공
+- 서버 컴포넌트 : 쿠키 수신 실패
+
+2. Route Handler(서버) 호출
+
+- 클라이언트 컴포넌트 : 쿠키 수신 실패
+- 서버 컴포넌트 : 쿠키 수신 실패
+
+유일하게 성공하는 방법이 클라이언트 컴포넌트에서 호출하는 방식이지만 이 프로젝트에서는 서버 컴포넌트를 최대한으로 사용하기 위해 서버 호출을 제대로 구현해 보기로 했어요.
 
 ### 쿠키는 어디에?
 
 Next.js에서는 `cookies(){:js}` 를 통해 헤더의 쿠키를 조회하거나 추가할 수 있습니다.
-그래서 서버 컴포넌트에서 쿠키를 조회하고 추가해보기로 했어요.
+그래서 서버 컴포넌트에서 쿠키를 조회하고 API 요청 헤더에 쿠키를 직접 추가 해보기로 했어요.
 
 ::: important Next.js 15부터는 cookies가 비동기로 동작합니다.
 
-```tsx caption="서버 컴포넌트에서 쿠키 직접 적용"
+```tsx caption="서버 컴포넌트에서 쿠키 직접 적용" {7, 12}
 import UserSettingsForm from "@/components/UserSettingsForm";
 import { cookies } from "next/headers";
 
@@ -234,7 +275,7 @@ export default UserSettings;
 ```
 
 이렇게 하면 정상적으로 쿠키가 담길까요? 쿠키가 요청 헤더에 담기긴 합니다.
-하지만 조회한 순간에는 쿠키에 토큰이 없었기 때문에 토큰 없는 쿠키를 보낸 셈이에요.
+하지만 조회한 순간에는 쿠키에 토큰이 없었고,그렇기 때문에 토큰 없는 쿠키를 보낸 셈이에요.
 백엔드에서는 쿠키는 있지만 토큰이 없다는 에러를 반환했어요.
 
 ![쿠키에 토큰이 없다](/postAssets/nextjs-and-cookie/토큰없음.png)
@@ -242,19 +283,16 @@ export default UserSettings;
 이번엔 문제의 원인이 뭘까요?
 
 앞서 로그인을 하고 쿠키를 받은 수신자는 클라이언트입니다.
-그런데 `cookies(){:js}` 가 조회하는 대상은 **Next.js의 서버 헤더**입니다.
+그런데 현재 API 요청을 보내는 송신자는 Next.js의 서버에서 실행되는 Route Handler 입니다.
 Next.js의 서버는 자체적인 node.js 서버이기 때문에 클라이언트와 실제 백엔드 서버 사이에 존재하면서 서버단에서의 다양한 역할을 수행하고 있죠.
-그렇기에 클라이언트가 받은 쿠키를 서버에서 조회할 수 없는 것이죠.
+
+**그렇기에 서버가 받은 쿠키를 클라이언트에 추가로 전달을 해 줘야 합니다.**
+
+![Next.js 서버에서 쿠키를 송수신 하는 과정](/postAssets/nextjs-and-cookie/쿠키-송수신.png)
 
 그래서 로그인 후 받은 토큰을 직접 서버의 쿠키에 저장하기로 했어요.
 
-### 서버액션? 서버함수?
-
-우선 클라이언트에서 쿠키를 조회하는 과정이 불필요하다고 생각되어 백엔드에서 accessToken은 헤더에, refreshToken은 바디에 실어 보내기로 했어요.
-
-그리고 프론트엔드에서는 토큰을 쿠키에 저장하는 Route Handler를 구현했습니다.
-
-```ts caption="기존 로그인 로직을 포함한 Route Handler"
+```ts caption="쿠키 전달 로직을 포함한 로그인 Route Handler" {20-21, 40-41}
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
@@ -334,6 +372,13 @@ export async function POST(request: NextRequest) {
 import { cookies } from "next/headers";
 
 // ... 생략
+요.
+
+### 서버액션? 서버함수?
+
+우선 클라이언트에서 쿠키를 조회하는 과정이 불필요하다고 생각되어 백엔드에서 accessToken은 헤더에, refreshToken은 바디에 실어 보내기로 했어요.
+
+그리고 프론트엔드에서는 토큰을 쿠키에 저장하는 Route Handler를 구현했습니다.
 
 const makeRequest = async <T>(
   url: string,
