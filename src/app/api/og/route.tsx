@@ -26,7 +26,8 @@ export const GET = async (req: Request) => {
         <img
           src={bgSrc}
           alt={`${title} 이미지`}
-          tw="absolute inset-0 w-full h-full object-cover"
+          tw="absolute inset-0 w-full h-full"
+          style={{ objectFit: "cover" }}
         />
         <div tw="absolute inset-0 bg-black opacity-50" />
         <div tw="flex flex-col w-full py-12 px-24">
