@@ -1,0 +1,618 @@
+---
+title: "tRPC 맛보기"
+description: "RPC 스타일의 API를 직접 구성해보자"
+date: 2025-07-12 10:43:07
+updated: ""
+series: "새로운 지식"
+image: "/postAssets/what-is-trpc/cover.jpg"
+tags:
+  - tRPC
+  - Next.js
+  - API
+---
+
+API의 타입을 직접 하나하나 정의하면서 골치 꽤나 아팠던 경험은 다들 한번 씩 있으셨을거라고 생각합니다. 이게 여간 수고로운 작업이 아니거든요.
+
+그런 의미에서 오늘은 타입스크립트로 풀 스택 서비스를 구성할 때 유용한 라이브러리인 **tRPC**에 대해서 포스팅을 해보려고 합니다. Next.js 강의를 찾아 들으면서 알게 된 라이브러리인데 특정 상황에서 사용하면 정말 좋을 것 같아 간단하게 기본적인 개념을 정리해보고자 해요.
+
+::: important React Query를 사용하므로 최소한의 사전 지식이 필요합니다.
+
+# tRPC란?
+
+tRPC가 뭐냐고 ChatGPT에게 물어보면 "TypeScript로 작성된 엔드-투-엔드 타입 안전한 API 라이브러리"라고 합니다. 이게 무슨 뜻인가 싶죠?
+
+tRPC는 **REST API**와 비교를 많이 하게 되는데 간단히 비교해볼게요.
+
+## tRPC vs REST API
+
+| 특징        | tRPC                   | REST API            |
+| ----------- | ---------------------- | ------------------- |
+| 타입 안전성 | ✅ 완전한 타입 안전성  | ❌ 런타임에만 확인  |
+| 개발 경험   | ✅ 자동완성, 타입 추론 | ❌ 수동 타입 정의   |
+| 번들 크기   | ✅ 필요한 타입만 포함  | ❌ 전체 스키마 포함 |
+
+REST API는 `/post/list` 와 같이 엔드포인트를 기준으로 서버에 요청하는 방식인데 반해 tRPC는 `getPostList() {:js}`와 같은 함수형으로 요청하게 됩니다. 이 과정에서 미리 정의해둔 타입을 사용하기 때문에 직접 추가로 타입을 정의할 필요가 없어지죠.
+
+이렇게만 보면 tRPC가 모든 면에서 좋아보이지만 무조건적으로 선택할 수 없다는 점도 인지를 해야합니다. 이 부분은 뒤에서 설명해볼게요. 그럼 tRPC의 각 구성 요소에 대해 설명해 보겠습니다.
+
+## 컨텍스트(Context)
+
+컨텍스트는 tRPC에서 각 API 요청에 대한 공통 데이터를 제공하는 역할을 합니다. 주로 인증 정보, 데이터베이스, 사용자 정보 등을 포함하죠.
+조금 뒤에서 설명할 프로시저에서 공통 데이터를 꺼내 쓰게 됩니다.
+
+```ts caption="컨텍스트에 사용자 인증 정보인 userId를 넘기도록 구성"
+export const createTRPCContext = cache(async () => {
+  const { userId } = await auth();
+
+  return { userId, db };
+});
+```
+
+## 프로시저(Procedure)
+
+프로시저는 실제 API 로직을 구현하기 위해 입력 검증, 권한 확인 등의 공통 비즈니스 로직을 포함하는 함수입니다. 쉽게 이해하기 위해 아래 예시 코드를 보면서 설명 드릴게요.
+
+```ts {6, 9} caption="userId가 있어야만 접근 할 수 있는 프로시저인 protectedProcedure 구성"
+const t = initTRPC.context<Context>().create();
+
+export const router = t.router;
+
+// 모든 사용자가 접근 가능한 API를 만드는 프로시저
+export const publicProcedure = t.procedure;
+
+// 인증된 사용자만 접근 가능한 API를 만드는 프로시저
+export const protectedProcedure = t.procedure.use(
+  t.middleware(({ ctx, next }) => {
+    if (!ctx.userId) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
+    return next({
+      ctx: {
+        ...ctx,
+        userId: ctx.userId,
+      },
+    });
+  })
+);
+```
+
+`publicProcedure`라는 공통 프로시저가 있고, 미들웨어를 활용해 사용자 정보를 확인하는 `protectedProcedure`가 있습니다.
+
+`protectedProcedure`의 내부를 살펴보면 `ctx`라는 매개변수가 보이는데 이것이 컨텍스트에서 넘겨준 값입니다. 이 값을 활용해 프로시저에 접근 가능한 사용자를 제한하거나 DB에서 데이터를 가져올 수 있습니다.
+
+## 라우터(Router)
+
+라우터는 프로시저를 활용해 만든 API의 집합입니다. 하나의 라우터에는 여러 API가 포함되며 각 API는 필요에 따라 각기 다른 프로시저를 사용할 수 있죠.
+
+```ts caption="여러 종류의 라우터를 통합하는 공통 라우터"
+export const appRouter = createTRPCRouter({
+  user: userRouter,
+  post: postRouter,
+  comment: commentRouter,
+});
+```
+
+여러 라우터를 tRPC에 넘겨주기 위한 `appRouter` 객체입니다. 여기에 만든 라우터를 등록해 놓으면 해당 라우터에 생성한 API들을 사용할 수 있습니다.
+
+```ts caption="postRouter 예시" {3, 9, 32}
+export const postRouter = createTRPCRouter({
+  // publicProcedure로 모든 사용자가 접근 가능한 API인 getAllPosts 구성
+  getAllPosts: publicProcedure.query(async () => {
+    const data = await ctx.db.select().from(posts);
+
+    return data;
+  }),
+  // protectedProcedure로 userId가 있어야 접근 가능한 API인 getMyPosts 구성
+  getMyPosts: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string().min(1, "사용자 ID는 필수입니다"),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const { userId: inputUserId } = input;
+
+      if (ctx.userId !== inputUserId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "자신의 포스트만 조회할 수 있습니다",
+        });
+      }
+
+      const posts = await ctx.db
+        .select()
+        .from(posts)
+        .where(eq(posts.userId, userId));
+
+      return posts;
+    }),
+  createPost: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1, "제목은 필수입니다"),
+        description: z.string().min(1, "설명은 필수입니다"),
+        content: z.string().min(1, "내용은 필수입니다"),
+        imageUrl: z.string().url("올바른 이미지 URL이어야 합니다"),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const newPost = await ctx.db
+        .insert(posts)
+        .values({
+          userId: ctx.userId,
+          title: input.title,
+          description: input.description,
+          content: input.content,
+          imageUrl: input.imageUrl,
+        })
+        .returning();
+
+      return newPost;
+    }),
+});
+```
+
+이렇게 라우터와 API 예시를 코드로 간략하게 만들어 봤습니다. 프로시저에서 체이닝을 통해 API를 구성한다는 규칙만 제외하면 Router Handler에서 직접 API를 구성하는 방식과 크게 다르지 않아요. [drizzle ORM](https://orm.drizzle.team/)으로 SQL 쿼리문을 작성하였고 [Zod](https://zod.dev/)로 전달받을 값의 타입을 정의해 주었습니다. 원하시면 **Prizma**와 같은 다른 ORM을 사용하셔도 무방합니다.
+
+`getAllPosts`, `getMyPosts`, `createPost`라는 세 개의 API를 정의해 보았습니다.
+모든 포스트를 불러오는 `getAllPosts`는 `publicProcedure`를 사용해 API에 접근하는데 제한이 없어 모든 사용자가 접근할 수 있게 됩니다.
+
+`getMyPosts`는 컨텍스트에서 넘겨받은 `userId`가 존재하는 사용자만 접근 가능한 `protectedProcedure`를 사용합니다. 함수의 인자로 `userId`를 전달해 주어야 하며, 이 값이 컨텍스트에서 넘겨받은 `userId`와 같아야 합니다. 그렇지 않으면 오류가 발생하고 이후 DB에서 데이터를 불러오게 되죠. ~~물론 실제로 자신의 포스트 내역을 불러올 때는 토큰으로 검증하면 되기 때문에 프론트엔드에서 직접 userId를 입력받을 필요는 없겠죠?~~
+
+`createPost`는 **데이터를 수정, 삭제 등을 수행할 수 있는** mutation으로 구성되어 있습니다. React Query에서 많이 보던 그 `mutation`이에요.
+
+::: tip DB Schema를 작성해 각 API에서의 데이터 타입을 보장할 수 있습니다.
+
+```ts caption="drizzle ORM 스키마 예시"
+export const posts = pgTable("posts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  content: text("content").notNull(),
+  imageUrl: text("image_url").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+```
+
+# tRPC 환경 구성하기
+
+개념은 간단하게 이해했으니 Next.js에서 사용하기 위한 환경을 구성해 보겠습니다.
+[tRPC 공식 튜토리얼](https://trpc.io/docs/client/react/server-components)을 보고 따라 구성하시면 됩니다.
+
+::: warning tRPC 11버전을 사용해야 서버 컴포넌트에서의 prefetch를 지원합니다.
+
+먼저 필요한 의존성 패키지를 설치합니다.
+
+```bash
+npm install @trpc/server @trpc/client @trpc/react-query @tanstack/react-query@latest zod client-only server-only
+```
+
+## 컨텍스트 및 라우터 구성
+
+먼저 tRPC 서버를 설정하고 컨텍스트를 구성해보겠습니다.
+
+### 1. 컨텍스트와 프로시저
+
+```ts title="trpc/init.ts"
+import { initTRPC } from "@trpc/server";
+import { cache } from "react";
+export const createTRPCContext = cache(async () => {
+  /**
+   * @see: https://trpc.io/docs/server/context
+   */
+  return { userId: "user_123" };
+});
+// Avoid exporting the entire t-object
+// since it's not very descriptive.
+// For instance, the use of a t variable
+// is common in i18n libraries.
+const t = initTRPC.create({
+  /**
+   * @see https://trpc.io/docs/server/data-transformers
+   */
+  // transformer: superjson,
+});
+// Base router and procedure helpers
+export const createTRPCRouter = t.router;
+export const createCallerFactory = t.createCallerFactory;
+export const baseProcedure = t.procedure;
+```
+
+컨텍스트와 프로시저가 있는 부분이죠. 이 내용을 직접 수정해 컨텍스트에서 공유할 값과 커스텀 프로시저를 설정할 수 있습니다.
+
+### 2. 라우터
+
+```ts title="trpc/routers/_app.ts"
+import { z } from "zod";
+import { baseProcedure, createTRPCRouter } from "../init";
+export const appRouter = createTRPCRouter({
+  hello: baseProcedure
+    .input(
+      z.object({
+        text: z.string(),
+      })
+    )
+    .query((opts) => {
+      return {
+        greeting: `hello ${opts.input.text}`,
+      };
+    }),
+});
+// export type definition of API
+export type AppRouter = typeof appRouter;
+```
+
+공식 문서에서 제공하는 예시 라우터와 함꼐 예시 API인 `hello`가 적혀 있는 모습입니다. 이 부분에 커스텀 라우터를 설정해도 되지만 상단의 라우터 설명 부분처럼 라우터를 별도 파일로 구성하고 이 파일에는 통합 라우터만 구성하는 것도 하나의 관리 방법이라고 할 수 있어요.
+
+### 3. 백엔드 어댑터 연결 (Route Handler)
+
+```ts title="app/api/trpc/[trpc]/route.ts"
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { createTRPCContext } from "~/trpc/init";
+import { appRouter } from "~/trpc/routers/_app";
+const handler = (req: Request) =>
+  fetchRequestHandler({
+    endpoint: "/api/trpc",
+    req,
+    router: appRouter,
+    createContext: createTRPCContext,
+  });
+export { handler as GET, handler as POST };
+```
+
+tRPC가 백엔드로 동작하기 위한 Route Handler를 구성해 줍니다.
+
+## tRPC 모듈 및 React Query 클라이언트 구성
+
+tRPC는 React Query를 내장하고 있기 때문에 QueryClient 초기 설정을 해 줘야 합니다.
+
+### 1. QueryClient
+
+```ts title="trpc/query-client.ts"
+import {
+  defaultShouldDehydrateQuery,
+  QueryClient,
+} from "@tanstack/react-query";
+import superjson from "superjson";
+export function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 30 * 1000,
+      },
+      dehydrate: {
+        // serializeData: superjson.serialize,
+        shouldDehydrateQuery: (query) =>
+          defaultShouldDehydrateQuery(query) ||
+          query.state.status === "pending",
+      },
+      hydrate: {
+        // deserializeData: superjson.deserialize,
+      },
+    },
+  });
+}
+```
+
+서버사이드에서 React Query를 활용해보신 분들은 어딘가 익숙한 코드일 수 있습니다. React Query의 [Advanced Server Rendering](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr) 문서에서 나오는 내용과 거의 같죠.
+
+tRPC의 공식 문서에서는 serialize와 deserialize가 선택이라고 하지만 `superjson` 패키지를 사용해 서버사이드와 클라이언트사이드 사이에서 **데이터를 안전하게 전송**하는 것을 추천합니다. 특히 `new Date() {:js}`나 `Math.random() {:js}` 등의 데이터 형식은 직렬화 과정을 거치지 않으면 **Hydration Error**를 발생시킬 수 있어요.
+
+### 2. tRPC 클라이언트 (클라이언트 사이드)
+
+```tsx
+"use client";
+// ^-- to make sure we can mount the Provider from a server component
+import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
+import { createTRPCReact } from "@trpc/react-query";
+import { useState } from "react";
+import { makeQueryClient } from "./query-client";
+import type { AppRouter } from "./routers/_app";
+export const trpc = createTRPCReact<AppRouter>();
+let clientQueryClientSingleton: QueryClient;
+function getQueryClient() {
+  if (typeof window === "undefined") {
+    // Server: always make a new query client
+    return makeQueryClient();
+  }
+  // Browser: use singleton pattern to keep the same query client
+  return (clientQueryClientSingleton ??= makeQueryClient());
+}
+function getUrl() {
+  const base = (() => {
+    if (typeof window !== "undefined") return "";
+    if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+    return "http://localhost:3000";
+  })();
+  return `${base}/api/trpc`;
+}
+export function TRPCProvider(
+  props: Readonly<{
+    children: React.ReactNode;
+  }>
+) {
+  // NOTE: Avoid useState when initializing the query client if you don't
+  //       have a suspense boundary between this and the code that may
+  //       suspend because React will throw away the client on the initial
+  //       render if it suspends and there is no boundary
+  const queryClient = getQueryClient();
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          // transformer: superjson, <-- if you use a data transformer
+          url: getUrl(),
+        }),
+      ],
+    })
+  );
+  return (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        {props.children}
+      </QueryClientProvider>
+    </trpc.Provider>
+  );
+}
+```
+
+이 부분은 클라이언트 컴포넌트에서 React Query를 사용하기 위한 설정이면서 tRPC에와 React Query를 연결하는 부분입니다. 필요시 `httpBatchLink() {:js}` 내부 객체에 커스텀 헤더를 추가할 수 있어요.
+
+### 3. tRPC 콜러 (서버 사이드)
+
+```ts
+import "server-only"; // <-- ensure this file cannot be imported from the client
+import { createHydrationHelpers } from "@trpc/react-query/rsc";
+import { cache } from "react";
+import { createCallerFactory, createTRPCContext } from "./init";
+import { makeQueryClient } from "./query-client";
+import { appRouter } from "./routers/_app";
+// IMPORTANT: Create a stable getter for the query client that
+//            will return the same client during the same request.
+export const getQueryClient = cache(makeQueryClient);
+const caller = createCallerFactory(appRouter)(createTRPCContext);
+export const { trpc, HydrateClient } = createHydrationHelpers<typeof appRouter>(
+  caller,
+  getQueryClient
+);
+```
+
+서버 사이드에서 tRPC 모듈을 사용할 수 있게 해주는 설정입니다. 객체 구조분해할당으로 export된 `trpc`와 `HydrateClient`로 서버 사이드에서 prefetch를 할 수 있습니다.
+
+# 내장된 React Query로 데이터 사용하기
+
+지금까지는 tRPC로 API를 만드는 방법만 알아보았으니 이제부터는 API를 직접 써보도록 하겠습니다.
+
+## 서버 컴포넌트에서 데이터 미리 가져오기
+
+```tsx title="app/posts/my/page.tsx (서버 컴포넌트)"
+import { HydrateClient, trpc } from "@/trpc/server";
+
+const MyPostsPage = async () => {
+  void trpc.posts.getMyPosts.prefetch({ userId: "123" });
+
+  return (
+    <HydrateClient>
+      <h1>포스트 목록</h1>
+      <Suspense fallback={<p>Loading...</p>}>
+        <MyPosts />
+      </Suspense>
+    </HydrateClient>
+  );
+};
+```
+
+::: important 반드시 서버 사이드용 trpc 모듈을 import 해야 합니다.
+
+서버 컴포넌트에서 사용하는 경우 입니다. React Query의 `prefetch`를 활용해 보신 분들이라면 아주 익숙한 방법이죠?
+
+```tsx caption="React Query로 prefetch하는 코드"
+const MyPostsPage = async () => {
+  const userId = "123";
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["myPosts", userId],
+    queryFn: () => getAllPosts(userId),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <h1>포스트 목록</h1>
+      <Suspense fallback={<p>Loading...</p>}>
+        <MyPosts />
+      </Suspense>
+    </HydrationBoundary>
+  );
+};
+
+export default MyPostsPage;
+```
+
+서버 컴포넌트에서 위와 같이 데이터를 미리 불러오는 코드를 작성해 본 경험이 있다면 tRPC의 prefetch도 금방 이해가 되실 거에요.
+
+서버에서 미리 데이터를 불러와 React Query의 QueryClient에 담아 이를 직렬화해 클라이언트로 넘겨주게 됩니다. 클라이언트에서는 데이터를 hydrate 하여 사용하기 위해 `<HydrationBoundary /> {:js}`, `<HydrateClient /> {:js}` 와 같은 요소로 감싸게 되죠.
+
+::: tip 필요한 경우 Next.js의 force dynamic으로 페이지의 데이터를 동적으로 불러오도록 할 수 있습니다.
+
+## 클라이언트 컴포넌트에서 사용하기
+
+```tsx title="app/posts/my/my-posts-list.tsx"
+"use client";
+
+import { trpc } from "@/lib/trpc/client";
+
+const MyPosts = () => {
+  const utils = trpc.useUtils();
+  const [posts] = trpc.posts.getMyPosts.useSuspenseQuery({
+    userId: "123",
+  });
+
+  const { mutate, isPending } = trpc.posts.createPost.useMutation({
+    onSuccess: () => {
+      utils.posts.getMyPosts.invalidate();
+      utils.posts.getAllPosts.invalidate();
+      console.log("새 포스트가 등록되었습니다.");
+    },
+    onError: (error) => {
+      console.error(error.message);
+    },
+  });
+
+  const newPost = {
+    title: "새 포스트 제목",
+    description: "새 포스트 설명",
+    content: "새 포스트 내용",
+    imageUrl: "새 포스트 이미지 url",
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(newPost);
+  };
+
+  return (
+    <div>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <h3>{post.title}</h3>
+            <p>{post.description}</p>
+          </li>
+        ))}
+      </ul>
+
+      <form onSubmit={handleSubmit}>
+        <button type="submit" disabled={isPending}>
+          {isPending ? "생성 중..." : "새 포스트 생성"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default MyPosts;
+```
+
+이 부분도 React Query를 사용해 보신 분들이라면 바로 이해하셨으리라 생각합니다. `useQuery`와 `useMutation`의 용법과 거의 같거든요.
+
+```tsx caption="React Query의 useSuspenseQuery와 useMutation을 사용한 코드"
+const MyPosts = () => {
+  const userId = "123";
+  const queryClient = useQueryClient();
+
+  const { data: posts = [] } = useSuspenseQuery({
+    queryKey: ["myPosts", userId],
+    queryFn: () => gethMyPosts(userId),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (newPost) => createPost(newPost),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myPosts", userId] });
+      queryClient.invalidateQueries({ queryKey: ["allPosts"] });
+      console.log("새 포스트가 등록되었습니다.");
+    },
+    onError: (error: any) => {
+      console.error(error.message);
+    },
+  });
+
+  const newPost = {
+    title: "새 포스트 제목",
+    description: "새 포스트 설명",
+    content: "새 포스트 내용",
+    imageUrl: "새 포스트 이미지 url",
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(newPost);
+  };
+
+  //...
+};
+```
+
+다만 기존 React Query에서 `queryClient.invalidateQueries() {:js}`를 개별 Query Key에 할당하던 부분을 `trpc.useUtils() {:js}`로 지정해야 하는 부분이 약간의 차이라고 할 수 있습니다.
+
+단, `useSuspenseQuery`의 경우, [반환 값을 배열로 받게 되니](https://trpc.io/docs/client/react/suspense) 이 점을 주의해서 사용해야 합니다.
+
+# 타입 안전성 체험하기
+
+tRPC의 가장 큰 장점인 타입 안전성을 실제로 체험해보겠습니다.
+각 API의 입력값은 `Zod`로, 반환 값은 DB 스키마와 함께 추론된 반환값을 라우터가 가지고 있기 때문에 tRPC 모듈에서 API를 꺼내 쓰는 것 만으로도 타입을 보장받을 수 있죠.
+
+## 1. 자동완성과 타입 추론
+
+```ts caption="IDE에서 자동완성 제공 및 컴파일 에러"
+const user = trpc.user.getById.query({ id: "123" });
+// user의 타입이 자동으로 추론됨: { id: string; name: string; email: string; ... }
+
+const { mutate } = trpc.user.create.mutate({
+  name: "홍길동",
+  email: "hong@example.com",
+  title: "hello", // 컴파일 에러: 스키마에 정의되지 않은 필드
+});
+```
+
+## 2. 런타임 타입 검증
+
+```ts caption="Zod 스키마를 통해 런타임 검증"
+const userRouter = router({
+  create: publicProcedure
+    .input(
+      z.object({
+        name: z.string().min(1, "이름은 필수입니다"),
+        email: z.string().email("올바른 이메일 형식이 아닙니다"),
+        age: z.number().min(0).max(150).optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      console.log(input.name); // string
+      console.log(input.age); // number | undefined
+    }),
+});
+```
+
+## 3. API 변경 시 자동 감지
+
+```ts caption="새로운 필드인 profileImage 추가시 클라이언트에서 즉시 감지"
+const userRouter = router({
+  getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      return {
+        id: input.id,
+        name: "홍길동",
+        email: "hong@example.com",
+        profileImage: "https://example.com/avatar.jpg",
+      };
+    }),
+});
+
+// 클라이언트에서 자동으로 타입 업데이트 감지
+const [user] = trpc.user.getById.query({ id: "123" });
+console.log(user.profileImage); // 새로운 필드도 타입 안전
+```
+
+# 마무리
+
+tRPC는 TypeScript를 활용하는 풀 스택 프로젝트에서 **타입 안전성을 극대화할 수 있는 강력한 라이브러리**입니다. 특히 Next.js와 함께 사용할 때 개발자 경험을 크게 향상시킬 수 있다고 생각합니다. 하지만 tRPC도 무조건 선택할 수 없는 이유가 몇 가지 있는데요.
+
+주요 단점:
+
+- **백엔드가 별도로 분리되어 있는 경우, 사용이 어려움.**
+- **TypeScript 환경에만 적합해 다른 언어와의 사용은 부적절.**
+- **React Query, tRPC 개념 등 초기 설정과 배경 지식이 많이 필요함.**
+
+tRPC는 이렇듯 여러 조건을 확인해가며 사용해야하는 라이브러리입니다. 하지만 TypeScript를 사용하는 Next.js 환경에서 한 번 쯤은 경험해 봐도 좋다고 생각합니다. 정말 편하거든요!
+
+## 참조
+
+[RPC와 REST의 차이점은 무엇인가요?](https://aws.amazon.com/ko/compare/the-difference-between-rpc-and-rest/)
+[tRPC vs GraphQL: Which API Is Best for You?](https://flatirons.com/blog/trpc-vs-graphql/?utm_source=chatgpt.com)
+[tRPC GitHub](https://github.com/trpc/trpc)
