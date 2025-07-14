@@ -52,10 +52,11 @@ const TOC = ({ toc }: Props) => {
           <li
             key={item.id}
             className={cn("text-sm", {
-              "pl-3 my-1": item.level === 2,
-              "pl-6": item.level === 3,
-              "pl-9": item.level === 4,
-              "pl-12": item.level === 5,
+              "pl-1": item.level === 1,
+              "pl-4": item.level === 2,
+              "pl-7": item.level === 3,
+              "pl-10": item.level === 4,
+              "pl-14": item.level === 5,
               "pl-[60px]": item.level === 6,
             })}
           >
