@@ -1,6 +1,5 @@
 import { baseUrl } from "@/app/sitemap";
 import { ImageResponse } from "next/og";
-import Image from "next/image";
 
 export const GET = async (req: Request) => {
   const url = new URL(req.url);
@@ -24,11 +23,10 @@ export const GET = async (req: Request) => {
   return new ImageResponse(
     (
       <div tw="flex w-full h-full items-center justify-center relative">
-        <Image
+        <img
           src={bgSrc}
           alt={`${title} 이미지`}
-          fill
-          style={{ objectFit: "cover" }}
+          tw="absolute inset-0 w-full h-full object-cover"
         />
         <div tw="absolute inset-0 bg-black opacity-50" />
         <div tw="flex flex-col w-full py-12 px-24">
