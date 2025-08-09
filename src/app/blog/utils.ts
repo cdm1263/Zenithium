@@ -15,15 +15,34 @@ const readMDXFile = (filePath: string) => {
 
 // Info: 디렉토리의 mdx 파일들을 파싱해 배열에 담아 반환
 const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
-  const directoryNames = fs.readdirSync(dir);
+  const directoryNames = fs
+    .readdirSync(dir)
+    // 숨김 항목 제외 및 디렉터리만 필터링
+    .filter((name) => {
+      if (name.startsWith(".")) return false;
+      const fullPath = path.join(dir, name);
+      try {
+        return fs.statSync(fullPath).isDirectory();
+      } catch {
+        return false;
+      }
+    });
 
-  const allPosts = directoryNames.map((dirName) => {
-    const filePath = path.join(directoryPath, dirName, "content.mdx");
-    const { data: frontMatter, content } = readMDXFile(filePath);
-    const slug = dirName;
+  const allPosts = directoryNames
+    .map((dirName) => {
+      const filePath = path.join(directoryPath, dirName, "content.mdx");
+      if (!fs.existsSync(filePath)) return null;
+      const { data: frontMatter, content } = readMDXFile(filePath);
+      const slug = dirName;
 
-    return { frontMatter: frontMatter as FrontMatter, content, slug, dirName };
-  });
+      return {
+        frontMatter: frontMatter as FrontMatter,
+        content,
+        slug,
+        dirName,
+      };
+    })
+    .filter(Boolean) as Mdx[];
 
   return allPosts;
 };
@@ -47,15 +66,26 @@ export const getResumeMDXDatas: (dir: string) => Map<string, string> = (
 
 // Info: 모든 태그와 시리즈 배열 반환
 export const getAllTagsAndSeries = () => {
-  const directoryNames = fs.readdirSync(directoryPath);
+  const directoryNames = fs.readdirSync(directoryPath).filter((name) => {
+    if (name.startsWith(".")) return false;
+    const fullPath = path.join(directoryPath, name);
+    try {
+      return fs.statSync(fullPath).isDirectory();
+    } catch {
+      return false;
+    }
+  });
+
   const allTags: string[][] = [];
   const allSeries: string[] = [];
+
   directoryNames.forEach((dirName) => {
     const filePath = path.join(directoryPath, dirName, "content.mdx");
+    if (!fs.existsSync(filePath)) return;
     const { data } = readMDXFile(filePath);
 
-    allSeries.push(data.series);
-    allTags.push(data.tags);
+    if (data.series) allSeries.push(data.series);
+    if (data.tags) allTags.push(data.tags);
   });
 
   return {
