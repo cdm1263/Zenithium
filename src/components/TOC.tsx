@@ -44,7 +44,7 @@ const TOC = ({ toc }: Props) => {
     <nav
       ref={ref}
       style={{ translate: isMoved ? "0 60px" : "0 0" }}
-      className="hidden h-full w-56 lg:block shrink-0 px-2 py-4 sticky top-20 transition-all duration-500"
+      className="hidden h-full w-56 2xl:block shrink-0 px-2 py-4 sticky top-20 transition-all duration-500"
     >
       <span className="absolute w-0.5 bg-primary/30 inset-y-0 left-0" />
       <ul className="flex flex-col gap-y-px">
@@ -64,7 +64,7 @@ const TOC = ({ toc }: Props) => {
               href={`#${item.id}`}
               onClick={(e) => handleClick(e, item.id)}
               className={cn(
-                "text-muted-foreground/70 hover:text-primary font-medium transition-color duration-300",
+                "block whitespace-normal break-words text-muted-foreground/70 hover:text-primary font-medium transition-color duration-300",
                 activeId === item.id ? "text-primary font-bold" : ""
               )}
             >

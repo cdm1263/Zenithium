@@ -140,9 +140,9 @@ const Blog = async ({ params }: Props) => {
         content={post.content}
         views
       />
-      <Inner className="flex flex-col xl:max-w-screen-2xl">
+      <Inner className="flex flex-col 2xl:max-w-screen-2xl">
         <div className="flex justify-center gap-5">
-          <div className="hidden w-56 xl:block shrink-0">
+          <div className="hidden w-56 2xl:block shrink-0">
             {/* // Todo: 추후 공간 활용 */}
           </div>
           <article className="prose dark:prose-invert w-full max-w-screen-lg">
