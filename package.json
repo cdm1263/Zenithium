@@ -42,7 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@typescript-eslint/parser": "^8.7.0",
     "eslint": "^8",
-    "eslint-config-next": "14.1.1-canary.46",
+    "eslint-config-next": "16.0.10",
     "gray-matter": "^4.0.3",
     "postcss": "^8",
     "rehype-autolink-headings": "^7.1.0",
