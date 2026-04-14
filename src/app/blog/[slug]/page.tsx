@@ -12,7 +12,7 @@ import { Metadata } from "next";
 import { baseUrl } from "@/app/sitemap";
 import SeriesAccordion from "@/components/SeriesAccordion";
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 export const generateStaticParams = async () => {
   const posts = getAllPosts();
@@ -24,7 +24,10 @@ export const generateStaticParams = async () => {
   }));
 };
 
-export const generateMetadata = ({ params }: Props): Metadata | undefined => {
+export const generateMetadata = async (
+  props: Props
+): Promise<Metadata | undefined> => {
+  const params = await props.params;
   const posts = getAllPosts();
   const post = posts.find((post) => post.slug === params.slug);
 
@@ -75,7 +78,8 @@ export const generateMetadata = ({ params }: Props): Metadata | undefined => {
   };
 };
 
-const Blog = async ({ params }: Props) => {
+const Blog = async (props: Props) => {
+  const params = await props.params;
   const allPosts = getAllPosts();
   const post = allPosts.find((post) => post.slug === params.slug);
 

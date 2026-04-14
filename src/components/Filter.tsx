@@ -23,25 +23,27 @@ type Props = {
 const Filter = ({ tags, series, className }: Props) => {
   const [search, setSearch] = useState("");
   const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams.toString());
   const router = useRouter();
   const { debouncedSearch } = useDebounce(search, 250);
 
   useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
     if (debouncedSearch) {
       params.set("search", debouncedSearch);
     } else {
       params.delete("search");
     }
     router.push(`?${params.toString()}`);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, router, searchParams]);
 
   const sortHandler = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
     params.set("sort", value);
     router.push(`?${params.toString()}`);
   };
 
   const seriesHandler = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
     if (value === "시리즈 전체") {
       params.delete("series");
     } else {
@@ -55,6 +57,7 @@ const Filter = ({ tags, series, className }: Props) => {
   };
 
   const tagHandler = (tag: string) => {
+    const params = new URLSearchParams(searchParams.toString());
     const currentTags = params.getAll("tag");
     if (currentTags.includes(tag)) {
       const newTags = currentTags.filter((currentTag) => currentTag !== tag);
@@ -68,7 +71,7 @@ const Filter = ({ tags, series, className }: Props) => {
     <div
       className={cn(
         "flex flex-col gap-2 w-3/4 self-center lg:w-2/5 lg:self-start ",
-        className
+        className,
       )}
     >
       <div className="flex flex-col xs:flex-row gap-2">
@@ -86,7 +89,7 @@ const Filter = ({ tags, series, className }: Props) => {
         {/* // Note: 시리즈 */}
         <Select
           onValueChange={seriesHandler}
-          value={params.get("series") || undefined}
+          value={searchParams.get("series") || undefined}
         >
           <SelectTrigger>
             <SelectValue placeholder="시리즈" />
@@ -116,7 +119,7 @@ const Filter = ({ tags, series, className }: Props) => {
             key={tag}
             tagName={tag}
             className={
-              params.getAll("tag").includes(tag) ? "bg-primary/30" : ""
+              searchParams.getAll("tag").includes(tag) ? "bg-primary/30" : ""
             }
             tagEvent={() => tagHandler(tag)}
           />

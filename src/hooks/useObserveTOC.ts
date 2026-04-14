@@ -7,11 +7,11 @@ type Props = {
 
 const useObserveTOC = ({ toc }: Props) => {
   const [activeId, setActiveId] = useState("");
-  const observerOptions = {
-    rootMargin: "0px 0px -40% 0px",
-  };
-
   useEffect(() => {
+    const observerOptions = {
+      rootMargin: "0px 0px -40% 0px",
+    };
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {

@@ -28,12 +28,13 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  searchParams: { [key: string]: string };
+  searchParams: Promise<{ [key: string]: string }>;
 };
 
 export const revalidate = 0;
 
-const Page = async ({ searchParams }: Props) => {
+const Page = async (props: Props) => {
+  const searchParams = await props.searchParams;
   const { series, tag: tags, search, sort } = searchParams;
   const filteredPosts = await filterPosts({ series, tags, search, sort });
   const { allTags, allSeries } = getAllTagsAndSeries();
