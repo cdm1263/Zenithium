@@ -96,7 +96,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${nanumSquareRound.variable}`}>
+    <html lang="ko" className={`${nanumSquareRound.variable}`}>
       <GoogleAnalytics />
       <body className={nanumSquareRound.className}>
         <ThemeProvider attribute="class" defaultTheme="system">

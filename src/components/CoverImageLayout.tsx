@@ -21,15 +21,15 @@ const CoverImageLayout = ({
   frontMatter,
 }: Props) => {
   const { scrollY } = useScroll();
-  const srpingOptions = { stiffness: 200, damping: 20 };
+  const springOptions = { stiffness: 200, damping: 20 };
 
-  const transfromedScale = useTransform(scrollY, [0, 600], [1, 1.1]);
-  const transfromedY = useTransform(scrollY, [0, 600], [0, -100]);
-  const transfromedOpacity = useTransform(scrollY, [0, 600], [1, 0]);
+  const transformedScale = useTransform(scrollY, [0, 600], [1, 1.1]);
+  const transformedY = useTransform(scrollY, [0, 600], [0, -100]);
+  const transformedOpacity = useTransform(scrollY, [0, 600], [1, 0]);
 
-  const scale = useSpring(transfromedScale, srpingOptions);
-  const y = useSpring(transfromedY, srpingOptions);
-  const opacity = useSpring(transfromedOpacity, srpingOptions);
+  const scale = useSpring(transformedScale, springOptions);
+  const y = useSpring(transformedY, springOptions);
+  const opacity = useSpring(transformedOpacity, springOptions);
 
   return (
     <div className="fixed inset-x-0 top-0 h-[600px] -z-10 overflow-hidden">

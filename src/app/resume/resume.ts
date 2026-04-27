@@ -5,7 +5,7 @@ const directoryPath = path.join(process.cwd(), "resume-contents");
 
 const contents = getResumeMDXDatas(directoryPath);
 
-export const about = contents.get("about") as string;
+export const about = contents.get("about") ?? "";
 
 export type ResumeContent = {
   title: string;
@@ -31,28 +31,28 @@ export const sections: ResumeSection[] = [
         title: "Zenithium",
         subtitle: "제니시움",
         period: "2024.09 ~ 2024.10",
-        content: contents.get("zenithium") as string,
+        content: contents.get("zenithium") ?? "",
         href: "https://github.com/cdm1263/Zenithium",
       },
       {
         title: "AIGOO",
         subtitle: "아이고",
         period: "2024.05 ~ 2024.06",
-        content: contents.get("aigoo") as string,
+        content: contents.get("aigoo") ?? "",
         href: "https://github.com/cdm1263/AIGOO-frontend",
       },
       {
         title: "Foodie Log",
         subtitle: "푸디로그",
         period: "2024.03 ~ 2024.04",
-        content: contents.get("foodie-log") as string,
+        content: contents.get("foodie-log") ?? "",
         href: "https://github.com/FoodieLog/foodie-log-client",
       },
       {
         title: "Pokehub",
         subtitle: "포켓허브",
         period: "2023.11 ~ 2024.02",
-        content: contents.get("pokehub") as string,
+        content: contents.get("pokehub") ?? "",
         href: "https://github.com/side-project-pokehub/my-pokemon",
       },
     ],
@@ -65,7 +65,7 @@ export const sections: ResumeSection[] = [
         title: "앱손 코리아 & 멋쟁이 사자처럼 해커톤 참여",
         subtitle: "Epson Innovation Challenge Korea",
         period: "2024.05 ~ 2024.06",
-        content: contents.get("epson") as string,
+        content: contents.get("epson") ?? "",
         open: true,
       },
     ],
@@ -78,7 +78,7 @@ export const sections: ResumeSection[] = [
         title: "react query 한글문서 코드 오류 해결",
         subtitle: "react-query-tutorial",
         period: "2024.08",
-        content: contents.get("react-query-tutorial") as string,
+        content: contents.get("react-query-tutorial") ?? "",
         href: "https://github.com/ssi02014/react-query-tutorial",
         open: true,
       },
@@ -92,7 +92,7 @@ export const sections: ResumeSection[] = [
         title: "프론트엔드 부트캠프 수료",
         subtitle: "패스트 캠퍼스 프론트엔드 부트캠프 5기",
         period: "2023.03 ~ 2023.10",
-        content: contents.get("fast-campus") as string,
+        content: contents.get("fast-campus") ?? "",
         open: true,
       },
     ],

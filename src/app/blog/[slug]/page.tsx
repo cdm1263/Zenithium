@@ -17,8 +17,6 @@ type Props = { params: Promise<{ slug: string }> };
 export const generateStaticParams = async () => {
   const posts = getAllPosts();
 
-  if (!posts) return [];
-
   return posts.map((post) => ({
     slug: post.slug,
   }));
@@ -146,9 +144,7 @@ const Blog = async (props: Props) => {
       />
       <Inner className="flex flex-col 2xl:max-w-screen-2xl">
         <div className="flex justify-center gap-5">
-          <div className="hidden w-56 2xl:block shrink-0">
-            {/* // Todo: 추후 공간 활용 */}
-          </div>
+          <div className="hidden w-56 2xl:block shrink-0" />
           <article className="prose dark:prose-invert w-full max-w-screen-lg">
             <CustomMDX source={post.content} />
           </article>

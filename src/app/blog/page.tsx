@@ -31,7 +31,7 @@ type Props = {
   searchParams: Promise<{ [key: string]: string }>;
 };
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 const Page = async (props: Props) => {
   const searchParams = await props.searchParams;

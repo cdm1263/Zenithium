@@ -12,7 +12,6 @@ const Footer = () => {
     <footer className="bg-muted h-60">
       <Inner className="flex flex-col justify-center items-center">
         <div className="flex gap-x-5 mb-10">
-          {/* // TODO: 추후 Link로 변경해야함 */}
           <Link href="/api/rss">
             <Rss className={iconStyle} />
           </Link>

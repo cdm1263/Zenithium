@@ -5,9 +5,12 @@ type Props = {
 };
 
 const PageViewCounter = async ({ slug }: Props) => {
-  const pageViews = await getPageViews(slug);
-
-  return <span>{pageViews}</span>;
+  try {
+    const pageViews = await getPageViews(slug);
+    return <span>{pageViews}</span>;
+  } catch {
+    return <span>---</span>;
+  }
 };
 
 export default PageViewCounter;

@@ -16,13 +16,19 @@ export const GET = async (req: Request) => {
       : "home-cover.jpg"
   }`;
 
-  const font = await fetch(
-    new URL(`${baseUrl}/font/NanumSquareRoundB.ttf`)
-  ).then((res) => res.arrayBuffer());
+  let font: ArrayBuffer | undefined;
+  try {
+    font = await fetch(
+      new URL(`${baseUrl}/font/NanumSquareRoundB.ttf`)
+    ).then((res) => res.arrayBuffer());
+  } catch {
+    // 폰트 로드 실패 시 기본 폰트로 대체
+  }
 
   return new ImageResponse(
     (
       <div tw="flex w-full h-full items-center justify-center relative">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={bgSrc}
           alt={`${title} 이미지`}
@@ -39,7 +45,7 @@ export const GET = async (req: Request) => {
     {
       width: 1200,
       height: 630,
-      fonts: [{ name: "NanumSquareRoundB", data: font }],
+      fonts: font ? [{ name: "NanumSquareRoundB", data: font }] : [],
     }
   );
 };

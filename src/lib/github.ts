@@ -35,6 +35,7 @@ const fetchGQL = async <T>(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ query, variables }),
+    next: { revalidate: 3600 },
   });
 
   if (!res.ok) {

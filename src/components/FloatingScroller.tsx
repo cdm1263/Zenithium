@@ -22,6 +22,10 @@ const FloatingScroller = () => {
   return (
     <motion.div
       onClick={scrollToTop}
+      onKeyDown={(e) => e.key === "Enter" && scrollToTop()}
+      tabIndex={0}
+      role="button"
+      aria-label="맨 위로 스크롤"
       className="w-12 h-12 fixed bottom-4 right-4 md:bottom-8 md:right-8 rounded-full flex items-center justify-center hover:bg-primary cursor-pointer group"
       style={{
         background: `conic-gradient(

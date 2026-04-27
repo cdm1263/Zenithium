@@ -24,10 +24,9 @@ const TOC = ({ toc }: Props) => {
   }, 100);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => throttledScroll());
-
+    window.addEventListener("scroll", throttledScroll);
     return () => {
-      window.removeEventListener("scroll", () => throttledScroll());
+      window.removeEventListener("scroll", throttledScroll);
     };
   }, [throttledScroll]);
 

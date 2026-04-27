@@ -20,6 +20,10 @@ const TagSelector = ({ tagName, className, tagEvent, ...props }: Props) => {
   return (
     <span
       onClick={tagHandler}
+      onKeyDown={(e) => e.key === "Enter" && tagHandler()}
+      tabIndex={0}
+      role="button"
+      aria-label={`${tagName} 태그 선택`}
       key={tagName}
       className={cn(
         "px-3 py-1 rounded-full text-sm text-primary shrink-0 cursor-pointer border-muted border-2 hover:bg-primary/30 transition-colors select-none",

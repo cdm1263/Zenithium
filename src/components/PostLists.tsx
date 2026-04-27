@@ -137,7 +137,7 @@ const PostLists = async ({ posts, postsLength = true }: Props) => {
             slug={post.slug}
             frontMatter={post.frontMatter}
             content={post.content}
-            comment={commentCounts[post.slug]}
+            comment={commentCounts[post.slug] ?? 0}
           />
         </li>
       ))}
