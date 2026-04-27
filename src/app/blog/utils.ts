@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
+import { cache } from "react";
 import { FrontMatter, Mdx } from "@/lib/types";
 
 const directoryPath = path.join(process.cwd(), "blog-contents");
@@ -48,7 +49,7 @@ const getMDXDatas: (dir: string) => Mdx[] = (dir: string) => {
 };
 
 // Info: resume 페이지에서 사용
-export const getResumeMDXDatas: (dir: string) => Map<string, string> = (
+export const getResumeMDXDatas: (dir: string) => Map<string, string> = cache((
   dir: string
 ) => {
   const fileNames = fs.readdirSync(dir);
@@ -62,10 +63,10 @@ export const getResumeMDXDatas: (dir: string) => Map<string, string> = (
   });
 
   return contents;
-};
+});
 
 // Info: 모든 태그와 시리즈 배열 반환
-export const getAllTagsAndSeries = () => {
+export const getAllTagsAndSeries = cache(() => {
   const directoryNames = fs.readdirSync(directoryPath).filter((name) => {
     if (name.startsWith(".")) return false;
     const fullPath = path.join(directoryPath, name);
@@ -92,11 +93,15 @@ export const getAllTagsAndSeries = () => {
     allTags: [...new Set(allTags.flat())],
     allSeries: [...new Set(allSeries)],
   };
-};
+});
 
 // Info: 모든 블로그 포스트 호출
-export const getAllPosts = () => {
+export const getAllPosts = cache(() => {
   return getMDXDatas(directoryPath).sort((a, b) => {
     return new Date(b.frontMatter.date) > new Date(a.frontMatter.date) ? 1 : -1;
   });
-};
+});
+
+export const getPostBySlug = cache((slug: string) => {
+  return getAllPosts().find((post) => post.slug === slug);
+});

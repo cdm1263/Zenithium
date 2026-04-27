@@ -1,5 +1,15 @@
 import type { Config } from "tailwindcss";
-type ThemeFunction = (path: string, defaultValue?: any) => any;
+import animate from "tailwindcss-animate";
+import typography from "@tailwindcss/typography";
+
+type ThemeValue =
+  | string
+  | number
+  | Record<string, unknown>
+  | Array<Record<string, unknown> | string | number>
+  | undefined;
+
+type ThemeFunction = (path: string, defaultValue?: ThemeValue) => ThemeValue;
 
 const config: Config = {
   darkMode: ["class"],
@@ -320,6 +330,6 @@ const config: Config = {
       }),
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [animate, typography],
 };
 export default config;

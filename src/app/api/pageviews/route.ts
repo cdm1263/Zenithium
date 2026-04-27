@@ -1,17 +1,21 @@
 import { NextResponse } from "next/server";
 import { BetaAnalyticsDataClient } from "@google-analytics/data";
+import {
+  getGoogleAnalyticsCredentials,
+  getGoogleAnalyticsProperty,
+} from "@/lib/env.server";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const path = url.searchParams.get("path") || "/";
 
-  const analytics = new BetaAnalyticsDataClient({
-    credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS || ""),
-  });
-
   try {
+    const analytics = new BetaAnalyticsDataClient({
+      credentials: getGoogleAnalyticsCredentials(),
+    });
+
     const [response] = await analytics.runReport({
-      property: `properties/${process.env.GOOGLE_ANALYTICS_PROPERTY}`,
+      property: `properties/${getGoogleAnalyticsProperty()}`,
       dateRanges: [{ startDate: "2015-08-14", endDate: "today" }],
       dimensions: [{ name: "pagePath" }],
       metrics: [{ name: "screenPageViews" }],
@@ -19,7 +23,7 @@ export async function GET(req: Request) {
         filter: {
           fieldName: "pagePath",
           stringFilter: {
-            matchType: "ENDS_WITH",
+            matchType: "EXACT",
             value: path,
           },
         },

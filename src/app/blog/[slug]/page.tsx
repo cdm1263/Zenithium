@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getAllPosts } from "../utils";
+import { getAllPosts, getPostBySlug } from "../utils";
 import Inner from "@/components/Inner";
 import CustomMDX from "@/components/CustomMDX";
 import TOC from "@/components/TOC";
@@ -26,8 +26,7 @@ export const generateMetadata = async (
   props: Props
 ): Promise<Metadata | undefined> => {
   const params = await props.params;
-  const posts = getAllPosts();
-  const post = posts.find((post) => post.slug === params.slug);
+  const post = getPostBySlug(params.slug);
 
   if (!post) return;
 
@@ -79,7 +78,7 @@ export const generateMetadata = async (
 const Blog = async (props: Props) => {
   const params = await props.params;
   const allPosts = getAllPosts();
-  const post = allPosts.find((post) => post.slug === params.slug);
+  const post = getPostBySlug(params.slug);
 
   if (!post) {
     notFound();

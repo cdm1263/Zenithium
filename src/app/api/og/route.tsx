@@ -1,5 +1,5 @@
-import { baseUrl } from "@/app/sitemap";
 import { ImageResponse } from "next/og";
+import { siteConfig } from "@/lib/site";
 
 export const GET = async (req: Request) => {
   const url = new URL(req.url);
@@ -8,7 +8,7 @@ export const GET = async (req: Request) => {
     url.searchParams.get("description") ?? "To Zenith. 어제보다 한 걸음 위로";
   const bgPath = url.searchParams.get("bg");
 
-  const bgSrc = `${baseUrl}/${
+  const bgSrc = `${siteConfig.baseUrl}/${
     bgPath === "resume-cover.jpg" || bgPath === "blog-cover.jpg"
       ? bgPath
       : bgPath
@@ -19,7 +19,7 @@ export const GET = async (req: Request) => {
   let font: ArrayBuffer | undefined;
   try {
     font = await fetch(
-      new URL(`${baseUrl}/font/NanumSquareRoundB.ttf`)
+      new URL(`${siteConfig.baseUrl}/font/NanumSquareRoundB.ttf`)
     ).then((res) => res.arrayBuffer());
   } catch {
     // 폰트 로드 실패 시 기본 폰트로 대체

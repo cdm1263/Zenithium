@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "./blog/utils";
+import { siteConfig } from "@/lib/site";
 
-export const baseUrl = "https://www.zenithium.info/";
+export const baseUrl = siteConfig.baseUrl;
 
 type Sitemap = () => MetadataRoute.Sitemap;
 

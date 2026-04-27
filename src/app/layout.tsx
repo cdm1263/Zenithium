@@ -5,7 +5,7 @@ import { ThemeProvider } from "next-themes";
 import Footer from "@/components/Footer";
 import FloatingScroller from "@/components/FloatingScroller";
 import localFont from "next/font/local";
-import { baseUrl } from "./sitemap";
+import { getGoogleAnalyticsId, siteConfig } from "@/lib/site";
 import { Toaster } from "@/components/ui/toaster";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
@@ -36,7 +36,7 @@ const nanumSquareRound = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(siteConfig.baseUrl),
   title: {
     default: "개발 블로그 Zenithium",
     template: "%s - 개발 블로그 Zenithium",
@@ -53,13 +53,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: "개발 블로그 Zenithium",
     description: "To Zenith. 어제보다 한 걸음 위로",
-    url: baseUrl,
+    url: siteConfig.baseUrl,
     siteName: "개발 블로그 Zenithium",
     locale: "ko_KR",
     type: "website",
     images: [
       {
-        url: `${baseUrl}/api/og`,
+        url: `${siteConfig.baseUrl}/api/og`,
         width: 1200,
         height: 630,
         alt: "개발 블로그 Zenithium OG 이미지",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "개발 블로그 Zenithium",
     description: "To Zenith",
-    images: [`${baseUrl}/api/og`],
+    images: [`${siteConfig.baseUrl}/api/og`],
   },
   robots: {
     index: true,
@@ -95,9 +95,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const googleAnalyticsId = getGoogleAnalyticsId();
+
   return (
     <html lang="ko" className={`${nanumSquareRound.variable}`}>
-      <GoogleAnalytics />
+      <GoogleAnalytics measurementId={googleAnalyticsId} />
       <body className={nanumSquareRound.className}>
         <ThemeProvider attribute="class" defaultTheme="system">
           <Nav />

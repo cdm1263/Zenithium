@@ -113,10 +113,12 @@ const PostCard = ({
 };
 
 const PostLists = async ({ posts, postsLength = true }: Props) => {
+  const categoryId = process.env.NEXT_PUBLIC_CATEGORY_KEY || "";
+
   const commentCounts = await getCommentCounts(
     "cdm1263",
     "zenithium",
-    process.env.NEXT_PUBLIC_CATEGORY_KEY!,
+    categoryId,
     posts.map((post) => post.slug)
   );
 
