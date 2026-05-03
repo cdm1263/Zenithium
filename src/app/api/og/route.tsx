@@ -1,5 +1,28 @@
 import { ImageResponse } from "next/og";
-import { siteConfig } from "@/lib/site";
+import { readFile } from "fs/promises";
+import path from "path";
+
+export const runtime = "nodejs";
+
+const publicDir = path.join(process.cwd(), "public");
+
+async function readAsArrayBuffer(relPath: string): Promise<ArrayBuffer | undefined> {
+  try {
+    const buf = await readFile(path.join(publicDir, relPath));
+    return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
+  } catch {
+    return undefined;
+  }
+}
+
+async function readAsDataUrl(relPath: string): Promise<string | null> {
+  try {
+    const buf = await readFile(path.join(publicDir, relPath));
+    return `data:image/jpeg;base64,${buf.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
 
 export const GET = async (req: Request) => {
   const url = new URL(req.url);
@@ -8,29 +31,27 @@ export const GET = async (req: Request) => {
     url.searchParams.get("description") ?? "To Zenith. 어제보다 한 걸음 위로";
   const bgPath = url.searchParams.get("bg");
 
-  const bgSrc = `${siteConfig.baseUrl}/${
+  const bgRelPath =
     bgPath === "resume-cover.jpg" || bgPath === "blog-cover.jpg"
       ? bgPath
       : bgPath
       ? `postAssets/${bgPath}/cover.jpg`
-      : "home-cover.jpg"
-  }`;
+      : "home-cover.jpg";
 
-  let font: ArrayBuffer | undefined;
-  try {
-    font = await fetch(
-      new URL(`${siteConfig.baseUrl}/font/NanumSquareRoundB.ttf`)
-    ).then((res) => res.arrayBuffer());
-  } catch {
-    // 폰트 로드 실패 시 기본 폰트로 대체
-  }
+  // 폰트와 배경 이미지를 파일시스템에서 병렬로 읽기
+  const [font, bgDataUrl] = await Promise.all([
+    readAsArrayBuffer("font/NanumSquareRoundB.ttf"),
+    readAsDataUrl(bgRelPath).then(
+      (result) => result ?? readAsDataUrl("home-cover.jpg")
+    ),
+  ]);
 
-  return new ImageResponse(
+  const response = new ImageResponse(
     (
       <div tw="flex w-full h-full items-center justify-center relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={bgSrc}
+          src={bgDataUrl ?? ""}
           alt={`${title} 이미지`}
           tw="absolute inset-0 w-full h-full"
           style={{ objectFit: "cover" }}
@@ -48,4 +69,8 @@ export const GET = async (req: Request) => {
       fonts: font ? [{ name: "NanumSquareRoundB", data: font }] : [],
     }
   );
+
+  response.headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+
+  return response;
 };
