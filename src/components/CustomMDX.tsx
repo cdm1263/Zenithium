@@ -4,7 +4,12 @@ import rehypePrettyCode, {
 } from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
-import { rehypeAddRelativeToHeadings, rehypeMessageBox } from "@/lib/plugin";
+import remarkDirective from "remark-directive";
+import {
+  rehypeAddRelativeToHeadings,
+  rehypeMessageBox,
+  remarkMessageBox,
+} from "@/lib/plugin";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings, {
   type Options as RehypeAutoLinkOptions,
@@ -42,7 +47,12 @@ const CustomMDX = (props: MDXRemoteProps) => {
         components={{ ...components, ...(props.components || {}) }}
         options={{
           mdxOptions: {
-            remarkPlugins: [remarkGfm, remarkBreaks],
+            remarkPlugins: [
+              remarkGfm,
+              remarkBreaks,
+              remarkDirective,
+              remarkMessageBox,
+            ],
             rehypePlugins: [
               [rehypePrettyCode, prettyCodeOptions],
               rehypeMessageBox,
