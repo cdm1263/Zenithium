@@ -1,71 +1,118 @@
 import { visit } from "unist-util-visit";
-import { Root, Element } from "hast";
+import type { Root, Element, ElementContent } from "hast";
+import type { Root as MdastRoot } from "mdast";
 import { path } from "./iconPath";
+
+type ContainerDirectiveNode = {
+  name?: unknown;
+  data?: Record<string, unknown>;
+};
+
+const MESSAGE_BOX_TYPES = ["note", "tip", "important", "warning", "caution"];
+
+const isMessageBoxType = (type: unknown): type is string => {
+  return typeof type === "string" && MESSAGE_BOX_TYPES.includes(type);
+};
+
+const createMessageIcon = (type: string): Element => ({
+  type: "element",
+  tagName: "svg",
+  properties: {
+    className: `message-icon message-icon-${type}`,
+    xmlns: "http://www.w3.org/2000/svg",
+  },
+  children: [
+    {
+      type: "element",
+      tagName: "path",
+      properties: {
+        fill: "currentColor",
+        d: path[type],
+      },
+      children: [],
+    },
+  ],
+});
+
+const addClassNames = (node: Element, classNamesToAdd: string[]) => {
+  node.properties = node.properties || {};
+
+  const className = node.properties.className;
+  let classNames: (string | number)[] = [];
+
+  if (Array.isArray(className)) {
+    classNames = className;
+  } else if (typeof className === "string" || typeof className === "number") {
+    classNames = [className];
+  }
+
+  node.properties.className = [...classNames, ...classNamesToAdd];
+};
+
+export const remarkMessageBox = () => {
+  return (tree: MdastRoot) => {
+    visit(tree, "containerDirective", (node) => {
+      const directive = node as ContainerDirectiveNode;
+
+      if (!isMessageBoxType(directive.name)) {
+        return;
+      }
+
+      directive.data = {
+        ...directive.data,
+        hName: "div",
+        hProperties: {
+          className: ["message-box", `message-box-${directive.name}`],
+          dataMessageBoxType: directive.name,
+        },
+      };
+    });
+  };
+};
 
 export const rehypeMessageBox = () => {
   return (tree: Root) => {
     visit(tree, "element", (node: Element) => {
+      const messageBoxType = node.properties?.dataMessageBoxType;
+
+      if (isMessageBoxType(messageBoxType)) {
+        node.children.unshift(createMessageIcon(messageBoxType));
+        return;
+      }
+
       if (
         node.tagName === "p" &&
         node.children &&
         node.children[0] &&
         node.children[0].type === "text"
       ) {
-        const firstChildValue = node.children[0].value.trim();
+        const firstChildValue = node.children[0].value;
+        const messageBoxMatch = firstChildValue.match(/^:{3,}\s*(\w+)\s*/);
 
-        if (firstChildValue.startsWith(":::")) {
-          const type = firstChildValue.split(" ")[1];
-
-          // Note: node.properties와 className이 없으면 초기화
-          node.properties = node.properties || {};
-
-          // Note: className이 배열인지, 아니면 문자열/숫자인지 확인
-          // Note: 배열이 아니면 배열에 담음
-          let classNames: (string | number)[] = [];
-          if (Array.isArray(node.properties.className)) {
-            classNames = node.properties.className;
-          } else if (
-            typeof node.properties.className === "string" ||
-            typeof node.properties.className === "number"
-          ) {
-            classNames = [node.properties.className];
-          }
-
-          // Note: classNames에 Tailwind Typhgraphy 클래스네임 추가
-          classNames.push("message-box", `message-box-${type}`);
-
-          // Note: 업데이트된 classNames 배열을 다시 설정
-          node.properties.className = classNames;
-
-          // Note: ::: 기호 이후 텍스트에서 줄바꿈 제거 (모든 텍스트를 하나로 합침)
-          const combinedText = node.children[0].value
-            .replace(/^:::\s*\w+/, "") // Note: ::: 및 그 뒤의 type 제거
-            .trim();
-
-          // Note: 아이콘 구성
-          const svgIcon: Element = {
-            type: "element",
-            tagName: "svg",
-            properties: {
-              className: `message-icon message-icon-${type}`,
-              xmlns: "http://www.w3.org/2000/svg",
-            },
-            children: [
-              {
-                type: "element",
-                tagName: "path",
-                properties: {
-                  fill: "currentColor",
-                  d: path[type],
-                },
-                children: [],
-              },
-            ],
-          };
-
-          // Note: 텍스트를 하나의 child로 재구성
-          node.children = [svgIcon, { type: "text", value: combinedText }];
+        if (!messageBoxMatch) {
+          return;
         }
+
+        const type = messageBoxMatch[1];
+
+        if (!isMessageBoxType(type)) {
+          return;
+        }
+
+        addClassNames(node, ["message-box", `message-box-${type}`]);
+
+        const remainingFirstText = firstChildValue
+          .slice(messageBoxMatch[0].length)
+          .trimStart();
+        const remainingChildren: ElementContent[] = remainingFirstText
+          ? [{ ...node.children[0], value: remainingFirstText }]
+          : [];
+
+        node.children = [
+          createMessageIcon(type),
+          ...remainingChildren,
+          ...node.children.slice(1),
+        ];
       }
     });
   };
@@ -75,7 +122,6 @@ export const rehypeAddRelativeToHeadings = () => {
   return (tree: Root) => {
     visit(tree, "element", (node: Element) => {
       if (/^h[1-6]$/.test(node.tagName)) {
-        // Note: h1 ~ h6 태그에 relative 클래스네임 추가
         node.properties = {
           ...node.properties,
           className: (node.properties.className || "") + " relative",
@@ -84,31 +130,3 @@ export const rehypeAddRelativeToHeadings = () => {
     });
   };
 };
-
-// Note: 미사용
-// export const rehypeImageCaption = () => {
-//   return (tree: Root) => {
-//     visit(tree, "element", (node: Element, index, parent) => {
-//       if (node.tagName === "img" && parent && typeof index === "number") {
-//         const alt = (node.properties.alt as string) || "";
-
-//         const figureNode: Element = {
-//           type: "element",
-//           tagName: "figure",
-//           properties: {},
-//           children: [
-//             node,
-//             {
-//               type: "element",
-//               tagName: "figcaption",
-//               properties: { "image-caption": "" },
-//               children: [{ type: "text", value: alt }],
-//             },
-//           ],
-//         };
-
-//         parent.children[index] = figureNode;
-//       }
-//     });
-//   };
-// };

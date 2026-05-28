@@ -11,6 +11,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test:message-box": "node scripts/check-message-box-regression.mjs",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --ignore-path .gitignore"
   },
   "dependencies": {
@@ -27,11 +28,13 @@
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.445.0",
     "next": "15.5.18",
+    "next-auth": "^4.24.14",
     "next-mdx-remote": "^6.0.0",
     "next-themes": "^0.3.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "reading-time": "^1.5.0",
+    "remark-directive": "^4.0.0",
     "rss": "^1.2.2",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7"

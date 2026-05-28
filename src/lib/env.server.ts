@@ -39,3 +39,14 @@ export const getGoogleAnalyticsCredentials = (): GoogleCredentials => {
 };
 
 export const getGitHubToken = () => process.env.GITHUB_TOKEN || "";
+
+export const getGitHubContentToken = () =>
+  getRequiredEnv("GITHUB_CONTENT_TOKEN");
+
+export const getGitHubContentOwner = () =>
+  getRequiredEnv("GITHUB_CONTENT_OWNER");
+
+export const getGitHubContentRepo = () => getRequiredEnv("GITHUB_CONTENT_REPO");
+
+export const getGitHubContentBranch = () =>
+  process.env.GITHUB_CONTENT_BRANCH || "main";
