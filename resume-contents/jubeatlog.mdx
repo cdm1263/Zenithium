@@ -1,0 +1,27 @@
+개인 프로젝트
+
+::: tip jubeat 플레이 기록을 동기화하고 분석할 수 있는 리듬게임 기록 관리 서비스
+
+##### 서비스 주요 기능
+
+- KONAMI 사이트의 jubeat 플레이 기록을 사용자 요청 기반으로 동기화
+- 곡별 점수, 등급, 풀콤보, 엑설런트, jubility 기록 조회
+- 점수 히스토리와 대시보드 통계를 통한 성장 추이 시각화
+- 유저 랭킹, 공개 프로필, 라이벌 비교 기능 제공
+- 채보 원문 기반 채보 플레이어 제공
+- 한국어, 영어, 일본어, 중국어 간체/번체 다국어 지원
+- Chrome Extension으로 브라우저 기반 기록 갱신 제공
+
+##### 사용 기술
+
+- `Next.js`, `TypeScript`, `Tailwind CSS`, `Supabase`, `Drizzle ORM`, `NextAuth.js`, `React Query`, `next-intl`, `Chrome Extension`, `Discord API`
+
+##### 특징
+
+- Supabase PostgreSQL과 Drizzle ORM으로 점수, 프로필, 히스토리, 통계 데이터 모델링
+- Chrome Extension으로 KONAMI 사이트의 점수 데이터를 브라우저에서 읽어 서비스에 동기화하는 기능 구현
+- `next-intl` 기반으로 5개 언어 메시지 구조를 관리
+- Discord 연동으로 jubility 기반 역할 동기화와 공지 전송 기능 구현
+- Codex와 Claude Code를 활용해 기획, 구현, 디버깅, 코드 리뷰, 검증 흐름을 반복하며 서비스 기능 확장
+- AI 에이전트용 `AGENTS.md`와 Superpowers 기반 워크플로우를 활용해 작업 규칙, TDD, 체계적 디버깅, 완료 전 검증 절차를 체계화
+- Vercel, React, Supabase 관련 AI 스킬을 활용해 배포 환경, 서버/클라이언트 컴포넌트 구조, 데이터베이스 연동 이슈를 빠르게 분석하고 개선

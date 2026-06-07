@@ -28,6 +28,13 @@ export const sections: ResumeSection[] = [
     description: "프로젝트",
     items: [
       {
+        title: "JubeatLog",
+        subtitle: "유비트로그",
+        period: "2026.04 ~ 진행중",
+        content: contents.get("jubeatlog") ?? "",
+        href: "https://www.jubeatlog.com",
+      },
+      {
         title: "Zenithium",
         subtitle: "제니시움",
         period: "2024.09 ~ 2024.10",
